@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 
 HERE = Path(__file__).parent
-SCREENS = [("landing", "landing.html"), ("issues", "issues.html"), ("read", "read.html"), ("ballot", "ballot.html"), ("browse", "browse.html")]
+SCREENS = [("landing", "landing.html"), ("issues", "issues.html"), ("read", "read.html"), ("ballot", "ballot.html"), ("browse", "browse.html"), ("compass", "compass.html")]
 GLOBAL = (":root", "*", "body", "@")
 
 
@@ -70,14 +70,14 @@ def main():
     var active = 'landing';
     function go(target) {
       var name = screens[target] && target !== 'landing' ? target : 'landing';
-      var changed = name !== active;
+      var changed = name !== active, prev = active;
       Object.keys(screens).forEach(function (k) { screens[k].hidden = k !== name; });
       active = name;
       var anchor = name === 'landing' && target && target !== 'top' && document.getElementById(target);
       if (anchor) anchor.scrollIntoView({ block: 'start' });
       else if (changed || target === 'top') window.scrollTo(0, 0);
       if (changed) {
-        screens[name].dispatchEvent(new CustomEvent('screen:show'));
+        screens[name].dispatchEvent(new CustomEvent('screen:show', { detail: { from: prev } }));
         var h = screens[name].querySelector('h1, h2');
         if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
       }

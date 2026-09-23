@@ -428,7 +428,7 @@
         <h3 id="inform-title">Map where you stand on every issue.</h3>
         <p>Compass helps you place yourself on every issue, and your next Read &amp; Rank will start with what you care about.</p>
         <div class="inform-actions">
-          <a class="btn" href="#">Calibrate your Compass</a>
+          <a class="btn" href="#compass">Calibrate your Compass</a>
           <button class="later" type="button" id="later">Maybe later</button>
         </div>
       </section>
@@ -487,12 +487,13 @@
       h.focus({ preventScroll: true });
     }
 
-    function run() {
+    function run(e) {
+      var from = e && e.detail && e.detail.from;
       clear();
       inform.hidden = false;
       ballot.querySelectorAll('.said').forEach(function (s) { s.classList.remove('open'); });
       ballot.querySelectorAll('.said-btn').forEach(function (b) { b.setAttribute('aria-expanded', 'false'); });
-      if (reduced) { showBallot(); return; }
+      if (reduced || from === 'compass') { showBallot(); return; }
       ballot.hidden = true; ballot.classList.remove('in');
       loading.hidden = false;
       fill.style.width = '0%'; step.textContent = STEPS[0];
