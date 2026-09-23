@@ -1,4 +1,4 @@
-<title>Read &amp; Rank Landing</title>
+<title>Read &amp; Rank Races</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
@@ -61,6 +61,8 @@
   }
 
   * { box-sizing: border-box; }
+  body { min-height: 100vh; display: flex; flex-direction: column; }
+  main { flex: 1 0 auto; width: 100%; }
   body {
     margin: 0;
     background: var(--ground);
@@ -91,61 +93,6 @@
   }
   .icon-btn:hover { color: var(--teal); border-color: var(--teal); }
   .icon-btn.account { border: 1.5px solid var(--teal); color: var(--teal); }
-
-  /* Hero */
-  .hero { padding-block: 72px 56px; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 64px; align-items: center; }
-  .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--teal); margin: 0 0 18px; }
-  h1 {
-    font-size: clamp(36px, 4.6vw, 56px);
-    line-height: 1.04; letter-spacing: -.035em; font-weight: 800;
-    margin: 0; text-wrap: balance;
-  }
-  h1 em { font-style: normal; color: var(--teal); display: block; }
-  .lede { font-size: 18px; color: var(--ink-2); max-width: 34em; margin: 22px 0 32px; }
-  .cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; }
-  .btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    height: 50px; padding-inline: 24px; border-radius: 999px;
-    background: var(--teal); color: var(--on-teal);
-    font: 700 16px/1 var(--font); text-decoration: none; border: 0; cursor: pointer;
-    transition: background .15s ease, transform .15s ease;
-  }
-  .btn:hover { background: var(--teal-strong); }
-  .btn:active { transform: translateY(1px); }
-  .link { color: var(--teal); font-weight: 600; text-decoration: none; font-size: 15px; }
-  .link:hover { text-decoration: underline; text-underline-offset: 3px; }
-  .link small { color: var(--ink-3); font-weight: 500; font-size: 13px; margin-left: 4px; }
-
-  /* How it works */
-  .steps { list-style: none; margin: 0; padding: 8px 0; position: relative; }
-  .steps::before { content: ""; position: absolute; left: 17px; top: 30px; bottom: 30px; width: 2px; background: var(--line); }
-  .steps li { display: grid; grid-template-columns: 36px 1fr; gap: 18px; padding-block: 14px; position: relative; }
-  .num {
-    width: 36px; height: 36px; border-radius: 50%;
-    display: grid; place-items: center;
-    background: var(--surface); border: 2px solid var(--line);
-    font-size: 13px; font-weight: 800; color: var(--ink-3); font-variant-numeric: tabular-nums;
-  }
-  .steps li:first-child .num { background: var(--teal); border-color: var(--teal); color: var(--on-teal); }
-  .steps h3 { margin: 5px 0 2px; font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
-  .steps p { margin: 0; color: var(--ink-2); font-size: 15px; }
-
-  /* Elections */
-  .elections { padding-block: 8px 72px; }
-  .sec-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px; padding-top: 40px; border-top: 1px solid var(--line); }
-  h2 { font-size: 30px; line-height: 1.15; letter-spacing: -.025em; font-weight: 800; margin: 0; }
-  .near { margin: 8px 0 0; color: var(--ink-2); font-size: 15px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
-  .near svg { color: var(--teal); flex: none; }
-  .near strong { color: var(--ink); font-weight: 600; }
-  .near button { background: none; border: 0; padding: 0; color: var(--teal); font: 600 15px var(--font); cursor: pointer; }
-  .near button:hover { text-decoration: underline; text-underline-offset: 3px; }
-
-  .seg { display: inline-flex; padding: 4px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); }
-  .seg button {
-    border: 0; background: transparent; color: var(--ink-2); cursor: pointer;
-    font: 600 14px/1 var(--font); height: 34px; padding-inline: 18px; border-radius: 999px;
-  }
-  .seg button[aria-pressed="true"] { background: var(--teal); color: var(--on-teal); }
 
   .group-label { margin: 32px 0 14px; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
 
@@ -183,6 +130,74 @@
 
   .more { margin-top: 28px; }
 
+  .group-label { display: none; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+  /* Browse */
+  .page { padding-block: 32px 80px; }
+  .back {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--teal); font-weight: 600; font-size: 14px; text-decoration: none;
+  }
+  .back:hover { text-decoration: underline; text-underline-offset: 3px; }
+  h1 { margin: 16px 0 0; font-size: clamp(30px, 4vw, 42px); line-height: 1.1; letter-spacing: -.03em; font-weight: 800; }
+
+  .tools {
+    margin-top: 24px; padding: 16px; border-radius: 20px;
+    background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow);
+    display: grid; gap: 14px;
+  }
+  .search { position: relative; }
+  .search svg { position: absolute; left: 16px; top: 50%; translate: 0 -50%; color: var(--ink-3); pointer-events: none; }
+  .search input {
+    width: 100%; height: 52px; padding: 0 44px 0 46px; border-radius: 14px;
+    border: 1.5px solid var(--line); background: var(--surface-2); color: var(--ink);
+    font: 500 16px var(--font);
+  }
+  .search input::placeholder { color: var(--ink-3); }
+  .search input:focus { outline: none; border-color: var(--teal); background: var(--surface); box-shadow: 0 0 0 4px var(--teal-tint); }
+  .clear {
+    position: absolute; right: 10px; top: 50%; translate: 0 -50%;
+    width: 30px; height: 30px; border-radius: 50%; border: 0; background: var(--line); color: var(--ink-2);
+    display: grid; place-items: center; cursor: pointer;
+  }
+  .filters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .chip {
+    height: 38px; padding-inline: 16px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink-2);
+    font: 600 14px/1 var(--font); white-space: nowrap;
+    transition: background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .chip:hover { border-color: var(--teal); color: var(--teal); }
+  .chip[aria-pressed="true"] { background: var(--teal); border-color: var(--teal); color: var(--on-teal); }
+  .state-pick { margin-left: auto; position: relative; }
+  .state-pick svg { position: absolute; left: 12px; top: 50%; translate: 0 -50%; color: var(--teal); pointer-events: none; }
+  .state-pick select {
+    appearance: none; height: 38px; padding: 0 36px 0 34px; border-radius: 999px;
+    border: 1px solid var(--line); color: var(--ink); font: 600 14px var(--font); cursor: pointer;
+    background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%237A7D92' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;
+  }
+
+  .result-count { margin: 22px 0 0; font-size: 14px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .result-count b { color: var(--ink); }
+
+  .group { margin-top: 28px; animation: fade .25s ease; }
+  .group-head {
+    margin: 0 0 14px; display: flex; align-items: center; gap: 10px;
+    font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--ink);
+  }
+  .g-icon { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; background: var(--teal-tint); color: var(--teal); }
+  .g-count { font-size: 12px; color: var(--ink-3); font-weight: 700; letter-spacing: 0; padding: 2px 8px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); }
+  .group-head::after { content: ""; flex: 1; height: 1px; background: var(--line); margin-left: 6px; }
+
+  .done-chip { display: inline-flex; align-items: center; gap: 5px; color: var(--ink-2); font-weight: 700; }
+  .done-chip svg { color: var(--teal); }
+
+  .none { margin-top: 28px; padding: 40px 20px; border-radius: 18px; border: 1.5px dashed var(--line); text-align: center; color: var(--ink-3); }
+  .none b { display: block; color: var(--ink); font-size: 17px; margin-bottom: 4px; }
+  .none button { margin-top: 12px; border: 0; background: none; color: var(--teal); font: 700 15px var(--font); cursor: pointer; }
+  .none button:hover { text-decoration: underline; text-underline-offset: 3px; }
+
   /* Footer */
   footer { border-top: 1px solid var(--line); background: var(--surface-2); }
   footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px 24px; padding-block: 28px; font-size: 14px; color: var(--ink-2); }
@@ -192,21 +207,20 @@
   footer nav a { text-decoration: none; }
   footer nav a:hover { color: var(--teal); }
 
-  @media (max-width: 880px) {
-    .hero { grid-template-columns: 1fr; gap: 40px; padding-block: 48px 40px; }
-  }
   @media (max-width: 560px) {
     .wrap { padding-inline: 16px; }
     .top .wrap { height: 60px; }
     .brand .word { display: none; }
-    .lede { font-size: 17px; }
-    .btn { width: 100%; justify-content: center; }
-    h2 { font-size: 26px; }
+    .page { padding-block: 20px 48px; }
+    .filters { flex-wrap: nowrap; overflow-x: auto; margin-inline: -16px; padding-inline: 16px; scrollbar-width: none; }
+    .tools { padding: 14px 16px; overflow: hidden; }
+    .state-pick { margin-left: 0; }
     footer .wrap { flex-direction: column; align-items: start; }
   }
   @media (prefers-reduced-motion: reduce) {
-    * { transition: none !important; }
+    * { transition: none !important; animation: none !important; }
   }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 </style>
 
 <header class="top">
@@ -241,110 +255,42 @@
   </div>
 </header>
 
-<main>
-  <section class="wrap hero">
-    <div>
-      <p class="eyebrow">Read &amp; Rank</p>
-      <h1>Read candidates blind, <em>rank by what they said.</em></h1>
-      <p class="lede">Real quotes from real candidates, with no names and no parties. Form your own view, then see who you actually agree with.</p>
-      <div class="cta-row">
-        <a class="btn" href="#elections">
-          Choose an election
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
-        </a>
-        <a class="link" href="#">Try a warm-up with pizza opinions <small>30 sec</small></a>
+<main class="wrap">
+  <div class="page">
+    <a class="back" href="#elections">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+      Back to my ballot
+    </a>
+    <h1>Choose an election</h1>
+
+    <div class="tools">
+      <label class="search">
+        <span class="sr">Search races</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input type="search" id="race-search" placeholder="Search races — office, state, or place…" autocomplete="off">
+        <button class="clear" id="clear" type="button" aria-label="Clear search" hidden><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </label>
+      <div class="filters" role="group" aria-label="Filter by office">
+        <button class="chip" type="button" aria-pressed="true" data-filter="all">All offices</button>
+        <button class="chip" type="button" aria-pressed="false" data-filter="governor">Governor</button>
+        <button class="chip" type="button" aria-pressed="false" data-filter="senate">U.S. Senate</button>
+        <button class="chip" type="button" aria-pressed="false" data-filter="house">U.S. House</button>
+        <button class="chip" type="button" aria-pressed="false" data-filter="state">State Legislature</button>
+        <button class="chip" type="button" aria-pressed="false" data-filter="local">Local</button>
+        <label class="state-pick">
+          <span class="sr">State</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+          <select id="state-select"><option value="indiana" selected>Indiana</option></select>
+        </label>
       </div>
     </div>
 
-    <ol class="steps" aria-label="How it works">
-      <li>
-        <span class="num">1</span>
-        <div><h3>Pick an election</h3><p>Local and upcoming races in our Alpha communities.</p></div>
-      </li>
-      <li>
-        <span class="num">2</span>
-        <div><h3>Read the quotes</h3><p>Judge positions on their words alone.</p></div>
-      </li>
-      <li>
-        <span class="num">3</span>
-        <div><h3>Rank the candidates</h3><p>See who earned your trust, and where you align.</p></div>
-      </li>
-    </ol>
-  </section>
+    <p class="result-count" id="result-count" aria-live="polite"><b>7</b> races</p>
 
-  <section class="wrap elections" id="elections" aria-labelledby="elections-title">
-    <div class="sec-head">
-      <div>
-        <h2 id="elections-title">Choose an election</h2>
-        <p class="near">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
-          Races for <strong>100 W Kirkwood Ave, Bloomington, IN</strong>
-          <button type="button">Change</button>
-        </p>
-      </div>
-      <div class="seg" role="group" aria-label="Election timing">
-        <button type="button" aria-pressed="true" data-panel="upcoming">Upcoming</button>
-        <button type="button" aria-pressed="false" data-panel="past">Past</button>
-      </div>
-    </div>
-
-    <div class="panel" id="panel-upcoming">
-    <p class="group-label">Indiana · Nov 3, 2026</p>
-
-    <div class="grid">
-      <a class="race in-progress" href="#issues">
-        <div class="race-top">
-          <div>
-            <span class="badge">In progress</span>
-            <h3>US Representative <span>District 7</span></h3>
-          </div>
-          <svg class="map" viewBox="0 0 40 56" aria-hidden="true"><path class="state" d="M7 3 H33 L34 42 L31 46 L27 48 L23 52 L17 53 L13 52 L9 55 L5 53 L6 49 L4 45 L5 41 Z"/><circle class="dist" cx="19" cy="28" r="3.2"/></svg>
-        </div>
-        <div class="progress" role="img" aria-label="1 of 2 topics read"><i></i></div>
-        <div class="meta"><span><strong>1 of 2 topics</strong> · ~1 min left</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
-      </a>
-
-      <a class="race" href="#">
-        <div class="race-top">
-          <div>
-            <span class="date">Nov 3, 2026</span>
-            <h3>US Representative <span>District 2</span></h3>
-          </div>
-          <svg class="map" viewBox="0 0 40 56" aria-hidden="true"><path class="state" d="M7 3 H33 L34 42 L31 46 L27 48 L23 52 L17 53 L13 52 L9 55 L5 53 L6 49 L4 45 L5 41 Z"/><path class="dist" d="M14 4 H26 V16 H14 Z"/></svg>
-        </div>
-        <div class="meta"><span>2 candidates · 1 topic · ~2 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
-      </a>
-
-      <a class="race" href="#">
-        <div class="race-top">
-          <div>
-            <span class="date">Nov 3, 2026</span>
-            <h3>US Representative <span>District 3</span></h3>
-          </div>
-          <svg class="map" viewBox="0 0 40 56" aria-hidden="true"><path class="state" d="M7 3 H33 L34 42 L31 46 L27 48 L23 52 L17 53 L13 52 L9 55 L5 53 L6 49 L4 45 L5 41 Z"/><path class="dist" d="M26 4 H33 V20 H26 Z"/></svg>
-        </div>
-        <div class="meta"><span>2 candidates · 1 topic · ~1 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
-      </a>
-
-      <a class="race" href="#">
-        <div class="race-top">
-          <div>
-            <span class="date">Nov 3, 2026</span>
-            <h3>US Representative <span>District 8</span></h3>
-          </div>
-          <svg class="map" viewBox="0 0 40 56" aria-hidden="true"><path class="state" d="M7 3 H33 L34 42 L31 46 L27 48 L23 52 L17 53 L13 52 L9 55 L5 53 L6 49 L4 45 L5 41 Z"/><path class="dist" d="M5 34 H14 V52 L9 55 L5 53 L6 49 L4 45 Z"/></svg>
-        </div>
-        <div class="meta"><span>2 candidates · 1 topic · ~2 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
-      </a>
-    </div>
-
-    </div>
-
-    <div class="panel" id="panel-past" hidden>
-    <p class="group-label">Your races · 3</p>
-
-    <div class="grid">
-      <a class="race in-progress" href="#">
+    <section class="group" data-group="house" aria-labelledby="g-house">
+      <h2 class="group-head" id="g-house"><span class="g-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-6h6v6"/></svg></span>U.S. House <span class="g-count" data-count>5</span></h2>
+      <div class="grid">
+      <a class="race in-progress" href="#" data-search="us representative district 9 indiana may 5, 2026">
         <div class="race-top">
           <div>
             <span class="date">Indiana · May 5, 2026</span>
@@ -355,8 +301,53 @@
         <div class="progress empty" role="img" aria-label="0 of 4 topics read"><i></i></div>
         <div class="meta wrap-ok"><span><strong>Continue · 0 of 4 topics</strong><br>4 candidates · 4 topics · ~5 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
       </a>
+      <a class="race done" href="#issues" data-search="us representative district 7 indiana nov 3, 2026">
+        <div class="race-top">
+          <div>
+            <span class="date">Indiana · Nov 3, 2026</span>
+            <h3>US Representative <span>District 7</span></h3>
+          </div>
+          <svg class="map" viewBox="0 0 40 56" aria-hidden="true"><path class="state" d="M7 3 H33 L34 42 L31 46 L27 48 L23 52 L17 53 L13 52 L9 55 L5 53 L6 49 L4 45 L5 41 Z"/><circle class="dist" cx="19" cy="28" r="3.2"/></svg>
+        </div>
+        <div class="meta wrap-ok"><span><span class="done-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Completed</span><br>2 candidates · 2 topics · ~2 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+      <a class="race" href="#" data-search="us representative district 2 indiana nov 3, 2026">
+        <div class="race-top">
+          <div>
+            <span class="date">Indiana · Nov 3, 2026</span>
+            <h3>US Representative <span>District 2</span></h3>
+          </div>
+          <svg class="map" viewBox="0 0 40 56" aria-hidden="true"><path class="state" d="M7 3 H33 L34 42 L31 46 L27 48 L23 52 L17 53 L13 52 L9 55 L5 53 L6 49 L4 45 L5 41 Z"/><path class="dist" d="M14 4 H26 V16 H14 Z"/></svg>
+        </div>
+        <div class="meta"><span>2 candidates · 1 topic · ~2 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+      <a class="race" href="#" data-search="us representative district 3 indiana nov 3, 2026">
+        <div class="race-top">
+          <div>
+            <span class="date">Indiana · Nov 3, 2026</span>
+            <h3>US Representative <span>District 3</span></h3>
+          </div>
+          <svg class="map" viewBox="0 0 40 56" aria-hidden="true"><path class="state" d="M7 3 H33 L34 42 L31 46 L27 48 L23 52 L17 53 L13 52 L9 55 L5 53 L6 49 L4 45 L5 41 Z"/><path class="dist" d="M26 4 H33 V20 H26 Z"/></svg>
+        </div>
+        <div class="meta"><span>2 candidates · 1 topic · ~1 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+      <a class="race" href="#" data-search="us representative district 8 indiana nov 3, 2026">
+        <div class="race-top">
+          <div>
+            <span class="date">Indiana · Nov 3, 2026</span>
+            <h3>US Representative <span>District 8</span></h3>
+          </div>
+          <svg class="map" viewBox="0 0 40 56" aria-hidden="true"><path class="state" d="M7 3 H33 L34 42 L31 46 L27 48 L23 52 L17 53 L13 52 L9 55 L5 53 L6 49 L4 45 L5 41 Z"/><path class="dist" d="M5 34 H14 V52 L9 55 L5 53 L6 49 L4 45 Z"/></svg>
+        </div>
+        <div class="meta"><span>2 candidates · 1 topic · ~2 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+      </div>
+    </section>
 
-      <a class="race" href="#">
+    <section class="group" data-group="state" aria-labelledby="g-state">
+      <h2 class="group-head" id="g-state"><span class="g-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M6 21V11M10 21V11M14 21V11M18 21V11M3 11l9-6 9 6z"/></svg></span>State Legislature <span class="g-count" data-count>2</span></h2>
+      <div class="grid">
+      <a class="race" href="#" data-search="state representative district 61 indiana may 5, 2026">
         <div class="race-top">
           <div>
             <span class="date">Indiana · May 5, 2026</span>
@@ -366,8 +357,7 @@
         </div>
         <div class="meta"><span>2 candidates · 2 topics · ~2 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
       </a>
-
-      <a class="race" href="#">
+      <a class="race" href="#" data-search="monroe county commissioner district 1 indiana may 5, 2026">
         <div class="race-top">
           <div>
             <span class="date">Indiana · May 5, 2026</span>
@@ -377,11 +367,15 @@
         </div>
         <div class="meta"><span>2 candidates · 3 topics · ~1 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
       </a>
-    </div>
-    </div>
+      </div>
+    </section>
 
-    <p class="more"><a class="link" href="#browse">Browse other races →</a></p>
-  </section>
+    <div class="none" id="none" hidden>
+      <b>No races match</b>
+      Try a different office or search.
+      <br><button type="button" id="reset">Show all races</button>
+    </div>
+  </div>
 </main>
 
 <footer>
@@ -406,13 +400,48 @@
         (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
       root.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
     }); });
-    document.querySelectorAll('.seg button').forEach(function (b, _, all) {
-      b.addEventListener('click', function () {
-        all.forEach(function (x) {
-          x.setAttribute('aria-pressed', String(x === b));
-          document.getElementById('panel-' + x.dataset.panel).hidden = x !== b;
+
+    var input = document.getElementById('race-search');
+    var clearBtn = document.getElementById('clear');
+    var chips = document.querySelectorAll('.chip');
+    var groups = document.querySelectorAll('.group');
+    var countEl = document.getElementById('result-count');
+    var none = document.getElementById('none');
+    var filter = 'all';
+
+    function apply() {
+      var q = input.value.trim().toLowerCase();
+      var total = 0;
+      groups.forEach(function (g) {
+        var inGroup = filter === 'all' || filter === g.dataset.group;
+        var shown = 0;
+        g.querySelectorAll('.race').forEach(function (r) {
+          var ok = inGroup && (!q || r.dataset.search.indexOf(q) !== -1);
+          r.hidden = !ok;
+          if (ok) shown++;
         });
+        g.hidden = shown === 0;
+        g.querySelector('[data-count]').textContent = shown;
+        total += shown;
+      });
+      countEl.innerHTML = '<b>' + total + '</b> race' + (total === 1 ? '' : 's');
+      none.hidden = total > 0;
+      clearBtn.hidden = !q;
+    }
+    chips.forEach(function (c) {
+      c.addEventListener('click', function () {
+        filter = c.dataset.filter;
+        chips.forEach(function (x) { x.setAttribute('aria-pressed', String(x === c)); });
+        apply();
       });
     });
+    input.addEventListener('input', apply);
+    clearBtn.addEventListener('click', function () { input.value = ''; apply(); input.focus(); });
+    document.getElementById('reset').addEventListener('click', function () {
+      input.value = ''; filter = 'all';
+      chips.forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.filter === 'all')); });
+      apply();
+    });
+    apply();
   })();
 </script>
