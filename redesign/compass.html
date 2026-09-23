@@ -91,6 +91,7 @@
   .product { display: flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 800; font-size: 17px; line-height: .95; letter-spacing: -.02em; }
   .product .a { color: var(--teal); display: block; text-align: right; }
   .product .b { color: var(--coral); display: block; }
+  .brand img, .product img { display: block; height: auto; max-width: none; }
   .actions { justify-self: end; display: flex; gap: 10px; }
   .icon-btn {
     width: 40px; height: 40px; border-radius: 50%;
@@ -254,7 +255,8 @@
   @media (max-width: 640px) {
     .wrap { padding-inline: 16px; }
     .top .wrap { height: 60px; }
-    .brand .word { display: none; }
+    .brand img { width: 110px; }
+    .product img { width: 90px; }
     .catnav { margin-inline: -16px; padding-inline: 16px; }
     .stepper { padding: 14px; gap: 6px; }
     .stepper li { flex-direction: column; text-align: center; gap: 6px; }
@@ -274,23 +276,10 @@
 <header class="top">
   <div class="wrap">
     <a class="brand" href="#top" aria-label="Empowered Vote home">
-      <span class="ev word">empowered<span>.vote</span></span>
-      <svg width="44" height="30" viewBox="0 0 44 30" aria-hidden="true">
-        <rect x="0" y="2" width="16" height="6" fill="var(--teal)"/>
-        <rect x="0" y="12" width="12" height="6" fill="var(--teal)"/>
-        <rect x="0" y="22" width="16" height="6" fill="var(--teal)"/>
-        <path d="M18 2 H44 L30 28 Z" fill="var(--coral)"/>
-        <circle cx="29" cy="12" r="4" fill="var(--surface)"/>
-      </svg>
+      <img src="assets/empowered-vote-logo.png" width="133" height="30" alt="empowered.vote">
     </a>
     <a class="product" href="#top" aria-label="Read and Rank">
-      <span><span class="a">read</span><span class="b">&amp; rank</span></span>
-      <svg width="26" height="30" viewBox="0 0 26 30" aria-hidden="true">
-        <rect x="2" y="2" width="22" height="26" rx="4" fill="var(--teal)" transform="rotate(6 13 15)"/>
-        <path d="M8 10 q0 -3 3 -3 M14 10 q0 -3 3 -3" stroke="var(--yellow)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-        <rect x="7" y="16" width="12" height="2" rx="1" fill="var(--on-teal)" opacity=".7"/>
-        <rect x="7" y="21" width="8" height="2" rx="1" fill="var(--on-teal)" opacity=".7"/>
-      </svg>
+      <img src="assets/read-rank-logo.png" width="107" height="48" alt="read &amp; rank">
     </a>
     <div class="actions">
       <button class="icon-btn" data-theme-toggle type="button" aria-label="Switch color theme">
