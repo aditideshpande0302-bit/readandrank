@@ -173,6 +173,11 @@
   #s-landing .race.in-progress:hover { border-color: var(--teal); }
   #s-landing .badge { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--teal); }
   #s-landing .progress { height: 6px; border-radius: 99px; background: color-mix(in srgb, var(--teal) 18%, transparent); overflow: hidden; }
+  #s-landing .panel { animation: fade .25s ease; }
+  @keyframes fade { from { opacity: 0; translate: 0 6px; } }
+  #s-landing [hidden] { display: none !important; }
+  #s-landing .progress.empty i { width: 0; }
+  #s-landing .meta.wrap-ok { white-space: normal; line-height: 1.5; }
   #s-landing .progress i { display: block; height: 100%; width: 50%; background: var(--teal); border-radius: inherit; }
   #s-landing .race.in-progress .meta { border-top-color: color-mix(in srgb, var(--teal) 22%, transparent); }
   #s-landing .race.in-progress .meta strong { color: var(--teal); font-weight: 700; }
@@ -1134,11 +1139,12 @@
         </p>
       </div>
       <div class="seg" role="group" aria-label="Election timing">
-        <button type="button" aria-pressed="true">Upcoming</button>
-        <button type="button" aria-pressed="false">Past</button>
+        <button type="button" aria-pressed="true" data-panel="upcoming">Upcoming</button>
+        <button type="button" aria-pressed="false" data-panel="past">Past</button>
       </div>
     </div>
 
+    <div class="panel" id="panel-upcoming">
     <p class="group-label">Indiana · Nov 3, 2026</p>
 
     <div class="grid">
@@ -1186,6 +1192,48 @@
         </div>
         <div class="meta"><span>2 candidates · 1 topic · ~2 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
       </a>
+    </div>
+
+    </div>
+
+    <div class="panel" id="panel-past" hidden>
+    <p class="group-label">Your races · 3</p>
+
+    <div class="grid">
+      <a class="race in-progress" href="#">
+        <div class="race-top">
+          <div>
+            <span class="date">Indiana · May 5, 2026</span>
+            <h3>US Representative <span>District 9</span></h3>
+          </div>
+          <svg class="map" viewBox="0 0 40 56" aria-hidden="true"><path class="state" d="M7 3 H33 L34 42 L31 46 L27 48 L23 52 L17 53 L13 52 L9 55 L5 53 L6 49 L4 45 L5 41 Z"/><path class="dist" d="M20 36 H33 V44 L27 48 L23 52 L20 50 Z"/></svg>
+        </div>
+        <div class="progress empty" role="img" aria-label="0 of 4 topics read"><i></i></div>
+        <div class="meta wrap-ok"><span><strong>Continue · 0 of 4 topics</strong><br>4 candidates · 4 topics · ~5 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+
+      <a class="race" href="#">
+        <div class="race-top">
+          <div>
+            <span class="date">Indiana · May 5, 2026</span>
+            <h3>State Representative <span>District 61</span></h3>
+          </div>
+          <svg class="map" viewBox="0 0 40 56" aria-hidden="true"><path class="state" d="M7 3 H33 L34 42 L31 46 L27 48 L23 52 L17 53 L13 52 L9 55 L5 53 L6 49 L4 45 L5 41 Z"/><circle class="dist" cx="17" cy="37" r="2.2"/></svg>
+        </div>
+        <div class="meta"><span>2 candidates · 2 topics · ~2 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+
+      <a class="race" href="#">
+        <div class="race-top">
+          <div>
+            <span class="date">Indiana · May 5, 2026</span>
+            <h3>Monroe County Commissioner <span>District 1</span></h3>
+          </div>
+          <svg class="map" viewBox="0 0 40 56" aria-hidden="true"><path class="state" d="M7 3 H33 L34 42 L31 46 L27 48 L23 52 L17 53 L13 52 L9 55 L5 53 L6 49 L4 45 L5 41 Z"/><rect class="dist" x="14.5" y="34" width="5" height="5" rx="1"/></svg>
+        </div>
+        <div class="meta"><span>2 candidates · 3 topics · ~1 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+    </div>
     </div>
 
     <p class="more"><a class="link" href="#">Browse other races →</a></p>
@@ -1640,7 +1688,10 @@
     }); });
     document.querySelectorAll('.seg button').forEach(function (b, _, all) {
       b.addEventListener('click', function () {
-        all.forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+        all.forEach(function (x) {
+          x.setAttribute('aria-pressed', String(x === b));
+          document.getElementById('panel-' + x.dataset.panel).hidden = x !== b;
+        });
       });
     });
   })();
