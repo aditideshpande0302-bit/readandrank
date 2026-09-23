@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 
 HERE = Path(__file__).parent
-SCREENS = [("landing", "landing.html"), ("issues", "issues.html"), ("read", "read.html"), ("ballot", "ballot.html"), ("browse", "browse.html"), ("compass", "compass.html")]
+SCREENS = [("landing", "landing.html"), ("issues", "issues.html"), ("read", "read.html"), ("ballot", "ballot.html"), ("browse", "browse.html"), ("compass", "compass.html"), ("stances", "stances.html")]
 GLOBAL = (":root", "*", "body", "@")
 
 
@@ -77,6 +77,7 @@ def main():
       if (anchor) anchor.scrollIntoView({ block: 'start' });
       else if (changed || target === 'top') window.scrollTo(0, 0);
       if (changed) {
+        if (screens[prev]) screens[prev].dispatchEvent(new CustomEvent('screen:hide'));
         screens[name].dispatchEvent(new CustomEvent('screen:show', { detail: { from: prev } }));
         var h = screens[name].querySelector('h1, h2');
         if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }

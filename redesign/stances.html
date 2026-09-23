@@ -1,0 +1,617 @@
+<title>Read &amp; Rank Stances</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+  :root {
+    --ground: #F7F4EF;
+    --surface: #FFFFFF;
+    --surface-2: #FBF9F6;
+    --ink: #1B1E3B;
+    --ink-2: #4A4E68;
+    --ink-3: #7A7D92;
+    --line: #E8E3DB;
+    --teal: #0E6A80;
+    --teal-strong: #0A5566;
+    --teal-tint: #E3EFF2;
+    --on-teal: #FFFFFF;
+    --coral: #EF5B3E;
+    --coral-strong: #D2452A;
+    --coral-tint: #FCEAE5;
+    --yellow: #F6C343;
+    --map-fill: #F1EEE8;
+    --map-line: #B9C9CE;
+    --shadow: 0 1px 2px rgba(27, 30, 59, .04), 0 8px 24px -12px rgba(27, 30, 59, .12);
+    --radius: 14px;
+    --font: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground: #11141F;
+      --surface: #191D2B;
+      --surface-2: #151926;
+      --ink: #EEF0F6;
+      --ink-2: #B6BACB;
+      --ink-3: #868AA0;
+      --line: #2A2F42;
+      --teal: #4FB3C8;
+      --teal-strong: #7CCADB;
+      --teal-tint: #1C3139;
+      --on-teal: #0B1E24;
+      --map-fill: #222738;
+      --map-line: #3C465B;
+      --coral-strong: #E0573B;
+      --coral-tint: #3A221D;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground: #11141F;
+    --surface: #191D2B;
+    --surface-2: #151926;
+    --ink: #EEF0F6;
+    --ink-2: #B6BACB;
+    --ink-3: #868AA0;
+    --line: #2A2F42;
+    --teal: #4FB3C8;
+    --teal-strong: #7CCADB;
+    --teal-tint: #1C3139;
+    --on-teal: #0B1E24;
+    --map-fill: #222738;
+    --map-line: #3C465B;
+    --coral-strong: #E0573B;
+    --coral-tint: #3A221D;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; display: flex; flex-direction: column; }
+  main { flex: 1 0 auto; width: 100%; }
+  a { color: inherit; }
+  :focus-visible { outline: 2.5px solid var(--teal); outline-offset: 3px; border-radius: 6px; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding-inline: 24px; }
+
+  /* Header (shared with landing) */
+  .top { background: var(--surface); border-bottom: 1px solid var(--line); }
+  .top .wrap { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 68px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; letter-spacing: -.02em; line-height: .95; font-size: 17px; }
+  .brand .ev { color: var(--teal); }
+  .brand .ev span { display: block; color: var(--coral); text-align: right; }
+  .product { display: flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 800; font-size: 17px; line-height: .95; letter-spacing: -.02em; }
+  .product .a { color: var(--teal); display: block; text-align: right; }
+  .product .b { color: var(--coral); display: block; }
+  .actions { justify-self: end; display: flex; gap: 10px; }
+  .icon-btn {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: transparent; border: 1px solid var(--line); color: var(--ink-2); cursor: pointer;
+  }
+  .icon-btn:hover { color: var(--teal); border-color: var(--teal); }
+  .icon-btn.account { border: 1.5px solid var(--teal); color: var(--teal); }
+
+  body { min-height: 100vh; display: flex; flex-direction: column; }
+  main { flex: 1 0 auto; width: 100%; }
+  [hidden] { display: none !important; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  .page { padding-block: 28px 0; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .back { display: inline-flex; align-items: center; gap: 6px; color: var(--teal); font-weight: 600; font-size: 14px; text-decoration: none; }
+  .back:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .help { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); font: 600 13px var(--font); cursor: pointer; }
+  .help:hover { border-color: var(--teal); color: var(--teal); }
+
+  /* Stepper (same as step 1) */
+  .stepper {
+    margin: 18px 0 0; padding: 18px 22px; list-style: none;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
+  }
+  .stepper li { position: relative; display: flex; align-items: center; gap: 12px; }
+  .stepper li + li::before { content: ""; position: absolute; right: calc(100% + 6px); width: calc(100% - 180px); max-width: 120px; min-width: 16px; top: 50%; height: 2px; background: var(--line); }
+  .stepper li.done + li::before { background: var(--teal); }
+  .dot { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 14px; border: 2px solid var(--line); color: var(--ink-3); background: var(--surface); }
+  .step-txt { display: grid; line-height: 1.25; }
+  .step-txt b { font-size: 15px; color: var(--ink-2); }
+  .step-txt small { font-size: 13px; color: var(--ink-3); }
+  .stepper li[aria-current="step"] .dot { background: var(--teal); border-color: var(--teal); color: var(--on-teal); box-shadow: 0 0 0 5px var(--teal-tint); }
+  .stepper li[aria-current="step"] .step-txt b { color: var(--ink); }
+  .stepper li.done .dot { background: var(--teal-tint); border-color: var(--teal); color: var(--teal); }
+  .stepper li.done .step-txt b { color: var(--teal); }
+
+  /* Topic tabs */
+  .tabs { margin-top: 24px; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+  .tab {
+    flex: none; display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); font: 600 14px var(--font); cursor: pointer;
+  }
+  .tab:hover { border-color: var(--teal); color: var(--teal); }
+  .tab[aria-selected="true"] { background: var(--teal); border-color: var(--teal); color: var(--on-teal); }
+  .tab .ok { display: none; width: 18px; height: 18px; border-radius: 50%; place-items: center; background: var(--teal-tint); color: var(--teal); }
+  .tab.answered .ok { display: grid; }
+  .tab[aria-selected="true"] .ok { background: var(--on-teal); color: var(--teal); }
+
+  /* Layout */
+  .work { margin-top: 24px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 32px; align-items: start; }
+  .chart {
+    position: sticky; top: calc(20px + env(safe-area-inset-top, 0px));
+    background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 20px;
+  }
+  .chart-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .chart-head h2 { margin: 0; font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+  .zoom { display: flex; gap: 6px; }
+  .zoom button { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); display: grid; place-items: center; cursor: pointer; }
+  .zoom button:hover:not(:disabled) { border-color: var(--teal); color: var(--teal); }
+  .zoom button:disabled { opacity: .35; cursor: default; }
+  .radar-box { overflow: hidden; }
+  .radar { display: block; width: 100%; height: auto; transition: transform .3s ease; transform-origin: 50% 52%; }
+  .radar .ring { fill: none; stroke: var(--line); stroke-width: 1; }
+  .radar .ring.outer { stroke: var(--map-line); }
+  .radar .axis { stroke: var(--line); stroke-width: 1; }
+  .radar .axis.on { stroke: var(--teal); stroke-width: 2; }
+  .radar .shape { fill: color-mix(in srgb, var(--teal) 18%, transparent); stroke: var(--teal); stroke-width: 2.5; stroke-linejoin: round; transition: all .45s cubic-bezier(.2,.7,.2,1); }
+  .radar .pt { fill: var(--teal); stroke: var(--surface); stroke-width: 2.5; transition: all .45s cubic-bezier(.2,.7,.2,1); }
+  .radar .pt.own { fill: var(--yellow); stroke: var(--ink); stroke-width: 1.5; }
+  .radar text { fill: var(--ink-2); font: 600 15px var(--font); }
+  .radar text.on { fill: var(--teal); font-weight: 800; }
+  .legend { margin: 8px 0 0; display: flex; justify-content: center; gap: 18px; font-size: 12px; color: var(--ink-3); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { width: 10px; height: 10px; border-radius: 50%; }
+
+  /* Question panel */
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 24px; box-shadow: var(--shadow); }
+  .q-meta { margin: 0; font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); }
+  .q { margin: 8px 0 0; font-size: 22px; line-height: 1.3; letter-spacing: -.02em; font-weight: 800; text-wrap: balance; }
+  .scale { margin: 18px 0 8px; display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--ink-3); }
+  .scale span { display: inline-flex; align-items: center; gap: 4px; }
+  .opts { display: grid; gap: 8px; position: relative; }
+  .opt {
+    position: relative; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 12px;
+    text-align: left; padding: 14px 16px; border-radius: 14px; cursor: pointer;
+    border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); font: 500 15px/1.4 var(--font);
+    transition: border-color .15s ease, background .15s ease, transform .1s ease;
+  }
+  .opt:hover { border-color: color-mix(in srgb, var(--teal) 50%, var(--line)); }
+  .opt:active { transform: scale(.995); }
+  .ring-badge { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 800; background: var(--surface-2); border: 1.5px solid var(--line); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .opt[aria-pressed="true"] { border-color: var(--teal); background: color-mix(in srgb, var(--teal-tint) 60%, var(--surface)); }
+  .opt[aria-pressed="true"] .ring-badge { background: var(--teal); border-color: var(--teal); color: var(--on-teal); }
+
+  .own { margin-top: 10px; border: 1.5px dashed var(--map-line); border-radius: 14px; padding: 4px; transition: border-color .15s ease; }
+  .own:focus-within, .own.set { border-color: var(--teal); border-style: solid; }
+  .own input { width: 100%; height: 44px; padding: 0 12px; border: 0; background: transparent; color: var(--ink); font: 500 15px var(--font); }
+  .own input:focus { outline: none; }
+  .own input::placeholder { color: var(--ink-3); }
+  .place { padding: 8px 12px 12px; display: grid; gap: 6px; }
+  .place label { font-size: 13px; font-weight: 700; color: var(--ink-2); }
+  .place input[type=range] { width: 100%; height: 28px; accent-color: var(--teal); cursor: grab; }
+  .place .ends { display: flex; justify-content: space-between; font-size: 12px; color: var(--ink-3); }
+  .place .save { justify-self: start; height: 36px; padding: 0 16px; border-radius: 999px; border: 0; background: var(--teal); color: var(--on-teal); font: 700 14px var(--font); cursor: pointer; }
+  .note { margin: 10px 0 0; font-size: 13px; color: var(--ink-3); text-align: center; }
+
+  /* Bottom bar */
+  .bar { position: sticky; bottom: 0; z-index: 5; margin-top: 40px; padding: 14px 0 calc(14px + env(safe-area-inset-bottom, 0px)); background: color-mix(in srgb, var(--ground) 88%, transparent); backdrop-filter: blur(10px); border-top: 1px solid var(--line); }
+  .bar-in { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .bar-mid { font-size: 14px; font-weight: 700; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .ghost, .primary { height: 48px; padding: 0 22px; border-radius: 999px; font: 700 15px var(--font); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+  .ghost { background: var(--surface); border: 1px solid var(--line); color: var(--ink-2); }
+  .ghost:hover { border-color: var(--teal); color: var(--teal); }
+  .primary { background: var(--teal); border: 0; color: var(--on-teal); }
+  .primary:hover { background: var(--teal-strong); }
+
+  /* Guided tour */
+  .tour-shade { position: fixed; inset: 0; z-index: 40; }
+  .spot {
+    position: fixed; z-index: 41; border-radius: 18px; pointer-events: none;
+    box-shadow: 0 0 0 4px var(--teal), 0 0 0 9999px rgba(17, 20, 31, .55);
+    transition: all .35s cubic-bezier(.2,.7,.2,1);
+  }
+  .pop {
+    position: fixed; z-index: 42; width: min(340px, calc(100vw - 32px));
+    padding: 20px; border-radius: 18px; background: var(--surface); color: var(--ink);
+    box-shadow: 0 20px 50px -10px rgba(0,0,0,.35); animation: popin .3s cubic-bezier(.2,.7,.2,1);
+    transition: top .35s cubic-bezier(.2,.7,.2,1), left .35s cubic-bezier(.2,.7,.2,1);
+  }
+  @keyframes popin { from { opacity: 0; translate: 0 8px; } }
+  .pop::before { content: ""; position: absolute; width: 14px; height: 14px; background: var(--surface); rotate: 45deg; }
+  .pop[data-side="right"]::before { left: -7px; top: var(--arrow, 28px); }
+  .pop[data-side="left"]::before { right: -7px; top: var(--arrow, 28px); }
+  .pop[data-side="top"]::before { bottom: -7px; left: var(--arrow, 28px); }
+  .pop[data-side="bottom"]::before { top: -7px; left: var(--arrow, 28px); }
+  .pop[data-side="sheet"]::before { display: none; }
+  .pop-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .pop-steps { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--teal); }
+  .pop-steps i { width: 18px; height: 5px; border-radius: 99px; background: var(--line); }
+  .pop-steps i.on { background: var(--teal); }
+  .pop-x { width: 30px; height: 30px; border-radius: 50%; border: 0; background: var(--surface-2); color: var(--ink-2); display: grid; place-items: center; cursor: pointer; }
+  .pop-x:hover { background: var(--line); }
+  .pop h3 { margin: 12px 0 0; font-size: 17px; font-weight: 800; letter-spacing: -.01em; }
+  .pop p { margin: 6px 0 0; font-size: 15px; line-height: 1.5; color: var(--ink-2); }
+  .pop-foot { margin-top: 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .pop-skip { border: 0; background: none; padding: 6px 2px; color: var(--ink-3); font: 600 14px var(--font); cursor: pointer; }
+  .pop-skip:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .pop-next { height: 42px; padding: 0 20px; border-radius: 999px; border: 0; background: var(--teal); color: var(--on-teal); font: 700 15px var(--font); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+  .pop-next:hover { background: var(--teal-strong); }
+
+  .toast { position: fixed; left: 50%; bottom: calc(96px + env(safe-area-inset-bottom, 0px)); translate: -50% 0; z-index: 6; padding: 10px 16px; border-radius: 12px; background: var(--ink); color: var(--ground); font-size: 14px; font-weight: 600; box-shadow: var(--shadow); }
+
+  /* Footer */
+  footer { border-top: 1px solid var(--line); background: var(--surface-2); }
+  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px 24px; padding-block: 28px; font-size: 14px; color: var(--ink-2); }
+  .foot-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--ink); }
+  .foot-brand i { width: 10px; height: 10px; border-radius: 3px; background: var(--yellow); }
+  footer nav { display: flex; flex-wrap: wrap; gap: 6px 22px; }
+  footer nav a { text-decoration: none; }
+  footer nav a:hover { color: var(--teal); }
+
+  @media (max-width: 900px) {
+    .work { grid-template-columns: minmax(0, 1fr); }
+    .chart { position: static; order: 2; }
+  }
+  @media (max-width: 640px) {
+    .wrap { padding-inline: 16px; }
+    .top .wrap { height: 60px; }
+    .brand .word { display: none; }
+    .stepper { padding: 14px; gap: 6px; }
+    .stepper li { flex-direction: column; text-align: center; gap: 6px; }
+    .stepper li + li::before { display: none; }
+    .step-txt b { font-size: 13px; }
+    .step-txt small { display: none; }
+    .panel { padding: 18px; }
+    .q { font-size: 19px; }
+    .bar-mid { display: none; }
+    footer .wrap { flex-direction: column; align-items: start; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Empowered Vote home">
+      <span class="ev word">empowered<span>.vote</span></span>
+      <svg width="44" height="30" viewBox="0 0 44 30" aria-hidden="true">
+        <rect x="0" y="2" width="16" height="6" fill="var(--teal)"/>
+        <rect x="0" y="12" width="12" height="6" fill="var(--teal)"/>
+        <rect x="0" y="22" width="16" height="6" fill="var(--teal)"/>
+        <path d="M18 2 H44 L30 28 Z" fill="var(--coral)"/>
+        <circle cx="29" cy="12" r="4" fill="var(--surface)"/>
+      </svg>
+    </a>
+    <a class="product" href="#top" aria-label="Read and Rank">
+      <span><span class="a">read</span><span class="b">&amp; rank</span></span>
+      <svg width="26" height="30" viewBox="0 0 26 30" aria-hidden="true">
+        <rect x="2" y="2" width="22" height="26" rx="4" fill="var(--teal)" transform="rotate(6 13 15)"/>
+        <path d="M8 10 q0 -3 3 -3 M14 10 q0 -3 3 -3" stroke="var(--yellow)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+        <rect x="7" y="16" width="12" height="2" rx="1" fill="var(--on-teal)" opacity=".7"/>
+        <rect x="7" y="21" width="8" height="2" rx="1" fill="var(--on-teal)" opacity=".7"/>
+      </svg>
+    </a>
+    <div class="actions">
+      <button class="icon-btn" data-theme-toggle type="button" aria-label="Switch color theme">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <button class="icon-btn account" type="button" aria-label="Your account">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page">
+    <div class="topbar">
+      <a class="back" href="#compass">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+        Back to topics
+      </a>
+      <button class="help" type="button" id="tour-again">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.3M12 17h.01"/></svg>
+        How this works
+      </button>
+    </div>
+
+    <ol class="stepper" aria-label="Compass steps">
+      <li class="done"><span class="dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="step-txt"><b>Choose topics</b><small>Done</small></span></li>
+      <li aria-current="step"><span class="dot">2</span><span class="step-txt"><b>Your stances</b><small>Where you stand</small></span></li>
+      <li><span class="dot">3</span><span class="step-txt"><b>Compare &amp; discover</b><small>See who matches</small></span></li>
+    </ol>
+
+    <div class="tabs" id="tabs" role="tablist" aria-label="Your topics"></div>
+
+    <div class="work">
+      <section class="chart" aria-labelledby="chart-title">
+        <div class="chart-head">
+          <h2 id="chart-title">Your compass</h2>
+          <div class="zoom">
+            <button type="button" id="zoom-in" aria-label="Zoom in"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button>
+            <button type="button" id="zoom-out" aria-label="Zoom out" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></button>
+          </div>
+        </div>
+        <div class="radar-box"><svg class="radar" id="radar" viewBox="-60 0 540 400" role="img" aria-label="Compass chart of your stances"></svg></div>
+        <p class="legend"><span><i style="background:var(--teal)"></i>Picked stance</span><span><i style="background:var(--yellow);box-shadow:inset 0 0 0 1.5px var(--ink)"></i>Your own</span></p>
+      </section>
+
+      <section class="panel" id="panel" aria-live="polite">
+        <p class="q-meta" id="q-meta">Topic 1 of 3 · School Equity Programs</p>
+        <h1 class="q" id="q">How should schools address gaps in achievement and opportunity between groups of students?</h1>
+        <div class="scale" aria-hidden="true"><span>↑ Outer ring</span><span>Center ring ↓</span></div>
+        <div id="tour-opts">
+          <div class="opts" id="opts"></div>
+        </div>
+        <div class="own" id="own">
+          <label class="sr" for="own-text">Write your own stance</label>
+          <input id="own-text" type="text" placeholder="Write your own…" autocomplete="off">
+          <div class="place" id="place" hidden>
+            <label for="own-level">Drag to where it fits best on the spectrum</label>
+            <input id="own-level" type="range" min="1" max="5" step="1" value="3">
+            <div class="ends"><span>Center ring</span><span>Outer ring</span></div>
+            <button class="save" type="button" id="own-save">Use my stance</button>
+          </div>
+        </div>
+        <p class="note">You can always write your own stance if none of these fit</p>
+      </section>
+    </div>
+  </div>
+
+  <div class="bar">
+    <div class="wrap bar-in">
+      <button class="ghost" type="button" id="prev">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Back
+      </button>
+      <span class="bar-mid" id="bar-mid">0 of 3 answered</span>
+      <button class="ghost" type="button" id="next">Skip</button>
+    </div>
+  </div>
+
+  <div class="tour-shade" id="tour-shade" hidden></div>
+  <div class="spot" id="spot" hidden></div>
+  <div class="pop" id="pop" role="dialog" aria-modal="true" aria-labelledby="pop-title" hidden>
+    <div class="pop-head">
+      <span class="pop-steps"><span id="pop-count">1 of 2</span><i class="on"></i><i></i></span>
+      <button class="pop-x" type="button" id="pop-x" aria-label="Close guide"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <h3 id="pop-title">Pick your stance</h3>
+    <p id="pop-body"></p>
+    <div class="pop-foot">
+      <button class="pop-skip" type="button" id="pop-skip">Skip All</button>
+      <button class="pop-next" type="button" id="pop-next">Next</button>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status" hidden></div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="foot-brand"><i aria-hidden="true"></i>Empowered Vote · Alpha</span>
+    <nav aria-label="Footer">
+      <span>© 2026</span>
+      <a href="#">Mind Map</a>
+      <a href="#">Briefing</a>
+      <a href="#">Financials</a>
+      <a href="#">Donate</a>
+      <a href="#">Newsletter</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    document.querySelectorAll('[data-theme-toggle]').forEach(function (t) { if (t.dataset.bound) return; t.dataset.bound = '1'; t.addEventListener('click', function () {
+      var current = root.getAttribute('data-theme') ||
+        (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      root.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    }); });
+
+    var STANCES = {"School Equity Programs": {"q": "How should schools address gaps in achievement and opportunity between groups of students?", "s": ["Fund dedicated equity offices and staff to close gaps between student groups", "Require equity training for staff and set measurable goals to close gaps between groups", "Measure results for each student group and steer extra support to those falling behind", "Offer the same supports to every struggling student, without grouping them by race or identity", "Eliminate equity programs, training, and staff from the district"]}, "Border Security": {"q": "How should the government handle people who cross the border?", "s": ["Create broader legal pathways and treat most unauthorized crossings as civil matters", "Expand asylum processing and legal entry options while keeping current enforcement", "Pair added border staffing and technology with faster, fair asylum decisions", "Increase border barriers, staffing, and detention to reduce unauthorized crossings", "Close the border to unauthorized entry and prosecute every illegal crossing"]}, "Civil Rights": {"q": "What role should government play in addressing racial and social inequality?", "s": ["Fund direct programs and reparative policies to close racial and social gaps", "Strengthen anti-discrimination enforcement and require equity plans in public agencies", "Enforce existing anti-discrimination laws and track outcomes by group", "Treat everyone identically under the law, without group-based programs", "Remove group-based government programs and limit anti-discrimination mandates"]}};
+    var DEFAULT = ['School Equity Programs', 'Border Security', 'Civil Rights'];
+    var screen = document.getElementById('panel').closest('.screen') || document.body;
+    var tabs = document.getElementById('tabs');
+    var opts = document.getElementById('opts');
+    var qEl = document.getElementById('q');
+    var metaEl = document.getElementById('q-meta');
+    var radar = document.getElementById('radar');
+    var own = document.getElementById('own');
+    var ownText = document.getElementById('own-text');
+    var place = document.getElementById('place');
+    var ownLevel = document.getElementById('own-level');
+    var prevBtn = document.getElementById('prev');
+    var nextBtn = document.getElementById('next');
+    var barMid = document.getElementById('bar-mid');
+    var toast = document.getElementById('toast');
+    var topics = [], answers = {}, cur = 0, zoom = 1, toastTimer;
+
+    function say(m) { toast.textContent = m; toast.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(function () { toast.hidden = true; }, 2400); }
+    function esc(t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+
+    function load() {
+      var picked = (window.RRCompass && window.RRCompass.length) ? window.RRCompass : DEFAULT.map(function (l) { return { label: l, q: STANCES[l].q }; });
+      topics = picked.map(function (p) {
+        var d = STANCES[p.label];
+        return { label: p.label, q: d ? d.q : p.q, s: d ? d.s : [1, 2, 3, 4, 5].map(function (n) { return '[Stance ' + n + ' for ' + p.label + ']'; }) };
+      });
+      answers = {}; cur = 0;
+    }
+
+    function paintTabs() {
+      tabs.innerHTML = '';
+      topics.forEach(function (t, i) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'tab' + (answers[i] ? ' answered' : '');
+        b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', String(i === cur));
+        b.innerHTML = '<span class="ok" aria-hidden="true"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>' + esc(t.label);
+        b.addEventListener('click', function () { go(i); });
+        tabs.appendChild(b);
+      });
+    }
+
+    function paintRadar() {
+      var n = topics.length, cx = 210, cy = 205, R = 140, NS = 'http://www.w3.org/2000/svg', h = '';
+      function pt(i, r) { var a = -Math.PI / 2 + i * 2 * Math.PI / n; return [cx + r * Math.cos(a), cy + r * Math.sin(a)]; }
+      for (var k = 1; k <= 5; k++) {
+        var ring = [];
+        for (var i = 0; i < n; i++) ring.push(pt(i, R * k / 5).join(','));
+        h += '<polygon class="ring' + (k === 5 ? ' outer' : '') + '" points="' + ring.join(' ') + '"/>';
+      }
+      for (var j = 0; j < n; j++) {
+        var e = pt(j, R);
+        h += '<line class="axis' + (j === cur ? ' on' : '') + '" x1="' + cx + '" y1="' + cy + '" x2="' + e[0] + '" y2="' + e[1] + '"/>';
+      }
+      var shape = [], dots = '';
+      for (var m = 0; m < n; m++) {
+        var a = answers[m], lvl = a ? a.level : 0, p = pt(m, R * lvl / 5);
+        shape.push(p.join(','));
+        if (a) dots += '<circle class="pt' + (a.own ? ' own' : '') + '" cx="' + p[0] + '" cy="' + p[1] + '" r="6"/>';
+      }
+      h += '<polygon class="shape" points="' + shape.join(' ') + '"/>' + dots;
+      for (var t = 0; t < n; t++) {
+        var lp = pt(t, R + 26), anchor = Math.abs(lp[0] - cx) < 8 ? 'middle' : (lp[0] < cx ? 'end' : 'start');
+        var words = topics[t].label.split(' '), lines = [], line = '';
+        words.forEach(function (w) { if ((line + ' ' + w).trim().length > 14 && line) { lines.push(line); line = w; } else line = (line + ' ' + w).trim(); });
+        lines.push(line);
+        var y0 = lp[1] - (lines.length - 1) * 8 + (lp[1] > cy + 20 ? 8 : lp[1] < cy - 20 ? -4 : 4);
+        h += '<text class="' + (t === cur ? 'on' : '') + '" text-anchor="' + anchor + '">' + lines.map(function (l, li) { return '<tspan x="' + lp[0] + '" y="' + (y0 + li * 16) + '">' + esc(l) + '</tspan>'; }).join('') + '</text>';
+      }
+      radar.innerHTML = h;
+      radar.style.transform = 'scale(' + zoom + ')';
+    }
+
+    function paintPanel() {
+      var t = topics[cur], a = answers[cur];
+      metaEl.textContent = 'Topic ' + (cur + 1) + ' of ' + topics.length + ' · ' + t.label;
+      qEl.textContent = t.q;
+      opts.innerHTML = '';
+      t.s.forEach(function (text, i) {
+        var level = 5 - i;
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'opt';
+        b.setAttribute('aria-pressed', String(!!a && !a.own && a.level === level));
+        b.innerHTML = '<span class="ring-badge" aria-label="Ring ' + level + '">' + level + '</span><span>' + esc(text) + '</span>';
+        b.addEventListener('click', function () { choose({ level: level, text: text }); });
+        opts.appendChild(b);
+      });
+      ownText.value = a && a.own ? a.text : '';
+      ownLevel.value = a && a.own ? a.level : 3;
+      place.hidden = !(a && a.own);
+      own.classList.toggle('set', !!(a && a.own));
+      var done = Object.keys(answers).length;
+      barMid.textContent = done + ' of ' + topics.length + ' answered';
+      prevBtn.innerHTML = prevBtn.innerHTML.replace(/Back.*$/, cur === 0 ? 'Back' : 'Back');
+      var last = cur === topics.length - 1;
+      nextBtn.className = a ? 'primary' : 'ghost';
+      nextBtn.innerHTML = a ? (last && done === topics.length ? 'Compare &amp; discover' : 'Next topic') + ' <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>' : 'Skip';
+    }
+
+    function paint() { paintTabs(); paintRadar(); paintPanel(); }
+    function go(i) { cur = Math.max(0, Math.min(topics.length - 1, i)); paint(); }
+
+    function choose(a) {
+      answers[cur] = a; paint();
+      if (!a.own && cur < topics.length - 1) setTimeout(function () { if (answers[cur] === a) go(cur + 1); }, 550);
+    }
+
+    prevBtn.addEventListener('click', function () {
+      if (cur === 0) { var l = document.createElement('a'); l.href = '#compass'; screen.appendChild(l); l.click(); l.remove(); return; }
+      go(cur - 1);
+    });
+    nextBtn.addEventListener('click', function () {
+      var done = Object.keys(answers).length;
+      if (cur < topics.length - 1) { go(cur + 1); return; }
+      if (done === topics.length) say('Stances saved. Compare & discover is the next step.');
+      else { var miss = topics.findIndex(function (_, i) { return !answers[i]; }); say('Pick a stance for ' + topics[miss].label + ' to finish.'); go(miss); }
+    });
+    ownText.addEventListener('input', function () { place.hidden = !ownText.value.trim(); });
+    ownLevel.addEventListener('input', function () {
+      if (answers[cur] && answers[cur].own) { answers[cur].level = +ownLevel.value; paintRadar(); }
+    });
+    document.getElementById('own-save').addEventListener('click', function () {
+      var txt = ownText.value.trim(); if (!txt) return;
+      choose({ level: +ownLevel.value, text: txt, own: true });
+    });
+    document.getElementById('zoom-in').addEventListener('click', function () { zoom = 1.25; paintRadar(); this.disabled = true; document.getElementById('zoom-out').disabled = false; });
+    document.getElementById('zoom-out').addEventListener('click', function () { zoom = 1; paintRadar(); this.disabled = true; document.getElementById('zoom-in').disabled = false; });
+
+    // Guided tour
+    var TOUR = [
+      { target: 'tour-opts', title: 'Pick your stance', body: 'Pick the stance that fits you best. Stances run bottom to top — bottom is closest to the center ring, top is the outermost ring. We randomize which political direction maps to each end, so neither side always starts first.', side: 'right' },
+      { target: 'own', title: 'Or write your own', body: 'If none of the stances quite match, write your own and drag it to where it fits best on the spectrum', side: 'top' }
+    ];
+    var shade = document.getElementById('tour-shade'), spot = document.getElementById('spot'), pop = document.getElementById('pop');
+    var popCount = document.getElementById('pop-count'), popTitle = document.getElementById('pop-title'), popBody = document.getElementById('pop-body');
+    var popNext = document.getElementById('pop-next'), bars = pop.querySelectorAll('.pop-steps i');
+    var tourStep = -1, seenTour = false, lastFocus = null;
+
+    function placeTour() {
+      if (tourStep < 0) return;
+      var s = TOUR[tourStep], el = document.getElementById(s.target), r = el.getBoundingClientRect(), pad = 8;
+      spot.style.top = (r.top - pad) + 'px'; spot.style.left = (r.left - pad) + 'px';
+      spot.style.width = (r.width + pad * 2) + 'px'; spot.style.height = (r.height + pad * 2) + 'px';
+      var pw = pop.offsetWidth, ph = pop.offsetHeight, vw = innerWidth, vh = innerHeight, side = s.side, top, left;
+      if (vw < 640) {
+        pop.dataset.side = 'sheet';
+        pop.style.left = ((vw - pw) / 2) + 'px'; pop.style.top = (vh - ph - 16) + 'px';
+        return;
+      }
+      if (side === 'right' && r.right + pw + 28 > vw) side = r.left - pw - 28 > 0 ? 'left' : 'bottom';
+      if (side === 'top' && r.top - ph - 24 < 0) side = 'bottom';
+      if (side === 'bottom' && r.bottom + ph + 24 > vh) side = 'top';
+      if (side === 'right' || side === 'left') {
+        left = side === 'right' ? r.right + 22 : r.left - pw - 22;
+        top = Math.max(16, Math.min(vh - ph - 16, r.top));
+        pop.style.setProperty('--arrow', Math.max(20, Math.min(ph - 30, r.top + 24 - top)) + 'px');
+      } else {
+        left = Math.max(16, Math.min(vw - pw - 16, r.left + r.width / 2 - pw / 2));
+        top = side === 'top' ? r.top - ph - 20 : r.bottom + 20;
+        pop.style.setProperty('--arrow', Math.max(20, Math.min(pw - 34, r.left + r.width / 2 - left - 7)) + 'px');
+      }
+      pop.dataset.side = side; pop.style.top = top + 'px'; pop.style.left = left + 'px';
+    }
+    function showTour(i) {
+      tourStep = i;
+      var s = TOUR[i];
+      document.getElementById(s.target).scrollIntoView({ block: innerWidth < 640 ? 'start' : 'center' });
+      if (innerWidth < 640) scrollBy(0, -16);
+      shade.hidden = spot.hidden = pop.hidden = false;
+      popCount.textContent = (i + 1) + ' of ' + TOUR.length;
+      popTitle.textContent = s.title; popBody.textContent = s.body;
+      bars.forEach(function (b, k) { b.classList.toggle('on', k <= i); });
+      popNext.innerHTML = i === TOUR.length - 1 ? 'Got it' : 'Next <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+      requestAnimationFrame(placeTour);
+      popNext.focus({ preventScroll: true });
+    }
+    function startTour() { lastFocus = document.activeElement; seenTour = true; showTour(0); }
+    function endTour() {
+      tourStep = -1; shade.hidden = spot.hidden = pop.hidden = true;
+      if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+    }
+    popNext.addEventListener('click', function () { if (tourStep < TOUR.length - 1) showTour(tourStep + 1); else endTour(); });
+    document.getElementById('pop-x').addEventListener('click', endTour);
+    document.getElementById('pop-skip').addEventListener('click', endTour);
+    shade.addEventListener('click', endTour);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && tourStep >= 0) endTour(); });
+    addEventListener('resize', placeTour);
+    addEventListener('scroll', placeTour, { passive: true });
+    document.getElementById('tour-again').addEventListener('click', startTour);
+
+    function open() {
+      load(); paint();
+      if (!seenTour) setTimeout(startTour, 350);
+    }
+    screen.addEventListener('screen:show', open);
+    screen.addEventListener('screen:hide', endTour);
+    if (screen === document.body) open(); else { load(); paint(); }
+  })();
+</script>

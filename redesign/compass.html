@@ -901,7 +901,10 @@
 
     cont.addEventListener('click', function () {
       if (picked.length < MIN) return;
-      say('Topics saved. Your stances is the next step.');
+      window.RRCompass = picked.map(function (t) { return { label: t.dataset.label, q: t.querySelector('.q').textContent }; });
+      var screenEl = cont.closest('.screen');
+      if (screenEl) { var l = document.createElement('a'); l.href = '#stances'; screenEl.appendChild(l); l.click(); l.remove(); }
+      else say('Topics saved. Your stances is the next step.');
     });
 
     // Category jump links scroll within the page; highlight the one in view.
