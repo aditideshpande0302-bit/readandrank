@@ -442,6 +442,277 @@
     * { transition: none !important; }
   }
 
+
+  :root {
+    --ground: #F7F4EF;
+    --surface: #FFFFFF;
+    --surface-2: #FBF9F6;
+    --ink: #1B1E3B;
+    --ink-2: #4A4E68;
+    --ink-3: #7A7D92;
+    --line: #E8E3DB;
+    --teal: #0E6A80;
+    --teal-strong: #0A5566;
+    --teal-tint: #E3EFF2;
+    --on-teal: #FFFFFF;
+    --coral: #EF5B3E;
+    --yellow: #F6C343;
+    --map-fill: #F1EEE8;
+    --map-line: #B9C9CE;
+    --shadow: 0 1px 2px rgba(27, 30, 59, .04), 0 8px 24px -12px rgba(27, 30, 59, .12);
+    --radius: 14px;
+    --font: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground: #11141F;
+      --surface: #191D2B;
+      --surface-2: #151926;
+      --ink: #EEF0F6;
+      --ink-2: #B6BACB;
+      --ink-3: #868AA0;
+      --line: #2A2F42;
+      --teal: #4FB3C8;
+      --teal-strong: #7CCADB;
+      --teal-tint: #1C3139;
+      --on-teal: #0B1E24;
+      --map-fill: #222738;
+      --map-line: #3C465B;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground: #11141F;
+    --surface: #191D2B;
+    --surface-2: #151926;
+    --ink: #EEF0F6;
+    --ink-2: #B6BACB;
+    --ink-3: #868AA0;
+    --line: #2A2F42;
+    --teal: #4FB3C8;
+    --teal-strong: #7CCADB;
+    --teal-tint: #1C3139;
+    --on-teal: #0B1E24;
+    --map-fill: #222738;
+    --map-line: #3C465B;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; display: flex; flex-direction: column; }
+  #s-read main { flex: 1 0 auto; width: 100%; }
+  #s-read a { color: inherit; }
+  #s-read :focus-visible { outline: 2.5px solid var(--teal); outline-offset: 3px; border-radius: 6px; }
+  #s-read .wrap { max-width: 1160px; margin: 0 auto; padding-inline: 24px; }
+
+  #s-read /* Header (shared with landing) */
+  .top { background: var(--surface); border-bottom: 1px solid var(--line); }
+  #s-read .top .wrap { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 68px; }
+  #s-read .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; letter-spacing: -.02em; line-height: .95; font-size: 17px; }
+  #s-read .brand .ev { color: var(--teal); }
+  #s-read .brand .ev span { display: block; color: var(--coral); text-align: right; }
+  #s-read .product { display: flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 800; font-size: 17px; line-height: .95; letter-spacing: -.02em; }
+  #s-read .product .a { color: var(--teal); display: block; text-align: right; }
+  #s-read .product .b { color: var(--coral); display: block; }
+  #s-read .actions { justify-self: end; display: flex; gap: 10px; }
+  #s-read .icon-btn {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: transparent; border: 1px solid var(--line); color: var(--ink-2); cursor: pointer;
+  }
+  #s-read .icon-btn:hover { color: var(--teal); border-color: var(--teal); }
+  #s-read .icon-btn.account { border: 1.5px solid var(--teal); color: var(--teal); }
+
+  #s-read /* Page */
+  .page {
+    max-width: 1080px; margin: 0 auto; padding-block: 32px 88px;
+    display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 48px; align-items: start;
+  }
+  #s-read .crumbs { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; font-size: 14px; color: var(--ink-3); }
+  #s-read .back {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--teal); font-weight: 600; text-decoration: none;
+  }
+  #s-read .back:hover { text-decoration: underline; text-underline-offset: 3px; }
+  #s-read .crumbs .sep { color: var(--line); }
+
+  #s-read /* Question */
+  .eyebrow { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+  #s-read .eyebrow b { color: var(--teal); font-weight: 800; }
+  #s-read .question {
+    margin: 14px 0 0;
+    font-size: clamp(26px, 3.2vw, 34px); line-height: 1.2; letter-spacing: -.025em; font-weight: 800;
+    text-wrap: balance;
+  }
+  #s-read .question mark {
+    color: inherit;
+    background: linear-gradient(transparent 58%, color-mix(in srgb, var(--yellow) 70%, transparent) 58%, color-mix(in srgb, var(--yellow) 70%, transparent) 92%, transparent 92%);
+    -webkit-box-decoration-break: clone; box-decoration-break: clone;
+    padding-inline: 2px;
+  }
+
+  #s-read .steps { margin-top: 28px; display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  #s-read .segs { display: flex; gap: 6px; flex: 1; }
+  #s-read .segs i { flex: 1; height: 6px; border-radius: 99px; background: var(--line); transition: background .25s ease; }
+  #s-read .segs i.done { background: var(--teal); }
+  #s-read .segs i.now { background: color-mix(in srgb, var(--teal) 40%, var(--line)); }
+
+  #s-read /* Quote card */
+  .card {
+    margin-top: 16px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 20px;
+    box-shadow: var(--shadow); overflow: hidden;
+  }
+  #s-read .card-body { position: relative; padding: 36px 36px 32px; min-height: 220px; display: flex; flex-direction: column; }
+  #s-read .qmark { width: 38px; height: 30px; color: var(--yellow); }
+  #s-read .quote {
+    margin: 16px 0 0;
+    font-size: clamp(20px, 2.2vw, 25px); line-height: 1.45; letter-spacing: -.01em; font-weight: 500;
+    text-wrap: pretty;
+  }
+  #s-read .who { margin-top: auto; padding-top: 24px; display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--ink-3); }
+  #s-read .who .anon {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--surface-2); border: 1.5px dashed var(--map-line);
+    font-weight: 800; font-size: 13px; color: var(--ink-3);
+  }
+  #s-read .info {
+    position: absolute; top: 20px; right: 20px;
+    width: 34px; height: 34px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: transparent; border: 1px solid var(--line); color: var(--ink-3); cursor: pointer;
+  }
+  #s-read .info:hover, #s-read .info[aria-expanded="true"] { color: var(--teal); border-color: var(--teal); }
+  #s-read .tip {
+    position: absolute; top: 60px; right: 20px; z-index: 3; width: min(260px, calc(100% - 40px));
+    padding: 12px 14px; border-radius: 12px;
+    background: var(--ink); color: var(--ground); font-size: 13px; line-height: 1.45;
+    box-shadow: var(--shadow);
+  }
+
+  #s-read .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 20px 20px; }
+  #s-read .choice {
+    height: 60px; border-radius: 14px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    font: 800 15px/1 var(--font); letter-spacing: .1em; text-transform: uppercase;
+    cursor: pointer; transition: background .15s ease, border-color .15s ease, color .15s ease, transform .1s ease;
+  }
+  #s-read .choice:active { transform: scale(.98); }
+  #s-read .choice.no { background: var(--surface); color: var(--ink); border: 1.5px solid var(--ink); }
+  #s-read .choice.no:hover { background: var(--ink); color: var(--surface); }
+  #s-read .choice.yes { background: var(--teal); color: var(--on-teal); border: 1.5px solid var(--teal); }
+  #s-read .choice.yes:hover { background: var(--teal-strong); border-color: var(--teal-strong); }
+  #s-read .choice svg { flex: none; }
+
+  #s-read .card.leaving { animation: leave .22s ease forwards; }
+  #s-read .card.entering { animation: enter .28s ease; }
+  @keyframes leave { #s-read to { opacity: 0; transform: translateY(-8px); } }
+  @keyframes enter { #s-read from { opacity: 0; transform: translateY(8px); } }
+
+  #s-read .keys { margin: 14px 0 0; text-align: center; font-size: 13px; color: var(--ink-3); }
+  #s-read kbd {
+    display: inline-block; min-width: 22px; padding: 1px 6px; border-radius: 6px;
+    border: 1px solid var(--line); border-bottom-width: 2px; background: var(--surface);
+    font: 700 12px/1.5 var(--font); color: var(--ink-2); text-align: center;
+  }
+
+  #s-read /* Done state */
+  .done-card { padding: 36px; text-align: center; display: grid; justify-items: center; gap: 10px; }
+  #s-read .done-icon { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--teal-tint); color: var(--teal); }
+  #s-read .done-card h2 { margin: 8px 0 0; font-size: 24px; letter-spacing: -.02em; }
+  #s-read .done-card p { margin: 0; color: var(--ink-2); max-width: 30em; }
+  #s-read .done-actions { margin-top: 14px; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+
+  #s-read .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    height: 50px; padding-inline: 24px; border-radius: 999px;
+    background: var(--teal); color: var(--on-teal);
+    font: 700 16px/1 var(--font); text-decoration: none; border: 1.5px solid var(--teal); cursor: pointer;
+    transition: background .15s ease;
+  }
+  #s-read .btn:hover { background: var(--teal-strong); border-color: var(--teal-strong); }
+  #s-read .btn.ghost { background: transparent; color: var(--teal); }
+  #s-read .btn.ghost:hover { background: var(--teal-tint); }
+
+  #s-read .reveal-row { margin-top: 24px; display: flex; justify-content: center; }
+  #s-read .reveal-row .btn { height: 44px; font-size: 15px; }
+
+  #s-read /* Ranking panel */
+  .rank {
+    position: sticky; top: calc(24px + env(safe-area-inset-top, 0px));
+    margin-top: 30px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 20px;
+    padding: 24px;
+  }
+  #s-read .rank h2 { margin: 0; font-size: 18px; font-weight: 800; letter-spacing: -.01em; }
+  #s-read .rank .sub { margin: 4px 0 0; font-size: 14px; color: var(--ink-3); }
+  #s-read .empty {
+    margin-top: 20px; padding: 28px 20px; border-radius: 14px;
+    border: 1.5px dashed var(--line); text-align: center; color: var(--ink-3); font-size: 14px;
+  }
+  #s-read .empty svg { color: var(--map-line); margin-bottom: 8px; }
+  #s-read .rank-list { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 10px; }
+  #s-read .rank-list li {
+    display: grid; grid-template-columns: auto auto 1fr auto; align-items: center; gap: 12px;
+    padding: 12px 14px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line);
+    animation: enter .28s ease;
+  }
+  #s-read .pos { font-size: 13px; font-weight: 800; color: var(--ink-3); font-variant-numeric: tabular-nums; width: 14px; }
+  #s-read .rank-list .anon { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--teal-tint); color: var(--teal); font-weight: 800; font-size: 14px; }
+  #s-read .rank-name { font-weight: 700; font-size: 15px; line-height: 1.3; }
+  #s-read .rank-name small { display: block; color: var(--ink-3); font-weight: 500; font-size: 13px; }
+  #s-read .verdict { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: 5px 9px; border-radius: 999px; white-space: nowrap; }
+  #s-read .verdict.yes { color: var(--teal); background: var(--teal-tint); }
+  #s-read .verdict.no { color: var(--ink-2); background: var(--surface); border: 1px solid var(--line); }
+  #s-read .rank-foot { margin: 16px 0 0; padding-top: 14px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-3); display: flex; gap: 8px; }
+  #s-read .rank-foot svg { flex: none; margin-top: 2px; color: var(--teal); }
+
+  #s-read [hidden] { display: none !important; }
+  #s-read [tabindex="-1"]:focus { outline: none; }
+  #s-read .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  #s-read /* Footer (shared with landing) */
+  footer { border-top: 1px solid var(--line); background: var(--surface-2); }
+  #s-read footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px 24px; padding-block: 28px; font-size: 14px; color: var(--ink-2); }
+  #s-read .foot-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--ink); }
+  #s-read .foot-brand i { width: 10px; height: 10px; border-radius: 3px; background: var(--yellow); }
+  #s-read footer nav { display: flex; flex-wrap: wrap; gap: 6px 22px; }
+  #s-read footer nav a { text-decoration: none; }
+  #s-read footer nav a:hover { color: var(--teal); }
+
+  @media (max-width: 900px) {
+    #s-read .page { grid-template-columns: 1fr; gap: 0; max-width: 640px; }
+    #s-read .rank { position: static; margin-top: 32px; }
+  }
+  @media (max-width: 560px) {
+    #s-read .wrap { padding-inline: 16px; }
+    #s-read .top .wrap { height: 60px; }
+    #s-read .brand .word { display: none; }
+    #s-read .page { padding-block: 20px 40px; }
+    #s-read .card-body { padding: 28px 22px 24px; min-height: 0; }
+    #s-read .choices { padding: 0 14px 14px; gap: 10px; }
+    #s-read .choice { height: 56px; font-size: 14px; }
+    #s-read .keys { display: none; }
+    #s-read .crumbs .where { display: none; }
+    #s-read .crumbs { margin-bottom: 20px; }
+    #s-read footer .wrap { flex-direction: column; align-items: start; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+
 .screen { flex: 1 0 auto; display: flex; flex-direction: column; }
 .screen[hidden] { display: none; }
 </style>
@@ -718,6 +989,123 @@
 </footer>
 </div>
 
+<div class="screen" id="s-read" hidden>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Empowered Vote home">
+      <span class="ev word">empowered<span>.vote</span></span>
+      <svg width="44" height="30" viewBox="0 0 44 30" aria-hidden="true">
+        <rect x="0" y="2" width="16" height="6" fill="var(--teal)"/>
+        <rect x="0" y="12" width="12" height="6" fill="var(--teal)"/>
+        <rect x="0" y="22" width="16" height="6" fill="var(--teal)"/>
+        <path d="M18 2 H44 L30 28 Z" fill="var(--coral)"/>
+        <circle cx="29" cy="12" r="4" fill="var(--surface)"/>
+      </svg>
+    </a>
+    <a class="product" href="#top" aria-label="Read and Rank">
+      <span><span class="a">read</span><span class="b">&amp; rank</span></span>
+      <svg width="26" height="30" viewBox="0 0 26 30" aria-hidden="true">
+        <rect x="2" y="2" width="22" height="26" rx="4" fill="var(--teal)" transform="rotate(6 13 15)"/>
+        <path d="M8 10 q0 -3 3 -3 M14 10 q0 -3 3 -3" stroke="var(--yellow)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+        <rect x="7" y="16" width="12" height="2" rx="1" fill="var(--on-teal)" opacity=".7"/>
+        <rect x="7" y="21" width="8" height="2" rx="1" fill="var(--on-teal)" opacity=".7"/>
+      </svg>
+    </a>
+    <div class="actions">
+      <button class="icon-btn" data-theme-toggle type="button" aria-label="Switch color theme">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <button class="icon-btn account" type="button" aria-label="Your account">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a class="back" href="#issues">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+        Issues
+      </a>
+      <span class="sep where" aria-hidden="true">/</span>
+      <span class="where">US Representative, District 7 · Indiana</span>
+    </nav>
+
+    <section aria-labelledby="question">
+      <p class="eyebrow">Issue 1 of 2 <span aria-hidden="true">·</span> <b>Housing</b></p>
+      <h1 class="question" id="question"><mark>What role should government play in making sure people can afford housing?</mark></h1>
+
+      <div class="steps">
+        <span id="quote-count">Quote 1 of 2</span>
+        <span class="segs" id="segs" aria-hidden="true"><i class="now"></i><i></i></span>
+      </div>
+
+      <div id="stage">
+        <article class="card" id="card" aria-live="polite">
+          <div class="card-body">
+            <svg class="qmark" viewBox="0 0 38 30" aria-hidden="true"><path fill="currentColor" d="M0 30V17C0 7.6 4.6 1.9 13.8 0l1.7 4.1C10.8 5.6 8.4 8.6 8.2 13H15v17H0zm22 0V17c0-9.4 4.6-15.1 13.8-17l1.7 4.1c-4.7 1.5-7.1 4.5-7.3 8.9H37v17H22z"/></svg>
+            <p class="quote" id="quote-text">We will update policies and introduce legislation that create stronger pathways to homeownership.</p>
+            <div class="who">
+              <span class="anon" id="quote-anon" aria-hidden="true">A</span>
+              <span id="quote-who">Candidate A · name hidden until you rank</span>
+            </div>
+            <button class="info" id="info" type="button" aria-expanded="false" aria-controls="tip" aria-label="About this quote">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+            </button>
+            <div class="tip" id="tip" role="note" hidden>This is a direct quote from a candidate's public statements. The source and speaker are shown after you reveal your ballot.</div>
+          </div>
+          <div class="choices">
+            <button class="choice no" type="button" data-answer="no">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              Disagree
+            </button>
+            <button class="choice yes" type="button" data-answer="yes">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+              Agree
+            </button>
+          </div>
+        </article>
+        <p class="keys" id="keys">Shortcut: <kbd>←</kbd> disagree · <kbd>→</kbd> agree</p>
+      </div>
+
+      <div class="reveal-row" id="reveal-row">
+        <button class="btn ghost" type="button">Reveal ballot</button>
+      </div>
+    </section>
+
+    <aside class="rank" aria-labelledby="rank-title">
+      <h2 id="rank-title">Your ranking</h2>
+      <p class="sub">Builds as you react to each quote.</p>
+      <div class="empty" id="rank-empty">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+        <div>Agree or disagree with a quote to see candidates appear here.</div>
+      </div>
+      <ol class="rank-list" id="rank-list" hidden></ol>
+      <p class="rank-foot">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        Names and parties stay hidden until you reveal your ballot.
+      </p>
+    </aside>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="foot-brand"><i aria-hidden="true"></i>Empowered Vote · Alpha</span>
+    <nav aria-label="Footer">
+      <span>© 2026</span>
+      <a href="#">Mind Map</a>
+      <a href="#">Briefing</a>
+      <a href="#">Financials</a>
+      <a href="#">Donate</a>
+      <a href="#">Newsletter</a>
+    </nav>
+  </div>
+</footer>
+</div>
+
 <script>
   (function () {
     var root = document.documentElement;
@@ -763,17 +1151,148 @@
 </script>
 <script>
   (function () {
-    var screens = { landing: document.getElementById('s-landing'), issues: document.getElementById('s-issues') };
-    function current() { return screens.issues.hidden ? 'landing' : 'issues'; }
+    var root = document.documentElement;
+    document.querySelectorAll('[data-theme-toggle]').forEach(function (t) { if (t.dataset.bound) return; t.dataset.bound = '1'; t.addEventListener('click', function () {
+      var current = root.getAttribute('data-theme') ||
+        (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      root.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    }); });
+
+    // Sample content: quote 1 is from the live page; quote 2 is a placeholder.
+    var QUOTES = [
+      { id: 'A', text: 'We will update policies and introduce legislation that create stronger pathways to homeownership.' },
+      { id: 'B', text: 'Local zoning should allow more homes near jobs and transit, so rents come down over time.' }
+    ];
+    var screen = document.getElementById('card').closest('.screen') || document.body;
+    var stage = document.getElementById('stage');
+    var card = document.getElementById('card');
+    var textEl = document.getElementById('quote-text');
+    var anonEl = document.getElementById('quote-anon');
+    var whoEl = document.getElementById('quote-who');
+    var countEl = document.getElementById('quote-count');
+    var segs = document.getElementById('segs').children;
+    var info = document.getElementById('info');
+    var tip = document.getElementById('tip');
+    var list = document.getElementById('rank-list');
+    var empty = document.getElementById('rank-empty');
+    var revealRow = document.getElementById('reveal-row');
+    var stageHTML = stage.innerHTML;
+    var index = 0, answers = [], busy = false;
+
+    function paintQuote() {
+      var q = QUOTES[index];
+      textEl.textContent = q.text;
+      anonEl.textContent = q.id;
+      whoEl.textContent = 'Candidate ' + q.id + ' · name hidden until you rank';
+      countEl.textContent = 'Quote ' + (index + 1) + ' of ' + QUOTES.length;
+      for (var i = 0; i < segs.length; i++) {
+        segs[i].className = i < index ? 'done' : i === index ? 'now' : '';
+      }
+      tip.hidden = true; info.setAttribute('aria-expanded', 'false');
+    }
+
+    function paintRanking() {
+      list.innerHTML = '';
+      var sorted = answers.slice().sort(function (a, b) { return (b.answer === 'yes') - (a.answer === 'yes'); });
+      sorted.forEach(function (a, i) {
+        var li = document.createElement('li');
+        li.innerHTML =
+          '<span class="pos">' + (i + 1) + '</span>' +
+          '<span class="anon" aria-hidden="true">' + a.id + '</span>' +
+          '<span class="rank-name">Candidate ' + a.id + '<small>Housing</small></span>' +
+          '<span class="verdict ' + a.answer + '">' + (a.answer === 'yes' ? 'Agreed' : 'Disagreed') + '</span>';
+        list.appendChild(li);
+      });
+      list.hidden = answers.length === 0;
+      empty.hidden = answers.length > 0;
+    }
+
+    function paintDone() {
+      for (var i = 0; i < segs.length; i++) segs[i].className = 'done';
+      countEl.textContent = 'All ' + QUOTES.length + ' quotes read';
+      revealRow.hidden = true;
+      stage.innerHTML =
+        '<div class="card entering"><div class="done-card">' +
+          '<span class="done-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>' +
+          '<h2 tabindex="-1">Housing is ranked</h2>' +
+          '<p>You’ve reacted to every quote on this issue. Reveal your ballot to see who said what, or keep going.</p>' +
+          '<div class="done-actions">' +
+            '<button class="btn" type="button">Reveal ballot</button>' +
+            '<a class="btn ghost" href="#issues">Back to issues</a>' +
+          '</div>' +
+        '</div></div>';
+      stage.querySelector('h2').focus({ preventScroll: true });
+    }
+
+    function answer(value) {
+      if (busy || index >= QUOTES.length) return;
+      busy = true;
+      answers.push({ id: QUOTES[index].id, answer: value });
+      paintRanking();
+      card.classList.add('leaving');
+      setTimeout(function () {
+        index++;
+        card.classList.remove('leaving');
+        if (index >= QUOTES.length) { paintDone(); busy = false; return; }
+        paintQuote();
+        card.classList.add('entering');
+        setTimeout(function () { card.classList.remove('entering'); busy = false; }, 280);
+      }, 220);
+    }
+
+    function bind() {
+      card = document.getElementById('card');
+      textEl = document.getElementById('quote-text');
+      anonEl = document.getElementById('quote-anon');
+      whoEl = document.getElementById('quote-who');
+      info = document.getElementById('info');
+      tip = document.getElementById('tip');
+      card.querySelectorAll('.choice').forEach(function (b) {
+        b.addEventListener('click', function () { answer(b.dataset.answer); });
+      });
+      info.addEventListener('click', function () {
+        tip.hidden = !tip.hidden;
+        info.setAttribute('aria-expanded', String(!tip.hidden));
+      });
+    }
+
+    function reset() {
+      index = 0; answers = []; busy = false;
+      stage.innerHTML = stageHTML;
+      revealRow.hidden = false;
+      bind(); paintQuote(); paintRanking();
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (screen.hidden || e.altKey || e.ctrlKey || e.metaKey) return;
+      if (/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+      if (e.key === 'ArrowLeft') { e.preventDefault(); answer('no'); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); answer('yes'); }
+    });
+    screen.addEventListener('screen:show', reset);
+
+    bind(); paintQuote(); paintRanking();
+  })();
+</script>
+<script>
+  (function () {
+    var screens = {};
+    document.querySelectorAll('.screen').forEach(function (el) { screens[el.id.slice(2)] = el; });
+    var active = 'landing';
     function go(target) {
-      var name = target === 'issues' ? 'issues' : 'landing';
-      var changed = name !== current();
-      screens.landing.hidden = name !== 'landing';
-      screens.issues.hidden = name !== 'issues';
+      var name = screens[target] && target !== 'landing' ? target : 'landing';
+      var changed = name !== active;
+      Object.keys(screens).forEach(function (k) { screens[k].hidden = k !== name; });
+      active = name;
       var anchor = name === 'landing' && target && target !== 'top' && document.getElementById(target);
       if (anchor) anchor.scrollIntoView({ block: 'start' });
       else if (changed || target === 'top') window.scrollTo(0, 0);
-      if (changed) { var h = screens[name].querySelector('h1, h2'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } }
+      if (changed) {
+        screens[name].dispatchEvent(new CustomEvent('screen:show'));
+        var h = screens[name].querySelector('h1, h2');
+        if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
+      }
+      try { history.replaceState(null, '', name === 'landing' ? location.pathname + location.search : '#' + name); } catch (err) {}
     }
     document.addEventListener('click', function (e) {
       var a = e.target.closest('a[href^="#"]');
@@ -781,8 +1300,12 @@
       e.preventDefault();
       var target = a.getAttribute('href').slice(1);
       if (target) go(target);
-      try { history.replaceState(null, '', target === 'issues' ? '#issues' : location.pathname + location.search); } catch (err) {}
     });
-    if (location.hash === '#issues') go('issues');
+    // "Start reading" on the issues screen opens the reading screen.
+    document.addEventListener('submit', function (e) {
+      if (e.target.id === 'issues-form') go('read');
+    });
+    var initial = location.hash.slice(1);
+    if (screens[initial]) go(initial);
   })();
 </script>

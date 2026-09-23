@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 
 HERE = Path(__file__).parent
-SCREENS = [("landing", "landing.html"), ("issues", "issues.html")]
+SCREENS = [("landing", "landing.html"), ("issues", "issues.html"), ("read", "read.html")]
 GLOBAL = (":root", "*", "body", "@")
 
 
@@ -63,17 +63,23 @@ def main():
 
     router = """<script>
   (function () {
-    var screens = { landing: document.getElementById('s-landing'), issues: document.getElementById('s-issues') };
-    function current() { return screens.issues.hidden ? 'landing' : 'issues'; }
+    var screens = {};
+    document.querySelectorAll('.screen').forEach(function (el) { screens[el.id.slice(2)] = el; });
+    var active = 'landing';
     function go(target) {
-      var name = target === 'issues' ? 'issues' : 'landing';
-      var changed = name !== current();
-      screens.landing.hidden = name !== 'landing';
-      screens.issues.hidden = name !== 'issues';
+      var name = screens[target] && target !== 'landing' ? target : 'landing';
+      var changed = name !== active;
+      Object.keys(screens).forEach(function (k) { screens[k].hidden = k !== name; });
+      active = name;
       var anchor = name === 'landing' && target && target !== 'top' && document.getElementById(target);
       if (anchor) anchor.scrollIntoView({ block: 'start' });
       else if (changed || target === 'top') window.scrollTo(0, 0);
-      if (changed) { var h = screens[name].querySelector('h1, h2'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } }
+      if (changed) {
+        screens[name].dispatchEvent(new CustomEvent('screen:show'));
+        var h = screens[name].querySelector('h1, h2');
+        if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
+      }
+      try { history.replaceState(null, '', name === 'landing' ? location.pathname + location.search : '#' + name); } catch (err) {}
     }
     document.addEventListener('click', function (e) {
       var a = e.target.closest('a[href^="#"]');
@@ -81,9 +87,13 @@ def main():
       e.preventDefault();
       var target = a.getAttribute('href').slice(1);
       if (target) go(target);
-      try { history.replaceState(null, '', target === 'issues' ? '#issues' : location.pathname + location.search); } catch (err) {}
     });
-    if (location.hash === '#issues') go('issues');
+    // "Start reading" on the issues screen opens the reading screen.
+    document.addEventListener('submit', function (e) {
+      if (e.target.id === 'issues-form') go('read');
+    });
+    var initial = location.hash.slice(1);
+    if (screens[initial]) go(initial);
   })();
 </script>"""
 
