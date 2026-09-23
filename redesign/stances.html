@@ -390,7 +390,7 @@
       <button class="pop-next" type="button" id="pop-next">Next</button>
     </div>
   </div>
-  <div class="toast" id="toast" role="status" hidden></div>
+  <div class="toast" id="st-toast" role="status" hidden></div>
 </main>
 
 <footer>
@@ -431,7 +431,7 @@
     var prevBtn = document.getElementById('prev');
     var nextBtn = document.getElementById('next');
     var barMid = document.getElementById('bar-mid');
-    var toast = document.getElementById('toast');
+    var toast = document.getElementById('st-toast');
     var topics = [], answers = {}, cur = 0, zoom = 1, toastTimer;
 
     function say(m) { toast.textContent = m; toast.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(function () { toast.hidden = true; }, 2400); }
@@ -530,7 +530,11 @@
     nextBtn.addEventListener('click', function () {
       var done = Object.keys(answers).length;
       if (cur < topics.length - 1) { go(cur + 1); return; }
-      if (done === topics.length) say('Stances saved. Compare & discover is the next step.');
+      if (done === topics.length) {
+        window.RRStances = topics.map(function (t, i) { return { label: t.label, level: answers[i].level }; });
+        var l = document.createElement('a'); l.href = '#ready';
+        if (screen !== document.body) { screen.appendChild(l); l.click(); l.remove(); } else say('Stances saved. Compare & discover is the next step.');
+      }
       else { var miss = topics.findIndex(function (_, i) { return !answers[i]; }); say('Pick a stance for ' + topics[miss].label + ' to finish.'); go(miss); }
     });
     ownText.addEventListener('input', function () { place.hidden = !ownText.value.trim(); });

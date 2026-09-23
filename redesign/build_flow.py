@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 
 HERE = Path(__file__).parent
-SCREENS = [("landing", "landing.html"), ("issues", "issues.html"), ("read", "read.html"), ("ballot", "ballot.html"), ("browse", "browse.html"), ("compass", "compass.html"), ("stances", "stances.html")]
+SCREENS = [("landing", "landing.html"), ("issues", "issues.html"), ("read", "read.html"), ("ballot", "ballot.html"), ("browse", "browse.html"), ("compass", "compass.html"), ("stances", "stances.html"), ("ready", "ready.html")]
 GLOBAL = (":root", "*", "body", "@")
 
 
@@ -107,7 +107,7 @@ def main():
         + "\n".join(styles)
         + "\n.screen { flex: 1 0 auto; display: flex; flex-direction: column; }"
         + "\n.screen[hidden] { display: none; }"
-        + "\n.screen [tabindex=\"-1\"]:focus { outline: none; }"
+        + "\n.screen [tabindex=\"-1\"]:focus, .screen [tabindex=\"-1\"]:focus-visible { outline: none !important; }"
         + "\n</style>\n\n"
         + "\n\n".join(bodies)
         + "\n\n"
