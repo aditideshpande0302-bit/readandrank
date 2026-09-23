@@ -175,7 +175,7 @@
   .q { margin: 8px 0 0; font-size: 22px; line-height: 1.3; letter-spacing: -.02em; font-weight: 800; text-wrap: balance; }
   .scale { margin: 18px 0 8px; display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--ink-3); }
   .scale span { display: inline-flex; align-items: center; gap: 4px; }
-  .opts { display: grid; gap: 8px; position: relative; }
+  .opts { margin-top: 18px; display: grid; gap: 8px; position: relative; }
   .opt {
     position: relative; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 12px;
     text-align: left; padding: 14px 16px; border-radius: 14px; cursor: pointer;
@@ -347,7 +347,6 @@
       <section class="panel" id="panel" aria-live="polite">
         <p class="q-meta" id="q-meta">Topic 1 of 3 · School Equity Programs</p>
         <h1 class="q" id="q">How should schools address gaps in achievement and opportunity between groups of students?</h1>
-        <div class="scale" aria-hidden="true"><span>↑ Outer ring</span><span>Center ring ↓</span></div>
         <div id="tour-opts">
           <div class="opts" id="opts"></div>
         </div>
@@ -355,9 +354,6 @@
           <label class="sr" for="own-text">Write your own stance</label>
           <input id="own-text" type="text" placeholder="Write your own…" autocomplete="off">
           <div class="place" id="place" hidden>
-            <label for="own-level">Drag to where it fits best on the spectrum</label>
-            <input id="own-level" type="range" min="1" max="5" step="1" value="3">
-            <div class="ends"><span>Center ring</span><span>Outer ring</span></div>
             <button class="save" type="button" id="own-save">Use my stance</button>
           </div>
         </div>
@@ -427,7 +423,6 @@
     var own = document.getElementById('own');
     var ownText = document.getElementById('own-text');
     var place = document.getElementById('place');
-    var ownLevel = document.getElementById('own-level');
     var prevBtn = document.getElementById('prev');
     var nextBtn = document.getElementById('next');
     var barMid = document.getElementById('bar-mid');
@@ -504,7 +499,6 @@
         opts.appendChild(b);
       });
       ownText.value = a && a.own ? a.text : '';
-      ownLevel.value = a && a.own ? a.level : 3;
       place.hidden = !(a && a.own);
       own.classList.toggle('set', !!(a && a.own));
       var done = Object.keys(answers).length;
@@ -538,12 +532,9 @@
       else { var miss = topics.findIndex(function (_, i) { return !answers[i]; }); say('Pick a stance for ' + topics[miss].label + ' to finish.'); go(miss); }
     });
     ownText.addEventListener('input', function () { place.hidden = !ownText.value.trim(); });
-    ownLevel.addEventListener('input', function () {
-      if (answers[cur] && answers[cur].own) { answers[cur].level = +ownLevel.value; paintRadar(); }
-    });
     document.getElementById('own-save').addEventListener('click', function () {
       var txt = ownText.value.trim(); if (!txt) return;
-      choose({ level: +ownLevel.value, text: txt, own: true });
+      choose({ level: 3, text: txt, own: true });
     });
     document.getElementById('zoom-in').addEventListener('click', function () { zoom = 1.25; paintRadar(); this.disabled = true; document.getElementById('zoom-out').disabled = false; });
     document.getElementById('zoom-out').addEventListener('click', function () { zoom = 1; paintRadar(); this.disabled = true; document.getElementById('zoom-in').disabled = false; });
