@@ -92,6 +92,8 @@ def main():
         + head
         + "<style>\n"
         + "\n".join(styles)
+        + "\n.screen { flex: 1 0 auto; display: flex; flex-direction: column; }"
+        + "\n.screen[hidden] { display: none; }"
         + "\n</style>\n\n"
         + "\n\n".join(bodies)
         + "\n\n"

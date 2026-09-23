@@ -272,6 +272,8 @@
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
   }
+  body { min-height: 100vh; display: flex; flex-direction: column; }
+  #s-issues main { flex: 1 0 auto; width: 100%; }
   #s-issues a { color: inherit; }
   #s-issues :focus-visible { outline: 2.5px solid var(--teal); outline-offset: 3px; border-radius: 6px; }
   #s-issues .wrap { max-width: 1160px; margin: 0 auto; padding-inline: 24px; }
@@ -440,6 +442,8 @@
     * { transition: none !important; }
   }
 
+.screen { flex: 1 0 auto; display: flex; flex-direction: column; }
+.screen[hidden] { display: none; }
 </style>
 
 <div class="screen" id="s-landing">
