@@ -456,6 +456,8 @@
     --teal-tint: #E3EFF2;
     --on-teal: #FFFFFF;
     --coral: #EF5B3E;
+    --coral-strong: #D2452A;
+    --coral-tint: #FCEAE5;
     --yellow: #F6C343;
     --map-fill: #F1EEE8;
     --map-line: #B9C9CE;
@@ -479,6 +481,8 @@
       --on-teal: #0B1E24;
       --map-fill: #222738;
       --map-line: #3C465B;
+      --coral-strong: #E0573B;
+      --coral-tint: #3A221D;
       --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
     }
   }
@@ -497,6 +501,8 @@
     --on-teal: #0B1E24;
     --map-fill: #222738;
     --map-line: #3C465B;
+    --coral-strong: #E0573B;
+    --coral-tint: #3A221D;
     --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
   }
 
@@ -611,7 +617,7 @@
   }
   #s-read .choice:active { transform: scale(.98); }
   #s-read .choice.no { background: var(--surface); color: var(--ink); border: 1.5px solid var(--ink); }
-  #s-read .choice.no:hover { background: var(--ink); color: var(--surface); }
+  #s-read .choice.no:hover { background: var(--coral-strong); border-color: var(--coral-strong); color: #FFFFFF; }
   #s-read .choice.yes { background: var(--teal); color: var(--on-teal); border: 1.5px solid var(--teal); }
   #s-read .choice.yes:hover { background: var(--teal-strong); border-color: var(--teal-strong); }
   #s-read .choice svg { flex: none; }
@@ -675,7 +681,7 @@
   #s-read .rank-name small { display: block; color: var(--ink-3); font-weight: 500; font-size: 13px; }
   #s-read .verdict { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: 5px 9px; border-radius: 999px; white-space: nowrap; }
   #s-read .verdict.yes { color: var(--teal); background: var(--teal-tint); }
-  #s-read .verdict.no { color: var(--ink-2); background: var(--surface); border: 1px solid var(--line); }
+  #s-read .verdict.no { color: var(--coral-strong); background: var(--coral-tint); }
   #s-read .rank-foot { margin: 16px 0 0; padding-top: 14px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-3); display: flex; gap: 8px; }
   #s-read .rank-foot svg { flex: none; margin-top: 2px; color: var(--teal); }
 
