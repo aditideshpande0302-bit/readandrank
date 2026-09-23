@@ -662,28 +662,81 @@
     background: var(--surface); border: 1px solid var(--line); border-radius: 20px;
     padding: 24px;
   }
+  #s-read .rank-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   #s-read .rank h2 { margin: 0; font-size: 18px; font-weight: 800; letter-spacing: -.01em; }
+  #s-read .count {
+    font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+    padding: 5px 10px; border-radius: 999px; color: var(--teal); background: var(--teal-tint);
+    font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
   #s-read .rank .sub { margin: 4px 0 0; font-size: 14px; color: var(--ink-3); }
   #s-read .empty {
-    margin-top: 20px; padding: 28px 20px; border-radius: 14px;
+    margin-top: 18px; padding: 26px 20px; border-radius: 14px;
     border: 1.5px dashed var(--line); text-align: center; color: var(--ink-3); font-size: 14px;
   }
   #s-read .empty svg { color: var(--map-line); margin-bottom: 8px; }
-  #s-read .rank-list { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 10px; }
+
+  #s-read .rank-list { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 10px; counter-reset: pos; }
   #s-read .rank-list li {
-    display: grid; grid-template-columns: auto auto 1fr auto; align-items: center; gap: 12px;
-    padding: 12px 14px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line);
-    animation: enter .28s ease;
+    display: grid; grid-template-columns: auto 1fr auto; align-items: start; gap: 14px;
+    padding: 14px 12px 14px 14px; border-radius: 14px;
+    background: var(--surface); border: 1.5px solid var(--line);
+    cursor: grab; animation: enter .28s ease;
+    transition: border-color .15s ease, box-shadow .15s ease, opacity .15s ease;
   }
-  #s-read .pos { font-size: 13px; font-weight: 800; color: var(--ink-3); font-variant-numeric: tabular-nums; width: 14px; }
-  #s-read .rank-list .anon { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--teal-tint); color: var(--teal); font-weight: 800; font-size: 14px; }
-  #s-read .rank-name { font-weight: 700; font-size: 15px; line-height: 1.3; }
-  #s-read .rank-name small { display: block; color: var(--ink-3); font-weight: 500; font-size: 13px; }
-  #s-read .verdict { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: 5px 9px; border-radius: 999px; white-space: nowrap; }
-  #s-read .verdict.yes { color: var(--teal); background: var(--teal-tint); }
-  #s-read .verdict.no { color: var(--coral-strong); background: var(--coral-tint); }
+  #s-read .rank-list li:hover { border-color: color-mix(in srgb, var(--teal) 45%, var(--line)); }
+  #s-read .rank-list li.dragging { opacity: .45; }
+  #s-read .rank-list li.over { border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-tint); }
+  #s-read .rank-list li:first-child { border-color: var(--teal); background: color-mix(in srgb, var(--teal-tint) 45%, var(--surface)); }
+  #s-read .pos {
+    width: 30px; height: 30px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--surface-2); border: 1.5px solid var(--line);
+    font-size: 14px; font-weight: 800; color: var(--ink-2); font-variant-numeric: tabular-nums;
+  }
+  #s-read .rank-list li:first-child .pos { background: var(--teal); border-color: var(--teal); color: var(--on-teal); }
+  #s-read .rank-text { margin: 4px 0 0; font-size: 15px; line-height: 1.45; }
+  #s-read .rank-tag { display: inline-block; margin-top: 8px; font-size: 12px; font-weight: 700; color: var(--ink-3); }
+  #s-read .order { display: grid; gap: 2px; justify-items: center; }
+  #s-read .order button {
+    width: 28px; height: 26px; border-radius: 8px; border: 0; background: transparent; color: var(--ink-3);
+    display: grid; place-items: center; cursor: pointer;
+  }
+  #s-read .order button:hover:not(:disabled) { background: var(--teal-tint); color: var(--teal); }
+  #s-read .order button:disabled { opacity: .3; cursor: default; }
+  #s-read .grip { color: var(--map-line); }
+
+  #s-read /* Disagreed tray */
+  .tray { margin-top: 14px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line); }
+  #s-read .tray summary {
+    list-style: none; cursor: pointer;
+    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px;
+    padding: 12px 14px;
+  }
+  #s-read .tray summary::-webkit-details-marker { display: none; }
+  #s-read .tray-icon { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--coral-tint); color: var(--coral-strong); }
+  #s-read .tray-title { font-weight: 700; font-size: 15px; line-height: 1.3; }
+  #s-read .tray-title small { display: block; font-weight: 500; font-size: 13px; color: var(--ink-3); }
+  #s-read .chev { color: var(--ink-3); transition: transform .2s ease; }
+  #s-read .tray[open] .chev { transform: rotate(180deg); }
+  #s-read .tray-list { list-style: none; margin: 0; padding: 0 14px 14px; display: grid; gap: 8px; }
+  #s-read .tray-list li { padding: 12px 14px; border-radius: 12px; background: var(--surface); border: 1px dashed var(--line); }
+  #s-read .tray-list p { margin: 0; font-size: 14px; line-height: 1.45; color: var(--ink-2); }
+  #s-read .recover {
+    margin-top: 8px; padding: 0; border: 0; background: none; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+    font: 700 13px var(--font); color: var(--teal);
+  }
+  #s-read .recover:hover { text-decoration: underline; text-underline-offset: 3px; }
+
   #s-read .rank-foot { margin: 16px 0 0; padding-top: 14px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-3); display: flex; gap: 8px; }
   #s-read .rank-foot svg { flex: none; margin-top: 2px; color: var(--teal); }
+
+  #s-read /* Topic complete */
+  .tally { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 4px; }
+  #s-read .tally span { font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; }
+  #s-read .tally .yes { color: var(--teal); background: var(--teal-tint); }
+  #s-read .tally .no { color: var(--coral-strong); background: var(--coral-tint); }
 
   #s-read [hidden] { display: none !important; }
   #s-read [tabindex="-1"]:focus { outline: none; }
@@ -1054,13 +1107,13 @@
             <svg class="qmark" viewBox="0 0 38 30" aria-hidden="true"><path fill="currentColor" d="M0 30V17C0 7.6 4.6 1.9 13.8 0l1.7 4.1C10.8 5.6 8.4 8.6 8.2 13H15v17H0zm22 0V17c0-9.4 4.6-15.1 13.8-17l1.7 4.1c-4.7 1.5-7.1 4.5-7.3 8.9H37v17H22z"/></svg>
             <p class="quote" id="quote-text">We will update policies and introduce legislation that create stronger pathways to homeownership.</p>
             <div class="who">
-              <span class="anon" id="quote-anon" aria-hidden="true">A</span>
-              <span id="quote-who">Candidate A · name hidden until you rank</span>
+              <span class="anon" id="quote-anon" aria-hidden="true">?</span>
+              <span id="quote-who">Speaker hidden until you see your ballot</span>
             </div>
             <button class="info" id="info" type="button" aria-expanded="false" aria-controls="tip" aria-label="About this quote">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
             </button>
-            <div class="tip" id="tip" role="note" hidden>This is a direct quote from a candidate's public statements. The source and speaker are shown after you reveal your ballot.</div>
+            <div class="tip" id="tip" role="note" hidden>This is a direct quote from a candidate's public statements. The source and speaker are shown on your full ballot.</div>
           </div>
           <div class="choices">
             <button class="choice no" type="button" data-answer="no">
@@ -1077,21 +1130,32 @@
       </div>
 
       <div class="reveal-row" id="reveal-row">
-        <button class="btn ghost" type="button">Reveal ballot</button>
+        <button class="btn ghost" type="button">See your full ballot</button>
       </div>
     </section>
 
     <aside class="rank" aria-labelledby="rank-title">
-      <h2 id="rank-title">Your ranking</h2>
-      <p class="sub">Builds as you react to each quote.</p>
+      <div class="rank-head">
+        <h2 id="rank-title">Your ranking</h2>
+        <span class="count" id="rank-count" hidden>0 agreed</span>
+      </div>
+      <p class="sub" id="rank-sub">Quotes you agree with land here.</p>
       <div class="empty" id="rank-empty">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
-        <div>Agree or disagree with a quote to see candidates appear here.</div>
+        <div>Agree with a quote to add it. Then drag to put the one you trust most on top.</div>
       </div>
       <ol class="rank-list" id="rank-list" hidden></ol>
+      <details class="tray" id="tray" hidden>
+        <summary>
+          <span class="tray-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
+          <span class="tray-title"><span id="tray-count">1 disagreed</span><small>Review or move back to your ranking</small></span>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <ul class="tray-list" id="tray-list"></ul>
+      </details>
       <p class="rank-foot">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-        Names and parties stay hidden until you reveal your ballot.
+        Names and parties stay hidden until you see your full ballot.
       </p>
     </aside>
   </div>
@@ -1173,23 +1237,30 @@
     var stage = document.getElementById('stage');
     var card = document.getElementById('card');
     var textEl = document.getElementById('quote-text');
-    var anonEl = document.getElementById('quote-anon');
-    var whoEl = document.getElementById('quote-who');
     var countEl = document.getElementById('quote-count');
     var segs = document.getElementById('segs').children;
     var info = document.getElementById('info');
     var tip = document.getElementById('tip');
     var list = document.getElementById('rank-list');
     var empty = document.getElementById('rank-empty');
+    var countBadge = document.getElementById('rank-count');
+    var sub = document.getElementById('rank-sub');
+    var tray = document.getElementById('tray');
+    var trayList = document.getElementById('tray-list');
+    var trayCount = document.getElementById('tray-count');
     var revealRow = document.getElementById('reveal-row');
     var stageHTML = stage.innerHTML;
-    var index = 0, answers = [], busy = false;
+    var index = 0, agreed = [], disagreed = [], busy = false, dragFrom = null;
+
+    var ICON_UP = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>';
+    var ICON_DOWN = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+    var ICON_GRIP = '<svg class="grip" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>';
+
+    function esc(t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
 
     function paintQuote() {
       var q = QUOTES[index];
       textEl.textContent = q.text;
-      anonEl.textContent = q.id;
-      whoEl.textContent = 'Candidate ' + q.id + ' · name hidden until you rank';
       countEl.textContent = 'Quote ' + (index + 1) + ' of ' + QUOTES.length;
       for (var i = 0; i < segs.length; i++) {
         segs[i].className = i < index ? 'done' : i === index ? 'now' : '';
@@ -1197,20 +1268,67 @@
       tip.hidden = true; info.setAttribute('aria-expanded', 'false');
     }
 
+    function move(from, to) {
+      if (to < 0 || to >= agreed.length || from === to) return;
+      var item = agreed.splice(from, 1)[0];
+      agreed.splice(to, 0, item);
+      paintRanking();
+      var btn = list.children[to] && list.children[to].querySelector(to < from ? '[data-up]' : '[data-down]');
+      if (btn && !btn.disabled) btn.focus();
+    }
+
     function paintRanking() {
       list.innerHTML = '';
-      var sorted = answers.slice().sort(function (a, b) { return (b.answer === 'yes') - (a.answer === 'yes'); });
-      sorted.forEach(function (a, i) {
+      agreed.forEach(function (q, i) {
         var li = document.createElement('li');
+        li.draggable = true;
         li.innerHTML =
-          '<span class="pos">' + (i + 1) + '</span>' +
-          '<span class="anon" aria-hidden="true">' + a.id + '</span>' +
-          '<span class="rank-name">Candidate ' + a.id + '<small>Housing</small></span>' +
-          '<span class="verdict ' + a.answer + '">' + (a.answer === 'yes' ? 'Agreed' : 'Disagreed') + '</span>';
+          '<span class="pos" aria-hidden="true">' + (i + 1) + '</span>' +
+          '<div><p class="rank-text"><span class="sr">Rank ' + (i + 1) + ': </span>' + esc(q.text) + '</p><span class="rank-tag">Housing</span></div>' +
+          '<div class="order">' +
+            '<button type="button" data-up aria-label="Move up"' + (i === 0 ? ' disabled' : '') + '>' + ICON_UP + '</button>' +
+            ICON_GRIP +
+            '<button type="button" data-down aria-label="Move down"' + (i === agreed.length - 1 ? ' disabled' : '') + '>' + ICON_DOWN + '</button>' +
+          '</div>';
+        li.querySelector('[data-up]').addEventListener('click', function () { move(i, i - 1); });
+        li.querySelector('[data-down]').addEventListener('click', function () { move(i, i + 1); });
+        li.addEventListener('dragstart', function (e) { dragFrom = i; li.classList.add('dragging'); try { e.dataTransfer.setData('text/plain', String(i)); } catch (err) {} });
+        li.addEventListener('dragend', function () { dragFrom = null; li.classList.remove('dragging'); });
+        li.addEventListener('dragover', function (e) { if (dragFrom === null) return; e.preventDefault(); li.classList.add('over'); });
+        li.addEventListener('dragleave', function () { li.classList.remove('over'); });
+        li.addEventListener('drop', function (e) { e.preventDefault(); li.classList.remove('over'); if (dragFrom !== null) move(dragFrom, i); });
         list.appendChild(li);
       });
-      list.hidden = answers.length === 0;
-      empty.hidden = answers.length > 0;
+      list.hidden = agreed.length === 0;
+      empty.hidden = agreed.length > 0;
+      countBadge.hidden = agreed.length === 0;
+      countBadge.textContent = agreed.length + ' agreed';
+      sub.textContent = agreed.length > 1 ? 'Drag or use the arrows. Your #1 is the view you trust most.'
+        : agreed.length === 1 ? 'Agree with more quotes to compare them here.'
+        : 'Quotes you agree with land here.';
+
+      trayList.innerHTML = '';
+      disagreed.forEach(function (q, i) {
+        var li = document.createElement('li');
+        li.innerHTML = '<p>' + esc(q.text) + '</p>' +
+          '<button class="recover" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>Move to my ranking</button>';
+        li.querySelector('.recover').addEventListener('click', function () {
+          agreed.push(disagreed.splice(i, 1)[0]);
+          paintRanking();
+          paintTally();
+        });
+        trayList.appendChild(li);
+      });
+      tray.hidden = disagreed.length === 0;
+      if (disagreed.length === 0) tray.open = false;
+      trayCount.textContent = disagreed.length + ' disagreed';
+    }
+
+    function paintTally() {
+      var t = stage.querySelector('.tally');
+      if (!t) return;
+      t.innerHTML = '<span class="yes">' + agreed.length + ' agreed</span>' +
+        (disagreed.length ? '<span class="no">' + disagreed.length + ' disagreed</span>' : '');
     }
 
     function paintDone() {
@@ -1220,20 +1338,22 @@
       stage.innerHTML =
         '<div class="card entering"><div class="done-card">' +
           '<span class="done-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>' +
-          '<h2 tabindex="-1">Housing is ranked</h2>' +
-          '<p>You’ve reacted to every quote on this issue. Reveal your ballot to see who said what, or keep going.</p>' +
+          '<h2 tabindex="-1">Topic complete</h2>' +
+          '<div class="tally"></div>' +
+          '<p>Move on to the next topic, or keep arranging your ranking on the right.</p>' +
           '<div class="done-actions">' +
-            '<button class="btn" type="button">Reveal ballot</button>' +
-            '<a class="btn ghost" href="#issues">Back to issues</a>' +
+            '<a class="btn" href="#issues">Next topic <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>' +
+            '<button class="btn ghost" type="button">See your full ballot</button>' +
           '</div>' +
         '</div></div>';
+      paintTally();
       stage.querySelector('h2').focus({ preventScroll: true });
     }
 
     function answer(value) {
       if (busy || index >= QUOTES.length) return;
       busy = true;
-      answers.push({ id: QUOTES[index].id, answer: value });
+      (value === 'yes' ? agreed : disagreed).push(QUOTES[index]);
       paintRanking();
       card.classList.add('leaving');
       setTimeout(function () {
@@ -1249,8 +1369,6 @@
     function bind() {
       card = document.getElementById('card');
       textEl = document.getElementById('quote-text');
-      anonEl = document.getElementById('quote-anon');
-      whoEl = document.getElementById('quote-who');
       info = document.getElementById('info');
       tip = document.getElementById('tip');
       card.querySelectorAll('.choice').forEach(function (b) {
@@ -1263,7 +1381,7 @@
     }
 
     function reset() {
-      index = 0; answers = []; busy = false;
+      index = 0; agreed = []; disagreed = []; busy = false;
       stage.innerHTML = stageHTML;
       revealRow.hidden = false;
       bind(); paintQuote(); paintRanking();
