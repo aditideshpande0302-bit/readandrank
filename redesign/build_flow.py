@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 
 HERE = Path(__file__).parent
-SCREENS = [("landing", "landing.html"), ("issues", "issues.html"), ("read", "read.html")]
+SCREENS = [("landing", "landing.html"), ("issues", "issues.html"), ("read", "read.html"), ("ballot", "ballot.html")]
 GLOBAL = (":root", "*", "body", "@")
 
 
@@ -27,20 +27,22 @@ def scope_selectors(sel, scope):
 
 
 def scope_css(css, scope):
-    """Prefix every rule with the scope; handles one level of @media nesting."""
-    out, i, depth, buf = [], 0, 0, ""
+    """Prefix every rule with the scope. Handles nested @media; leaves @keyframes alone."""
+    out, stack, buf = [], [], ""
     for ch in css:
         if ch == "{":
             head = buf.strip()
-            if head.startswith("@") or depth == 0 and head.startswith(":root"):
+            in_keyframes = any(h.startswith("@keyframes") for h in stack)
+            if head.startswith("@") or in_keyframes or (not stack and head.startswith(":root")):
                 out.append(buf + "{")
             else:
                 out.append(buf[: len(buf) - len(buf.lstrip())] + scope_selectors(head, scope) + " {")
-            depth += 1
+            stack.append(head)
             buf = ""
         elif ch == "}":
             out.append(buf + "}")
-            depth -= 1
+            if stack:
+                stack.pop()
             buf = ""
         else:
             buf += ch
