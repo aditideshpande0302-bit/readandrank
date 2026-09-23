@@ -1,0 +1,758 @@
+<title>Read &amp; Rank Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+
+  :root {
+    --ground: #F7F4EF;
+    --surface: #FFFFFF;
+    --surface-2: #FBF9F6;
+    --ink: #1B1E3B;
+    --ink-2: #4A4E68;
+    --ink-3: #7A7D92;
+    --line: #E8E3DB;
+    --teal: #0E6A80;
+    --teal-strong: #0A5566;
+    --teal-tint: #E3EFF2;
+    --on-teal: #FFFFFF;
+    --coral: #EF5B3E;
+    --yellow: #F6C343;
+    --map-fill: #F1EEE8;
+    --map-line: #B9C9CE;
+    --shadow: 0 1px 2px rgba(27, 30, 59, .04), 0 8px 24px -12px rgba(27, 30, 59, .12);
+    --radius: 14px;
+    --font: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground: #11141F;
+      --surface: #191D2B;
+      --surface-2: #151926;
+      --ink: #EEF0F6;
+      --ink-2: #B6BACB;
+      --ink-3: #868AA0;
+      --line: #2A2F42;
+      --teal: #4FB3C8;
+      --teal-strong: #7CCADB;
+      --teal-tint: #1C3139;
+      --on-teal: #0B1E24;
+      --map-fill: #222738;
+      --map-line: #3C465B;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground: #11141F;
+    --surface: #191D2B;
+    --surface-2: #151926;
+    --ink: #EEF0F6;
+    --ink-2: #B6BACB;
+    --ink-3: #868AA0;
+    --line: #2A2F42;
+    --teal: #4FB3C8;
+    --teal-strong: #7CCADB;
+    --teal-tint: #1C3139;
+    --on-teal: #0B1E24;
+    --map-fill: #222738;
+    --map-line: #3C465B;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  #s-landing a { color: inherit; }
+  #s-landing :focus-visible { outline: 2.5px solid var(--teal); outline-offset: 3px; border-radius: 6px; }
+  #s-landing .wrap { max-width: 1160px; margin: 0 auto; padding-inline: 24px; }
+
+  #s-landing /* Header */
+  .top { background: var(--surface); border-bottom: 1px solid var(--line); }
+  #s-landing .top .wrap { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 68px; }
+  #s-landing .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; letter-spacing: -.02em; line-height: .95; font-size: 17px; }
+  #s-landing .brand .ev { color: var(--teal); }
+  #s-landing .brand .ev span { display: block; color: var(--coral); text-align: right; }
+  #s-landing .product { display: flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 800; font-size: 17px; line-height: .95; letter-spacing: -.02em; }
+  #s-landing .product .a { color: var(--teal); display: block; text-align: right; }
+  #s-landing .product .b { color: var(--coral); display: block; }
+  #s-landing .actions { justify-self: end; display: flex; gap: 10px; }
+  #s-landing .icon-btn {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: transparent; border: 1px solid var(--line); color: var(--ink-2); cursor: pointer;
+  }
+  #s-landing .icon-btn:hover { color: var(--teal); border-color: var(--teal); }
+  #s-landing .icon-btn.account { border: 1.5px solid var(--teal); color: var(--teal); }
+
+  #s-landing /* Hero */
+  .hero { padding-block: 72px 56px; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 64px; align-items: center; }
+  #s-landing .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--teal); margin: 0 0 18px; }
+  #s-landing h1 {
+    font-size: clamp(36px, 4.6vw, 56px);
+    line-height: 1.04; letter-spacing: -.035em; font-weight: 800;
+    margin: 0; text-wrap: balance;
+  }
+  #s-landing h1 em { font-style: normal; color: var(--teal); display: block; }
+  #s-landing .lede { font-size: 18px; color: var(--ink-2); max-width: 34em; margin: 22px 0 32px; }
+  #s-landing .cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; }
+  #s-landing .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 50px; padding-inline: 24px; border-radius: 999px;
+    background: var(--teal); color: var(--on-teal);
+    font: 700 16px/1 var(--font); text-decoration: none; border: 0; cursor: pointer;
+    transition: background .15s ease, transform .15s ease;
+  }
+  #s-landing .btn:hover { background: var(--teal-strong); }
+  #s-landing .btn:active { transform: translateY(1px); }
+  #s-landing .link { color: var(--teal); font-weight: 600; text-decoration: none; font-size: 15px; }
+  #s-landing .link:hover { text-decoration: underline; text-underline-offset: 3px; }
+  #s-landing .link small { color: var(--ink-3); font-weight: 500; font-size: 13px; margin-left: 4px; }
+
+  #s-landing /* How it works */
+  .steps { list-style: none; margin: 0; padding: 8px 0; position: relative; }
+  #s-landing .steps::before { content: ""; position: absolute; left: 17px; top: 30px; bottom: 30px; width: 2px; background: var(--line); }
+  #s-landing .steps li { display: grid; grid-template-columns: 36px 1fr; gap: 18px; padding-block: 14px; position: relative; }
+  #s-landing .num {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--surface); border: 2px solid var(--line);
+    font-size: 13px; font-weight: 800; color: var(--ink-3); font-variant-numeric: tabular-nums;
+  }
+  #s-landing .steps li:first-child .num { background: var(--teal); border-color: var(--teal); color: var(--on-teal); }
+  #s-landing .steps h3 { margin: 5px 0 2px; font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
+  #s-landing .steps p { margin: 0; color: var(--ink-2); font-size: 15px; }
+
+  #s-landing /* Elections */
+  .elections { padding-block: 8px 72px; }
+  #s-landing .sec-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px; padding-top: 40px; border-top: 1px solid var(--line); }
+  #s-landing h2 { font-size: 30px; line-height: 1.15; letter-spacing: -.025em; font-weight: 800; margin: 0; }
+  #s-landing .near { margin: 8px 0 0; color: var(--ink-2); font-size: 15px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  #s-landing .near svg { color: var(--teal); flex: none; }
+  #s-landing .near strong { color: var(--ink); font-weight: 600; }
+  #s-landing .near button { background: none; border: 0; padding: 0; color: var(--teal); font: 600 15px var(--font); cursor: pointer; }
+  #s-landing .near button:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  #s-landing .seg { display: inline-flex; padding: 4px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); }
+  #s-landing .seg button {
+    border: 0; background: transparent; color: var(--ink-2); cursor: pointer;
+    font: 600 14px/1 var(--font); height: 34px; padding-inline: 18px; border-radius: 999px;
+  }
+  #s-landing .seg button[aria-pressed="true"] { background: var(--teal); color: var(--on-teal); }
+
+  #s-landing .group-label { margin: 32px 0 14px; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+
+  #s-landing .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+  #s-landing .race {
+    display: flex; flex-direction: column; gap: 16px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px; text-decoration: none; color: inherit;
+    transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+  }
+  #s-landing .race:hover { border-color: var(--teal); box-shadow: var(--shadow); transform: translateY(-2px); }
+  #s-landing .race-top { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+  #s-landing .date { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+  #s-landing .race h3 { margin: 6px 0 0; font-size: 18px; line-height: 1.2; font-weight: 700; letter-spacing: -.015em; }
+  #s-landing .race h3 span { display: block; color: var(--ink-2); font-weight: 500; font-size: 16px; margin-top: 2px; }
+  #s-landing .map { width: 38px; height: 52px; flex: none; }
+  #s-landing .map .state { fill: var(--map-fill); stroke: var(--map-line); stroke-width: 1.2; stroke-linejoin: round; }
+  #s-landing .map .dist { fill: var(--teal); }
+  #s-landing .meta { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 13.5px; color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  #s-landing .meta .go { color: var(--teal); display: inline-flex; transition: transform .15s ease; }
+  #s-landing .race:hover .go { transform: translateX(3px); }
+
+  #s-landing .race.in-progress { background: var(--teal-tint); border-color: transparent; }
+  #s-landing .race.in-progress:hover { border-color: var(--teal); }
+  #s-landing .badge { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--teal); }
+  #s-landing .progress { height: 6px; border-radius: 99px; background: color-mix(in srgb, var(--teal) 18%, transparent); overflow: hidden; }
+  #s-landing .progress i { display: block; height: 100%; width: 50%; background: var(--teal); border-radius: inherit; }
+  #s-landing .race.in-progress .meta { border-top-color: color-mix(in srgb, var(--teal) 22%, transparent); }
+  #s-landing .race.in-progress .meta strong { color: var(--teal); font-weight: 700; }
+
+  #s-landing .more { margin-top: 28px; }
+
+  #s-landing /* Footer */
+  footer { border-top: 1px solid var(--line); background: var(--surface-2); }
+  #s-landing footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px 24px; padding-block: 28px; font-size: 14px; color: var(--ink-2); }
+  #s-landing .foot-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--ink); }
+  #s-landing .foot-brand i { width: 10px; height: 10px; border-radius: 3px; background: var(--yellow); }
+  #s-landing footer nav { display: flex; flex-wrap: wrap; gap: 6px 22px; }
+  #s-landing footer nav a { text-decoration: none; }
+  #s-landing footer nav a:hover { color: var(--teal); }
+
+  @media (max-width: 880px) {
+    #s-landing .hero { grid-template-columns: 1fr; gap: 40px; padding-block: 48px 40px; }
+  }
+  @media (max-width: 560px) {
+    #s-landing .wrap { padding-inline: 16px; }
+    #s-landing .top .wrap { height: 60px; }
+    #s-landing .brand .word { display: none; }
+    #s-landing .lede { font-size: 17px; }
+    #s-landing .btn { width: 100%; justify-content: center; }
+    #s-landing h2 { font-size: 26px; }
+    #s-landing footer .wrap { flex-direction: column; align-items: start; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+
+
+  :root {
+    --ground: #F7F4EF;
+    --surface: #FFFFFF;
+    --surface-2: #FBF9F6;
+    --ink: #1B1E3B;
+    --ink-2: #4A4E68;
+    --ink-3: #7A7D92;
+    --line: #E8E3DB;
+    --teal: #0E6A80;
+    --teal-strong: #0A5566;
+    --teal-tint: #E3EFF2;
+    --on-teal: #FFFFFF;
+    --coral: #EF5B3E;
+    --yellow: #F6C343;
+    --map-fill: #F1EEE8;
+    --map-line: #B9C9CE;
+    --shadow: 0 1px 2px rgba(27, 30, 59, .04), 0 8px 24px -12px rgba(27, 30, 59, .12);
+    --radius: 14px;
+    --font: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground: #11141F;
+      --surface: #191D2B;
+      --surface-2: #151926;
+      --ink: #EEF0F6;
+      --ink-2: #B6BACB;
+      --ink-3: #868AA0;
+      --line: #2A2F42;
+      --teal: #4FB3C8;
+      --teal-strong: #7CCADB;
+      --teal-tint: #1C3139;
+      --on-teal: #0B1E24;
+      --map-fill: #222738;
+      --map-line: #3C465B;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground: #11141F;
+    --surface: #191D2B;
+    --surface-2: #151926;
+    --ink: #EEF0F6;
+    --ink-2: #B6BACB;
+    --ink-3: #868AA0;
+    --line: #2A2F42;
+    --teal: #4FB3C8;
+    --teal-strong: #7CCADB;
+    --teal-tint: #1C3139;
+    --on-teal: #0B1E24;
+    --map-fill: #222738;
+    --map-line: #3C465B;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  #s-issues a { color: inherit; }
+  #s-issues :focus-visible { outline: 2.5px solid var(--teal); outline-offset: 3px; border-radius: 6px; }
+  #s-issues .wrap { max-width: 1160px; margin: 0 auto; padding-inline: 24px; }
+
+  #s-issues /* Header (shared with landing) */
+  .top { background: var(--surface); border-bottom: 1px solid var(--line); }
+  #s-issues .top .wrap { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 68px; }
+  #s-issues .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; letter-spacing: -.02em; line-height: .95; font-size: 17px; }
+  #s-issues .brand .ev { color: var(--teal); }
+  #s-issues .brand .ev span { display: block; color: var(--coral); text-align: right; }
+  #s-issues .product { display: flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 800; font-size: 17px; line-height: .95; letter-spacing: -.02em; }
+  #s-issues .product .a { color: var(--teal); display: block; text-align: right; }
+  #s-issues .product .b { color: var(--coral); display: block; }
+  #s-issues .actions { justify-self: end; display: flex; gap: 10px; }
+  #s-issues .icon-btn {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: transparent; border: 1px solid var(--line); color: var(--ink-2); cursor: pointer;
+  }
+  #s-issues .icon-btn:hover { color: var(--teal); border-color: var(--teal); }
+  #s-issues .icon-btn.account { border: 1.5px solid var(--teal); color: var(--teal); }
+
+  #s-issues /* Page */
+  .page { max-width: 600px; margin: 0 auto; padding-block: 32px 80px; }
+  #s-issues .back {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--teal); font-weight: 600; font-size: 14px; text-decoration: none;
+  }
+  #s-issues .back:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  #s-issues /* Race context */
+  .race {
+    margin-top: 20px;
+    display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: center;
+    padding: 16px 18px; border-radius: var(--radius);
+    background: var(--teal-tint);
+  }
+  #s-issues .map { width: 34px; height: 48px; }
+  #s-issues .map .state { fill: var(--surface); stroke: var(--map-line); stroke-width: 1.2; stroke-linejoin: round; }
+  #s-issues .map .dist { fill: var(--teal); }
+  #s-issues .race .date { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+  #s-issues .race .name { margin: 2px 0 0; font-size: 17px; font-weight: 700; letter-spacing: -.01em; line-height: 1.25; }
+  #s-issues .race .name span { color: var(--ink-2); font-weight: 500; }
+
+  #s-issues h1 {
+    margin: 40px 0 0;
+    font-size: clamp(32px, 4.4vw, 42px); line-height: 1.08; letter-spacing: -.03em; font-weight: 800;
+    text-wrap: balance;
+  }
+  #s-issues .lede { margin: 12px 0 0; color: var(--ink-2); font-size: 17px; max-width: 32em; }
+
+  #s-issues .progress-row { margin-top: 28px; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 14px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  #s-issues .progress-row strong { color: var(--ink); font-weight: 700; }
+  #s-issues .bar { margin-top: 8px; height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; }
+  #s-issues .bar i { display: block; height: 100%; background: var(--teal); border-radius: inherit; }
+
+  #s-issues /* Issue list */
+  fieldset { border: 0; margin: 24px 0 0; padding: 0; min-width: 0; }
+  #s-issues legend { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  #s-issues .issues { display: grid; gap: 10px; }
+  #s-issues .issue {
+    position: relative;
+    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 16px;
+    padding: 18px 20px; border-radius: var(--radius);
+    background: var(--surface); border: 1.5px solid var(--line);
+    cursor: pointer;
+    transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  #s-issues .issue:hover { border-color: color-mix(in srgb, var(--teal) 45%, var(--line)); }
+  #s-issues .issue input { position: absolute; opacity: 0; pointer-events: none; }
+  #s-issues .issue:has(input:focus-visible) { outline: 2.5px solid var(--teal); outline-offset: 3px; }
+  #s-issues .issue:has(input:checked) { border-color: var(--teal); box-shadow: var(--shadow); }
+
+  #s-issues .check {
+    width: 24px; height: 24px; border-radius: 7px;
+    border: 2px solid var(--map-line); background: var(--surface);
+    display: grid; place-items: center; color: transparent;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  #s-issues .issue:has(input:checked) .check { background: var(--teal); border-color: var(--teal); color: var(--on-teal); }
+
+  #s-issues .issue-name { font-size: 17px; font-weight: 700; letter-spacing: -.01em; line-height: 1.3; }
+  #s-issues .issue-sub { display: block; font-size: 14px; color: var(--ink-3); font-weight: 500; margin-top: 2px; font-variant-numeric: tabular-nums; }
+
+  #s-issues .status {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    padding: 6px 10px; border-radius: 999px; white-space: nowrap;
+  }
+  #s-issues .status.new { color: var(--ink-3); background: var(--surface-2); border: 1px solid var(--line); }
+  #s-issues .status.done { color: var(--teal); background: var(--teal-tint); }
+
+  #s-issues /* Action */
+  .action { margin-top: 28px; display: grid; gap: 14px; justify-items: center; }
+  #s-issues .btn {
+    width: 100%;
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    height: 56px; padding-inline: 24px; border-radius: 999px;
+    background: var(--teal); color: var(--on-teal);
+    font: 700 17px/1 var(--font); border: 0; cursor: pointer; white-space: nowrap;
+    transition: background .15s ease, transform .15s ease, opacity .15s ease;
+  }
+  #s-issues .btn:hover { background: var(--teal-strong); }
+  #s-issues .btn:active { transform: translateY(1px); }
+  #s-issues .btn:disabled { opacity: .45; cursor: not-allowed; }
+  #s-issues .btn .dim { font-weight: 500; opacity: .8; }
+  #s-issues .ballot { color: var(--teal); font-weight: 600; font-size: 15px; text-decoration: none; }
+  #s-issues .ballot:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  #s-issues .note {
+    margin-top: 36px; display: flex; gap: 10px; align-items: start;
+    font-size: 14px; color: var(--ink-3);
+  }
+  #s-issues .note svg { flex: none; margin-top: 2px; color: var(--teal); }
+
+  #s-issues /* Footer (shared with landing) */
+  footer { border-top: 1px solid var(--line); background: var(--surface-2); }
+  #s-issues footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px 24px; padding-block: 28px; font-size: 14px; color: var(--ink-2); }
+  #s-issues .foot-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--ink); }
+  #s-issues .foot-brand i { width: 10px; height: 10px; border-radius: 3px; background: var(--yellow); }
+  #s-issues footer nav { display: flex; flex-wrap: wrap; gap: 6px 22px; }
+  #s-issues footer nav a { text-decoration: none; }
+  #s-issues footer nav a:hover { color: var(--teal); }
+
+  @media (max-width: 560px) {
+    #s-issues .wrap { padding-inline: 16px; }
+    #s-issues .top .wrap { height: 60px; }
+    #s-issues .brand .word { display: none; }
+    #s-issues .page { padding-block: 20px 40px; }
+    #s-issues h1 { margin-top: 32px; }
+    #s-issues .issue { padding: 16px; gap: 14px; }
+    #s-issues .status.new { display: none; }
+    #s-issues .btn { font-size: 15px; gap: 8px; }
+    #s-issues .btn svg { display: none; }
+    #s-issues /* Keep the main action within thumb reach */
+    .action {
+      position: sticky; bottom: 0; z-index: 2;
+      margin-inline: -16px; padding: 14px 16px calc(14px + env(safe-area-inset-bottom, 0px));
+      background: color-mix(in srgb, var(--ground) 92%, transparent);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid var(--line);
+    }
+    #s-issues footer .wrap { flex-direction: column; align-items: start; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+
+</style>
+
+<div class="screen" id="s-landing">
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Empowered Vote home">
+      <span class="ev word">empowered<span>.vote</span></span>
+      <svg width="44" height="30" viewBox="0 0 44 30" aria-hidden="true">
+        <rect x="0" y="2" width="16" height="6" fill="var(--teal)"/>
+        <rect x="0" y="12" width="12" height="6" fill="var(--teal)"/>
+        <rect x="0" y="22" width="16" height="6" fill="var(--teal)"/>
+        <path d="M18 2 H44 L30 28 Z" fill="var(--coral)"/>
+        <circle cx="29" cy="12" r="4" fill="var(--surface)"/>
+      </svg>
+    </a>
+    <a class="product" href="#top" aria-label="Read and Rank">
+      <span><span class="a">read</span><span class="b">&amp; rank</span></span>
+      <svg width="26" height="30" viewBox="0 0 26 30" aria-hidden="true">
+        <rect x="2" y="2" width="22" height="26" rx="4" fill="var(--teal)" transform="rotate(6 13 15)"/>
+        <path d="M8 10 q0 -3 3 -3 M14 10 q0 -3 3 -3" stroke="var(--yellow)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+        <rect x="7" y="16" width="12" height="2" rx="1" fill="var(--on-teal)" opacity=".7"/>
+        <rect x="7" y="21" width="8" height="2" rx="1" fill="var(--on-teal)" opacity=".7"/>
+      </svg>
+    </a>
+    <div class="actions">
+      <button class="icon-btn" data-theme-toggle type="button" aria-label="Switch color theme">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <button class="icon-btn account" type="button" aria-label="Your account">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="wrap hero">
+    <div>
+      <p class="eyebrow">Read &amp; Rank</p>
+      <h1>Read candidates blind, <em>rank by what they said.</em></h1>
+      <p class="lede">Real quotes from real candidates, with no names and no parties. Form your own view, then see who you actually agree with.</p>
+      <div class="cta-row">
+        <a class="btn" href="#elections">
+          Choose an election
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+        </a>
+        <a class="link" href="#">Try a warm-up with pizza opinions <small>30 sec</small></a>
+      </div>
+    </div>
+
+    <ol class="steps" aria-label="How it works">
+      <li>
+        <span class="num">1</span>
+        <div><h3>Pick an election</h3><p>Local and upcoming races in our Alpha communities.</p></div>
+      </li>
+      <li>
+        <span class="num">2</span>
+        <div><h3>Read the quotes</h3><p>Judge positions on their words alone.</p></div>
+      </li>
+      <li>
+        <span class="num">3</span>
+        <div><h3>Rank the candidates</h3><p>See who earned your trust, and where you align.</p></div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="wrap elections" id="elections" aria-labelledby="elections-title">
+    <div class="sec-head">
+      <div>
+        <h2 id="elections-title">Choose an election</h2>
+        <p class="near">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+          Races for <strong>100 W Kirkwood Ave, Bloomington, IN</strong>
+          <button type="button">Change</button>
+        </p>
+      </div>
+      <div class="seg" role="group" aria-label="Election timing">
+        <button type="button" aria-pressed="true">Upcoming</button>
+        <button type="button" aria-pressed="false">Past</button>
+      </div>
+    </div>
+
+    <p class="group-label">Indiana · Nov 3, 2026</p>
+
+    <div class="grid">
+      <a class="race in-progress" href="#issues">
+        <div class="race-top">
+          <div>
+            <span class="badge">In progress</span>
+            <h3>US Representative <span>District 7</span></h3>
+          </div>
+          <svg class="map" viewBox="0 0 40 56" aria-hidden="true"><path class="state" d="M7 3 H33 L34 42 L31 46 L27 48 L23 52 L17 53 L13 52 L9 55 L5 53 L6 49 L4 45 L5 41 Z"/><circle class="dist" cx="19" cy="28" r="3.2"/></svg>
+        </div>
+        <div class="progress" role="img" aria-label="1 of 2 topics read"><i></i></div>
+        <div class="meta"><span><strong>1 of 2 topics</strong> · ~1 min left</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+
+      <a class="race" href="#">
+        <div class="race-top">
+          <div>
+            <span class="date">Nov 3, 2026</span>
+            <h3>US Representative <span>District 2</span></h3>
+          </div>
+          <svg class="map" viewBox="0 0 40 56" aria-hidden="true"><path class="state" d="M7 3 H33 L34 42 L31 46 L27 48 L23 52 L17 53 L13 52 L9 55 L5 53 L6 49 L4 45 L5 41 Z"/><path class="dist" d="M14 4 H26 V16 H14 Z"/></svg>
+        </div>
+        <div class="meta"><span>2 candidates · 1 topic · ~2 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+
+      <a class="race" href="#">
+        <div class="race-top">
+          <div>
+            <span class="date">Nov 3, 2026</span>
+            <h3>US Representative <span>District 3</span></h3>
+          </div>
+          <svg class="map" viewBox="0 0 40 56" aria-hidden="true"><path class="state" d="M7 3 H33 L34 42 L31 46 L27 48 L23 52 L17 53 L13 52 L9 55 L5 53 L6 49 L4 45 L5 41 Z"/><path class="dist" d="M26 4 H33 V20 H26 Z"/></svg>
+        </div>
+        <div class="meta"><span>2 candidates · 1 topic · ~1 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+
+      <a class="race" href="#">
+        <div class="race-top">
+          <div>
+            <span class="date">Nov 3, 2026</span>
+            <h3>US Representative <span>District 8</span></h3>
+          </div>
+          <svg class="map" viewBox="0 0 40 56" aria-hidden="true"><path class="state" d="M7 3 H33 L34 42 L31 46 L27 48 L23 52 L17 53 L13 52 L9 55 L5 53 L6 49 L4 45 L5 41 Z"/><path class="dist" d="M5 34 H14 V52 L9 55 L5 53 L6 49 L4 45 Z"/></svg>
+        </div>
+        <div class="meta"><span>2 candidates · 1 topic · ~2 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+    </div>
+
+    <p class="more"><a class="link" href="#">Browse other races →</a></p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="foot-brand"><i aria-hidden="true"></i>Empowered Vote · Alpha</span>
+    <nav aria-label="Footer">
+      <span>© 2026</span>
+      <a href="#">Mind Map</a>
+      <a href="#">Briefing</a>
+      <a href="#">Financials</a>
+      <a href="#">Donate</a>
+      <a href="#">Newsletter</a>
+    </nav>
+  </div>
+</footer>
+</div>
+
+<div class="screen" id="s-issues" hidden>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Empowered Vote home">
+      <span class="ev word">empowered<span>.vote</span></span>
+      <svg width="44" height="30" viewBox="0 0 44 30" aria-hidden="true">
+        <rect x="0" y="2" width="16" height="6" fill="var(--teal)"/>
+        <rect x="0" y="12" width="12" height="6" fill="var(--teal)"/>
+        <rect x="0" y="22" width="16" height="6" fill="var(--teal)"/>
+        <path d="M18 2 H44 L30 28 Z" fill="var(--coral)"/>
+        <circle cx="29" cy="12" r="4" fill="var(--surface)"/>
+      </svg>
+    </a>
+    <a class="product" href="#top" aria-label="Read and Rank">
+      <span><span class="a">read</span><span class="b">&amp; rank</span></span>
+      <svg width="26" height="30" viewBox="0 0 26 30" aria-hidden="true">
+        <rect x="2" y="2" width="22" height="26" rx="4" fill="var(--teal)" transform="rotate(6 13 15)"/>
+        <path d="M8 10 q0 -3 3 -3 M14 10 q0 -3 3 -3" stroke="var(--yellow)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+        <rect x="7" y="16" width="12" height="2" rx="1" fill="var(--on-teal)" opacity=".7"/>
+        <rect x="7" y="21" width="8" height="2" rx="1" fill="var(--on-teal)" opacity=".7"/>
+      </svg>
+    </a>
+    <div class="actions">
+      <button class="icon-btn" data-theme-toggle type="button" aria-label="Switch color theme">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <button class="icon-btn account" type="button" aria-label="Your account">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page">
+    <a class="back" href="#elections">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+      All races
+    </a>
+
+    <div class="race">
+      <svg class="map" viewBox="0 0 40 56" aria-hidden="true"><path class="state" d="M7 3 H33 L34 42 L31 46 L27 48 L23 52 L17 53 L13 52 L9 55 L5 53 L6 49 L4 45 L5 41 Z"/><circle class="dist" cx="19" cy="28" r="3.2"/></svg>
+      <div>
+        <span class="date">Indiana · Nov 3, 2026</span>
+        <p class="name">US Representative <span>· District 7</span></p>
+      </div>
+    </div>
+
+    <h1>Choose your issues</h1>
+    <p class="lede">Pick the topics you care about. You'll read what each candidate said, then rank them.</p>
+
+    <div class="progress-row">
+      <span><strong>1 of 2</strong> issues ranked</span>
+      <span>Welcome back</span>
+    </div>
+    <div class="bar" role="img" aria-label="1 of 2 issues ranked"><i style="width: 50%"></i></div>
+
+    <form id="issues-form">
+      <fieldset>
+        <legend>Issues for this race</legend>
+        <div class="issues">
+          <label class="issue">
+            <input type="checkbox" id="issue-housing" name="issue" value="housing" data-quotes="2" checked>
+            <span class="check" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+            <span>
+              <span class="issue-name">Housing</span>
+              <span class="issue-sub">2 quotes · about 30 sec</span>
+            </span>
+            <span class="status new">Not started</span>
+          </label>
+
+          <label class="issue">
+            <input type="checkbox" id="issue-immigration" name="issue" value="immigration" data-quotes="2" checked>
+            <span class="check" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+            <span>
+              <span class="issue-name">Immigration</span>
+              <span class="issue-sub">2 quotes · already ranked</span>
+            </span>
+            <span class="status done">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+              Ranked
+            </span>
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="action">
+        <button class="btn" id="start" type="submit">
+          <span id="start-label">Start reading</span>
+          <span class="dim" id="start-meta">4 quotes · about 1 min</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <a class="ballot" href="#">See your ballot so far</a>
+      </div>
+    </form>
+
+    <p class="note">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18"/><path d="M10.6 5.1A10 10 0 0 1 12 5c5 0 9 4.5 10 7a13 13 0 0 1-3.2 4.3M6.6 6.6C4.3 8 2.7 10.2 2 12c1 2.5 5 7 10 7a10 10 0 0 0 4.4-1"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+      Quotes are shown without names or parties. You'll find out who said what after you rank.
+    </p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="foot-brand"><i aria-hidden="true"></i>Empowered Vote · Alpha</span>
+    <nav aria-label="Footer">
+      <span>© 2026</span>
+      <a href="#">Mind Map</a>
+      <a href="#">Briefing</a>
+      <a href="#">Financials</a>
+      <a href="#">Donate</a>
+      <a href="#">Newsletter</a>
+    </nav>
+  </div>
+</footer>
+</div>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    document.querySelectorAll('[data-theme-toggle]').forEach(function (t) { if (t.dataset.bound) return; t.dataset.bound = '1'; t.addEventListener('click', function () {
+      var current = root.getAttribute('data-theme') ||
+        (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      root.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    }); });
+    document.querySelectorAll('.seg button').forEach(function (b, _, all) {
+      b.addEventListener('click', function () {
+        all.forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      });
+    });
+  })();
+</script>
+<script>
+  (function () {
+    var root = document.documentElement;
+    document.querySelectorAll('[data-theme-toggle]').forEach(function (t) { if (t.dataset.bound) return; t.dataset.bound = '1'; t.addEventListener('click', function () {
+      var current = root.getAttribute('data-theme') ||
+        (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      root.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    }); });
+
+    var form = document.getElementById('issues-form');
+    var boxes = form.querySelectorAll('input[name="issue"]');
+    var btn = document.getElementById('start');
+    var label = document.getElementById('start-label');
+    var meta = document.getElementById('start-meta');
+
+    function update() {
+      var quotes = 0;
+      boxes.forEach(function (b) { if (b.checked) quotes += Number(b.dataset.quotes); });
+      btn.disabled = quotes === 0;
+      label.textContent = quotes === 0 ? 'Pick at least one issue' : 'Start reading';
+      var mins = Math.max(1, Math.round(quotes * 15 / 60));
+      meta.textContent = quotes === 0 ? '' : quotes + ' quotes · about ' + mins + ' min';
+    }
+    boxes.forEach(function (b) { b.addEventListener('change', update); });
+    form.addEventListener('submit', function (e) { e.preventDefault(); });
+    update();
+  })();
+</script>
+<script>
+  (function () {
+    var screens = { landing: document.getElementById('s-landing'), issues: document.getElementById('s-issues') };
+    function current() { return screens.issues.hidden ? 'landing' : 'issues'; }
+    function go(target) {
+      var name = target === 'issues' ? 'issues' : 'landing';
+      var changed = name !== current();
+      screens.landing.hidden = name !== 'landing';
+      screens.issues.hidden = name !== 'issues';
+      var anchor = name === 'landing' && target && target !== 'top' && document.getElementById(target);
+      if (anchor) anchor.scrollIntoView({ block: 'start' });
+      else if (changed || target === 'top') window.scrollTo(0, 0);
+      if (changed) { var h = screens[name].querySelector('h1, h2'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } }
+    }
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      e.preventDefault();
+      var target = a.getAttribute('href').slice(1);
+      if (target) go(target);
+      try { history.replaceState(null, '', target === 'issues' ? '#issues' : location.pathname + location.search); } catch (err) {}
+    });
+    if (location.hash === '#issues') go('issues');
+  })();
+</script>
