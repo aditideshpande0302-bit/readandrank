@@ -357,6 +357,28 @@
   .bar > .wrap { max-width: none; padding-inline: 0; }
   .page { max-width: none; }
   @media (max-width: 900px) { .catnav { margin-inline: calc(-1 * var(--side)); padding-inline: var(--side); } }
+
+  /* Ballot-casting figure from empowered.vote (icons/Sticks/noun_ballot), recolored with a mask */
+  .ballot-fig { position: relative; display: inline-block; width: 150px; aspect-ratio: 1; flex: none; }
+  .ballot-fig::before {
+    content: ""; position: absolute; inset: 0; background: var(--fig, var(--teal));
+    -webkit-mask: url("assets/ballot-figure.png") center / contain no-repeat;
+    mask: url("assets/ballot-figure.png") center / contain no-repeat;
+  }
+  .ballot-fig .slip {
+    position: absolute; left: 33%; top: 37.5%; width: 4.8%; height: 7%; border-radius: 2px;
+    background: var(--yellow); box-shadow: 0 0 0 2px var(--slip-edge, var(--surface)); opacity: 0;
+  }
+  .ballot-fig.loop .slip { animation: slipdrop 1.5s ease-in infinite; }
+  .ballot-fig.once .slip { animation: slipdrop 1.2s ease-in var(--slip-delay, .3s) both; }
+  @keyframes slipdrop {
+    0% { transform: translateY(-240%); opacity: 0; }
+    20% { opacity: 1; }
+    70% { transform: translateY(40%); opacity: 1; }
+    100% { transform: translateY(100%); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .ballot-fig .slip { animation: none !important; opacity: 1; } }
+  .done-fig { width: 120px; margin-bottom: -8px; }
   /* end EV layout */
 </style>
 
@@ -591,7 +613,7 @@
       revealRow.hidden = true;
       stage.innerHTML =
         '<div class="card entering"><div class="done-card">' +
-          '<span class="done-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>' +
+          '<span class="ballot-fig once done-fig" aria-hidden="true"><span class="slip"></span></span>' +
           '<h2 tabindex="-1">Topic complete</h2>' +
           '<div class="tally"></div>' +
           '<p>Move on to the next topic, or keep arranging your ranking on the right.</p>' +

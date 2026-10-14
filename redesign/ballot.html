@@ -335,6 +335,29 @@
   }
   @media (max-width: 560px) { main.wrap { padding-inline: 16px; } }
   @media (prefers-reduced-motion: reduce) { .col-main > *, .col-side > * { opacity: 1; translate: none; } }
+
+  /* Ballot-casting figure from empowered.vote (icons/Sticks/noun_ballot), recolored with a mask */
+  .ballot-fig { position: relative; display: inline-block; width: 150px; aspect-ratio: 1; flex: none; }
+  .ballot-fig::before {
+    content: ""; position: absolute; inset: 0; background: var(--fig, var(--teal));
+    -webkit-mask: url("assets/ballot-figure.png") center / contain no-repeat;
+    mask: url("assets/ballot-figure.png") center / contain no-repeat;
+  }
+  .ballot-fig .slip {
+    position: absolute; left: 33%; top: 37.5%; width: 4.8%; height: 7%; border-radius: 2px;
+    background: var(--yellow); box-shadow: 0 0 0 2px var(--slip-edge, var(--surface)); opacity: 0;
+  }
+  .ballot-fig.loop .slip { animation: slipdrop 1.5s ease-in infinite; }
+  .ballot-fig.once .slip { animation: slipdrop 1.2s ease-in var(--slip-delay, .3s) both; }
+  @keyframes slipdrop {
+    0% { transform: translateY(-240%); opacity: 0; }
+    20% { opacity: 1; }
+    70% { transform: translateY(40%); opacity: 1; }
+    100% { transform: translateY(100%); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .ballot-fig .slip { animation: none !important; opacity: 1; } }
+  .hero-fig { position: absolute; right: 48px; bottom: -10px; width: 132px; --fig: rgba(247, 244, 239, .92); --slip-edge: #1B1E3B; --slip-delay: 1s; }
+  @media (max-width: 1023px) { .hero-fig { display: none; } }
   /* end EV layout */
 </style>
 
@@ -369,7 +392,7 @@
     </nav>
 
     <div class="loading" id="loading" role="status" aria-live="polite">
-      <div class="deck" aria-hidden="true"><i></i><i></i><i></i></div>
+      <span class="ballot-fig loop" aria-hidden="true"><span class="slip"></span></span>
       <div>
         <p>Tallying your ballot</p>
         <small id="load-step">Matching quotes to candidates…</small>
@@ -381,6 +404,7 @@
       <section class="hero" style="--i:0" aria-labelledby="ballot-title">
         <p class="hero-eyebrow">U.S. Representative District 7 · You ranked 2 quotes across 2 topics</p>
         <h1 id="ballot-title">Now see <u>who</u> you agreed with</h1>
+        <span class="ballot-fig once hero-fig" aria-hidden="true"><span class="slip"></span></span>
       </section>
 
       <div class="layout">
