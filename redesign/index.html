@@ -1245,6 +1245,9 @@
   @media (prefers-reduced-motion: reduce) { #s-ballot .ballot-fig .slip { animation: none !important; opacity: 1; } }
   #s-ballot .hero-fig { position: absolute; right: 48px; bottom: -10px; width: 132px; --fig: rgba(247, 244, 239, .92); --slip-edge: #1B1E3B; --slip-delay: 1s; }
   @media (max-width: 1023px) { #s-ballot .hero-fig { display: none; } }
+  #s-ballot .mark.rank { background: var(--teal-tint); color: var(--teal); font-weight: 800; font-size: 14px; }
+  #s-ballot .mark.none { color: var(--ink-3); font-weight: 700; }
+  #s-ballot .matrix .empty-row { text-align: left; color: var(--ink-3); font-size: 14px; }
   /* end EV layout */
 
 
@@ -2399,7 +2402,7 @@
     <p class="group-label">Indiana · Nov 3, 2026</p>
 
     <div class="grid">
-      <a class="race in-progress" href="#issues">
+      <a class="race in-progress" href="#issues" data-race="d7">
         <div class="race-top">
           <div>
             <span class="badge">In progress</span>
@@ -2411,7 +2414,7 @@
         <div class="meta"><span><strong>1 of 2 topics</strong> · ~1 min left</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
       </a>
 
-      <a class="race" href="#">
+      <a class="race" href="#issues" data-race="d2">
         <div class="race-top">
           <div>
             <span class="date">Nov 3, 2026</span>
@@ -2422,7 +2425,7 @@
         <div class="meta"><span>2 candidates · 1 topic · ~2 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
       </a>
 
-      <a class="race" href="#">
+      <a class="race" href="#issues" data-race="d3">
         <div class="race-top">
           <div>
             <span class="date">Nov 3, 2026</span>
@@ -2433,7 +2436,7 @@
         <div class="meta"><span>2 candidates · 1 topic · ~1 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
       </a>
 
-      <a class="race" href="#">
+      <a class="race" href="#issues" data-race="d8">
         <div class="race-top">
           <div>
             <span class="date">Nov 3, 2026</span>
@@ -2595,7 +2598,7 @@
           <span class="dim" id="start-meta">4 quotes · about 1 min</span>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </button>
-        <a class="ballot" href="#">See your ballot so far</a>
+        <a class="ballot" href="#ballot">See your ballot so far</a>
       </div>
     </form>
 
@@ -2962,7 +2965,7 @@
         <div class="progress empty" role="img" aria-label="0 of 4 topics read"><i></i></div>
         <div class="meta wrap-ok"><span><strong>Continue · 0 of 4 topics</strong><br>4 candidates · 4 topics · ~5 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
       </a>
-      <a class="race done" href="#issues" data-state="indiana" data-search="us representative district 7 indiana nov 3, 2026">
+      <a class="race done" href="#issues" data-race="d7" data-state="indiana" data-search="us representative district 7 indiana nov 3, 2026">
         <div class="race-top">
           <div>
             <span class="date">Indiana · Nov 3, 2026</span>
@@ -2972,7 +2975,7 @@
         </div>
         <div class="meta wrap-ok"><span><span class="done-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Completed</span><br>2 candidates · 2 topics · ~2 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
       </a>
-      <a class="race" href="#" data-state="indiana" data-search="us representative district 2 indiana nov 3, 2026">
+      <a class="race" href="#issues" data-race="d2" data-state="indiana" data-search="us representative district 2 indiana nov 3, 2026">
         <div class="race-top">
           <div>
             <span class="date">Indiana · Nov 3, 2026</span>
@@ -2982,7 +2985,7 @@
         </div>
         <div class="meta"><span>2 candidates · 1 topic · ~2 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
       </a>
-      <a class="race" href="#" data-state="indiana" data-search="us representative district 3 indiana nov 3, 2026">
+      <a class="race" href="#issues" data-race="d3" data-state="indiana" data-search="us representative district 3 indiana nov 3, 2026">
         <div class="race-top">
           <div>
             <span class="date">Indiana · Nov 3, 2026</span>
@@ -2992,7 +2995,7 @@
         </div>
         <div class="meta"><span>2 candidates · 1 topic · ~1 min</span><span class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
       </a>
-      <a class="race" href="#" data-state="indiana" data-search="us representative district 8 indiana nov 3, 2026">
+      <a class="race" href="#issues" data-race="d8" data-state="indiana" data-search="us representative district 8 indiana nov 3, 2026">
         <div class="race-top">
           <div>
             <span class="date">Indiana · Nov 3, 2026</span>
@@ -3796,6 +3799,67 @@
 
 <script>
   (function () {
+    // Shared race data for the clickable prototype. District 7 uses the content from the live
+    // screens; Districts 2, 3 and 8 use bracketed placeholders until their real topics, quotes
+    // and candidates are supplied. Screens read window.RR when they open.
+    if (!window.RR) {
+      var STATE = '<path class="state" d="M7 3 H33 L34 42 L31 46 L27 48 L23 52 L17 53 L13 52 L9 55 L5 53 L6 49 L4 45 L5 41 Z"/>';
+      var placeholderRace = function (seat, dist, minutes) {
+        return {
+          office: 'US Representative', officeLong: 'U.S. Representative', seat: seat, state: 'Indiana', date: 'Nov 3, 2026', dist: dist, minutes: minutes,
+          candidates: {
+            c1: { name: '[Candidate 1 name]', ini: 'C1', office: 'Candidate' },
+            c2: { name: '[Candidate 2 name]', ini: 'C2', office: 'Candidate' }
+          },
+          topics: [{
+            key: 'topic-1', name: '[Topic name]', q: '[Question for this topic]',
+            quotes: [{ c: 'c1', text: '[Quote from candidate 1]' }, { c: 'c2', text: '[Quote from candidate 2]' }]
+          }]
+        };
+      };
+      window.RR = {
+        state: STATE,
+        active: 'd7',
+        selected: null,
+        results: {},
+        races: {
+          d7: {
+            office: 'US Representative', officeLong: 'U.S. Representative', seat: 'District 7', state: 'Indiana', date: 'Nov 3, 2026',
+            dist: '<circle class="dist" cx="19" cy="28" r="3.2"/>', minutes: 2,
+            candidates: {
+              ac: { name: 'André Carson', ini: 'AC', office: 'U.S. House of Representatives - Indiana 7th Congressional District' },
+              pm: { name: 'Patrick Mcauley', ini: 'PM', office: 'Candidate' }
+            },
+            topics: [
+              { key: 'housing', name: 'Housing', q: 'What role should government play in making sure people can afford housing?',
+                quotes: [
+                  { c: 'pm', text: 'We will update policies and introduce legislation that create stronger pathways to homeownership.' },
+                  { c: 'ac', text: 'Local zoning should allow more homes near jobs and transit, so rents come down over time.' }
+                ],
+                sample: { agreed: ['pm'], disagreed: ['ac'] } },
+              { key: 'immigration', name: 'Immigration', q: '[Immigration question]',
+                quotes: [{ c: 'ac', text: '[Immigration quote from the ballot]' }, { c: 'pm', text: '[Immigration quote from the ballot]' }],
+                ranked: { agreed: ['ac'], disagreed: ['pm'] } }
+            ]
+          },
+          d2: placeholderRace('District 2', '<path class="dist" d="M14 4 H26 V16 H14 Z"/>', 2),
+          d3: placeholderRace('District 3', '<path class="dist" d="M26 4 H33 V20 H26 Z"/>', 1),
+          d8: placeholderRace('District 8', '<path class="dist" d="M5 34 H14 V52 L9 55 L5 53 L6 49 L4 45 Z"/>', 2)
+        },
+        race: function () { return this.races[this.active]; },
+        // A topic's result: what the user did this session, else what the sample already holds.
+        result: function (raceId, t) {
+          var r = this.results[raceId] && this.results[raceId][t.key];
+          return r || t.ranked || null;
+        }
+      };
+      // Any race card carrying data-race selects that race before the router opens it.
+      document.addEventListener('click', function (e) {
+        var card = e.target.closest('[data-race]');
+        if (card && window.RR.races[card.dataset.race]) { window.RR.active = card.dataset.race; window.RR.selected = null; }
+      }, true);
+    }
+
     var root = document.documentElement;
     document.querySelectorAll('[data-theme-toggle]').forEach(function (t) { if (t.dataset.bound) return; t.dataset.bound = '1'; t.addEventListener('click', function () {
       var current = root.getAttribute('data-theme') ||
@@ -3822,21 +3886,61 @@
     }); });
 
     var form = document.getElementById('issues-form');
-    var boxes = form.querySelectorAll('input[name="issue"]');
     var btn = document.getElementById('start');
     var label = document.getElementById('start-label');
     var meta = document.getElementById('start-meta');
+    var screen = form.closest('.screen') || document.body;
+    var CHECK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+    var TICK = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+    function esc(t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
 
     function update() {
       var quotes = 0;
-      boxes.forEach(function (b) { if (b.checked) quotes += Number(b.dataset.quotes); });
+      form.querySelectorAll('input[name="issue"]').forEach(function (b) { if (b.checked) quotes += Number(b.dataset.quotes); });
       btn.disabled = quotes === 0;
       label.textContent = quotes === 0 ? 'Pick at least one issue' : 'Start reading';
       var mins = Math.max(1, Math.round(quotes * 15 / 60));
       meta.textContent = quotes === 0 ? '' : quotes + ' quotes · about ' + mins + ' min';
     }
-    boxes.forEach(function (b) { b.addEventListener('change', update); });
-    form.addEventListener('submit', function (e) { e.preventDefault(); });
+
+    // Draw the race picked on the landing or browse screen (window.RR). Without it the
+    // District 7 markup above stays as is.
+    function render() {
+      var RR = window.RR; if (!RR) return;
+      var race = RR.race(), id = RR.active;
+      var page = form.closest('.page');
+      page.querySelector('.race .map').innerHTML = RR.state + race.dist;
+      page.querySelector('.race .date').textContent = race.state + ' · ' + race.date;
+      page.querySelector('.race .name').innerHTML = esc(race.office) + ' <span>· ' + esc(race.seat) + '</span>';
+      var ranked = race.topics.filter(function (t) { return RR.result(id, t); }).length;
+      var total = race.topics.length;
+      var row = page.querySelector('.progress-row');
+      row.innerHTML = '<span><strong>' + ranked + ' of ' + total + '</strong> issue' + (total === 1 ? '' : 's') + ' ranked</span>' + (ranked ? '<span>Welcome back</span>' : '');
+      var bar = page.querySelector('.intro .bar');
+      bar.setAttribute('aria-label', ranked + ' of ' + total + ' issues ranked');
+      bar.firstElementChild.style.width = (total ? ranked / total * 100 : 0) + '%';
+      form.querySelector('.panel-count').textContent = total + ' available';
+      form.querySelector('.issues').innerHTML = race.topics.map(function (t) {
+        var done = RR.result(id, t), n = t.quotes.length;
+        return '<label class="issue">' +
+          '<input type="checkbox" name="issue" value="' + t.key + '" data-quotes="' + n + '" checked>' +
+          '<span class="check" aria-hidden="true">' + CHECK + '</span>' +
+          '<span><span class="issue-name">' + esc(t.name) + '</span><span class="issue-sub">' + n + ' quotes · ' + (done ? 'already ranked' : 'about ' + n * 15 + ' sec') + '</span></span>' +
+          (done ? '<span class="status done">' + TICK + 'Ranked</span>' : '<span class="status new">Not started</span>') +
+        '</label>';
+      }).join('');
+      update();
+    }
+
+    form.addEventListener('change', update);
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (window.RR) {
+        window.RR.selected = Array.prototype.map.call(form.querySelectorAll('input[name="issue"]:checked'), function (b) { return b.value; });
+      }
+    });
+    screen.addEventListener('screen:show', render);
     update();
   })();
 </script>
@@ -3872,6 +3976,37 @@
     var revealRow = document.getElementById('reveal-row');
     var stageHTML = stage.innerHTML;
     var index = 0, agreed = [], disagreed = [], busy = false, dragFrom = null;
+    var topic = null, raceId = null, topicName = 'Housing';
+    var whereEl = document.querySelector('#question').closest('.page').querySelector('.crumbs .where:not(.sep)');
+    var eyebrowEl = document.querySelector('#question').closest('section').querySelector('.eyebrow');
+    var questionEl = document.getElementById('question');
+    var segsBox = document.getElementById('segs');
+
+    // Topics of the race picked earlier (window.RR) that were selected and are not ranked yet.
+    function remainingTopics() {
+      var RR = window.RR; if (!RR) return [];
+      var race = RR.race(), sel = RR.selected || race.topics.map(function (t) { return t.key; });
+      return race.topics.filter(function (t) { return sel.indexOf(t.key) >= 0 && !RR.result(RR.active, t); });
+    }
+
+    function applyTopic(t) {
+      var RR = window.RR, race = RR.race();
+      topic = t; raceId = RR.active; topicName = t.name;
+      QUOTES = t.quotes.map(function (q) { return { id: q.c, c: q.c, text: q.text }; });
+      whereEl.textContent = race.office + ', ' + race.seat + ' · ' + race.state;
+      eyebrowEl.innerHTML = 'Issue ' + (race.topics.indexOf(t) + 1) + ' of ' + race.topics.length + ' <span aria-hidden="true">·</span> <b>' + esc(t.name) + '</b>';
+      questionEl.innerHTML = '<mark>' + esc(t.q) + '</mark>';
+      segsBox.innerHTML = QUOTES.map(function () { return '<i></i>'; }).join('');
+    }
+
+    function saveResult() {
+      var RR = window.RR; if (!RR || !topic) return;
+      RR.results[raceId] = RR.results[raceId] || {};
+      RR.results[raceId][topic.key] = {
+        agreed: agreed.map(function (q) { return q.c; }),
+        disagreed: disagreed.map(function (q) { return q.c; })
+      };
+    }
 
     var ICON_UP = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>';
     var ICON_DOWN = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
@@ -3905,7 +4040,7 @@
         li.draggable = true;
         li.innerHTML =
           '<span class="pos" aria-hidden="true">' + (i + 1) + '</span>' +
-          '<div><p class="rank-text"><span class="sr">Rank ' + (i + 1) + ': </span>' + esc(q.text) + '</p><span class="rank-tag">Housing</span></div>' +
+          '<div><p class="rank-text"><span class="sr">Rank ' + (i + 1) + ': </span>' + esc(q.text) + '</p><span class="rank-tag">' + esc(topicName) + '</span></div>' +
           '<div class="order">' +
             '<button type="button" data-up aria-label="Move up"' + (i === 0 ? ' disabled' : '') + '>' + ICON_UP + '</button>' +
             ICON_GRIP +
@@ -3943,6 +4078,7 @@
       tray.hidden = disagreed.length === 0;
       if (disagreed.length === 0) tray.open = false;
       trayCount.textContent = disagreed.length + ' disagreed';
+      if (index >= QUOTES.length) saveResult();
     }
 
     function paintTally() {
@@ -3950,6 +4086,13 @@
       if (!t) return;
       t.innerHTML = '<span class="yes">' + agreed.length + ' agreed</span>' +
         (disagreed.length ? '<span class="no">' + disagreed.length + ' disagreed</span>' : '');
+    }
+
+    function nextLink() {
+      saveResult();
+      var next = remainingTopics()[0];
+      return next ? '<button class="btn" type="button" data-next-topic>Next topic: ' + esc(next.name) + ' '
+                  : '<a class="btn" href="#issues">Back to issues ';
     }
 
     function paintDone() {
@@ -3963,11 +4106,13 @@
           '<div class="tally"></div>' +
           '<p>Move on to the next topic, or keep arranging your ranking on the right.</p>' +
           '<div class="done-actions">' +
-            '<a class="btn" href="#issues">Next topic <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>' +
+            nextLink() + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>' + (remainingTopics().length ? '</button>' : '</a>') +
             '<a class="btn ghost" href="#ballot">See your full ballot</a>' +
           '</div>' +
         '</div></div>';
       paintTally();
+      var nb = stage.querySelector('[data-next-topic]');
+      if (nb) nb.addEventListener('click', function () { reset(); window.scrollTo(0, 0); });
       stage.querySelector('h2').focus({ preventScroll: true });
     }
 
@@ -4002,6 +4147,7 @@
     }
 
     function reset() {
+      if (window.RR) { var RR = window.RR; applyTopic(remainingTopics()[0] || RR.race().topics[0]); }
       index = 0; agreed = []; disagreed = []; busy = false;
       stage.innerHTML = stageHTML;
       revealRow.hidden = false;
@@ -4040,6 +4186,84 @@
 
     function clear() { timers.forEach(clearTimeout); timers = []; }
 
+    var XMARK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+    var LENS = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="7" class="lens" stroke="currentColor"/><circle cx="10" cy="8.5" r="2.2"/><path d="M6.5 14c.8-1.6 2-2.4 3.5-2.4s2.7.8 3.5 2.4"/><path d="M15.5 15.5L21 21" class="lens" stroke="currentColor"/></svg>';
+    var CHEV = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+    function esc(t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+    function plural(n, w) { return n + ' ' + w + (n === 1 ? '' : 's'); }
+
+    // Build the ballot for the race picked earlier (window.RR) from the rankings made on the
+    // reading screen. Without window.RR the District 7 markup above stays as is.
+    function render() {
+      var RR = window.RR; if (!RR) return;
+      var race = RR.race(), id = RR.active;
+      var where = ballot.closest('.page').querySelector('.crumbs .where:not(.sep)');
+      if (where) where.textContent = race.office + ', ' + race.seat + ' · ' + race.state;
+      var ranked = race.topics.map(function (t) { return { t: t, r: RR.result(id, t) || t.sample }; }).filter(function (x) { return x.r; });
+      var ids = Object.keys(race.candidates);
+      var agreedTotal = ranked.reduce(function (n, x) { return n + x.r.agreed.length; }, 0);
+      ballot.querySelector('.hero-eyebrow').textContent = race.officeLong + ' ' + race.seat + ' · ' +
+        (ranked.length ? 'You ranked ' + plural(agreedTotal, 'quote') + ' across ' + plural(ranked.length, 'topic') : 'No topics ranked yet');
+
+      var stats = ids.map(function (c, order) {
+        var agree = 0, quotes = 0, top = 0;
+        ranked.forEach(function (x) {
+          if (x.t.quotes.some(function (q) { return q.c === c; })) quotes++;
+          var i = x.r.agreed.indexOf(c);
+          if (i >= 0) agree++;
+          if (i === 0) top++;
+        });
+        return { c: c, agree: agree, quotes: quotes, top: top, order: order };
+      });
+
+      var d = 0;
+      ballot.querySelector('.matrix thead').innerHTML = '<tr><th scope="col">Candidate</th>' +
+        ranked.map(function (x) { return '<th scope="col" class="topic">' + esc(x.t.name) + '</th>'; }).join('') + '</tr>';
+      ballot.querySelector('.matrix tbody').innerHTML = ranked.length ? ids.map(function (c) {
+        var who = race.candidates[c];
+        return '<tr><th scope="row"><span class="person"><span class="ini" aria-hidden="true">' + esc(who.ini) + '</span>' + esc(who.name) + '</span></th>' +
+          ranked.map(function (x) {
+            var i = x.r.agreed.indexOf(c), cell;
+            if (i === 0) cell = '<span class="mark top" style="--d:' + (d++) + '" role="img" aria-label="Your number 1 pick">1</span>';
+            else if (i > 0) cell = '<span class="mark rank" style="--d:' + (d++) + '" role="img" aria-label="Agreed, ranked ' + (i + 1) + '">' + (i + 1) + '</span>';
+            else if (x.r.disagreed.indexOf(c) >= 0) cell = '<span class="mark no" style="--d:' + (d++) + '" role="img" aria-label="Disagreed">' + XMARK + '</span>';
+            else cell = '<span class="mark none" style="--d:' + (d++) + '" role="img" aria-label="No quote">–</span>';
+            return '<td>' + cell + '</td>';
+          }).join('') + '</tr>';
+      }).join('') : '<tr><td class="empty-row" colspan="1">Rank a topic to see your alignment.</td></tr>';
+
+      stats.sort(function (a, b) { return b.top - a.top || b.agree - a.agree || a.order - b.order; });
+      ballot.querySelector('.stack').innerHTML = stats.map(function (st, rank) {
+        var who = race.candidates[st.c];
+        var meter = '';
+        for (var m = 0; m < Math.max(st.quotes, 1); m++) meter += '<i' + (m < st.agree ? ' class="on"' : '') + '></i>';
+        var said = ranked.map(function (x) {
+          var q = x.t.quotes.filter(function (q) { return q.c === st.c; })[0];
+          if (!q) return '';
+          var i = x.r.agreed.indexOf(st.c);
+          var tag = i === 0 ? '<span class="tag top">#1 pick</span>' : i > 0 ? '<span class="tag top">#' + (i + 1) + '</span>' : '<span class="tag no">Disagreed</span>';
+          return '<li><span class="topic-row">' + esc(x.t.name) + ' ' + tag + '</span><p>' + esc(q.text) + '</p></li>';
+        }).join('');
+        var summary = ranked.length
+          ? 'Agreed with <b>' + st.agree + ' of ' + st.quotes + '</b> · <span class="pick">' + plural(st.top, 'top pick') + '</span>'
+          : 'Not ranked yet';
+        return '<li class="cand">' +
+          '<div class="cand-main">' +
+            '<span class="rank-no"><span class="sr">Rank </span>' + (rank + 1) + '</span>' +
+            '<span class="avatar" aria-hidden="true">' + esc(who.ini) + '</span>' +
+            '<div><h3>' + esc(who.name) + '</h3><p class="office">' + esc(who.office) + '</p></div>' +
+            '<a class="profile" href="#" aria-label="View ' + esc(who.name) + '\'s profile">' + LENS + '</a>' +
+          '</div>' +
+          '<div class="cand-foot">' +
+            '<span class="agree"><span class="meter" aria-hidden="true">' + meter + '</span>' + summary + '</span>' +
+            (said ? '<button class="said-btn" type="button" aria-expanded="false" aria-controls="said-' + st.c + '">See what they said ' + CHEV + '</button>' : '') +
+          '</div>' +
+          (said ? '<div class="said" id="said-' + st.c + '"><div><ul>' + said + '</ul></div></div>' : '') +
+        '</li>';
+      }).join('');
+    }
+
+
     function showBallot() {
       loading.hidden = true;
       ballot.hidden = false;
@@ -4054,6 +4278,7 @@
     function run(e) {
       var from = e && e.detail && e.detail.from;
       clear();
+      render();
       inform.hidden = false;
       ballot.querySelectorAll('.said').forEach(function (s) { s.classList.remove('open'); });
       ballot.querySelectorAll('.said-btn').forEach(function (b) { b.setAttribute('aria-expanded', 'false'); });
@@ -4067,12 +4292,11 @@
       timers.push(setTimeout(showBallot, 1850));
     }
 
-    ballot.querySelectorAll('.said-btn').forEach(function (b) {
-      b.addEventListener('click', function () {
-        var open = b.getAttribute('aria-expanded') !== 'true';
-        b.setAttribute('aria-expanded', String(open));
-        document.getElementById(b.getAttribute('aria-controls')).classList.toggle('open', open);
-      });
+    ballot.addEventListener('click', function (e) {
+      var b = e.target.closest('.said-btn'); if (!b) return;
+      var open = b.getAttribute('aria-expanded') !== 'true';
+      b.setAttribute('aria-expanded', String(open));
+      document.getElementById(b.getAttribute('aria-controls')).classList.toggle('open', open);
     });
     document.getElementById('later').addEventListener('click', function () { inform.hidden = true; });
 

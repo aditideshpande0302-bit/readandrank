@@ -358,6 +358,9 @@
   @media (prefers-reduced-motion: reduce) { .ballot-fig .slip { animation: none !important; opacity: 1; } }
   .hero-fig { position: absolute; right: 48px; bottom: -10px; width: 132px; --fig: rgba(247, 244, 239, .92); --slip-edge: #1B1E3B; --slip-delay: 1s; }
   @media (max-width: 1023px) { .hero-fig { display: none; } }
+  .mark.rank { background: var(--teal-tint); color: var(--teal); font-weight: 800; font-size: 14px; }
+  .mark.none { color: var(--ink-3); font-weight: 700; }
+  .matrix .empty-row { text-align: left; color: var(--ink-3); font-size: 14px; }
   /* end EV layout */
 </style>
 
@@ -544,6 +547,84 @@
 
     function clear() { timers.forEach(clearTimeout); timers = []; }
 
+    var XMARK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+    var LENS = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="7" class="lens" stroke="currentColor"/><circle cx="10" cy="8.5" r="2.2"/><path d="M6.5 14c.8-1.6 2-2.4 3.5-2.4s2.7.8 3.5 2.4"/><path d="M15.5 15.5L21 21" class="lens" stroke="currentColor"/></svg>';
+    var CHEV = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+    function esc(t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+    function plural(n, w) { return n + ' ' + w + (n === 1 ? '' : 's'); }
+
+    // Build the ballot for the race picked earlier (window.RR) from the rankings made on the
+    // reading screen. Without window.RR the District 7 markup above stays as is.
+    function render() {
+      var RR = window.RR; if (!RR) return;
+      var race = RR.race(), id = RR.active;
+      var where = ballot.closest('.page').querySelector('.crumbs .where:not(.sep)');
+      if (where) where.textContent = race.office + ', ' + race.seat + ' · ' + race.state;
+      var ranked = race.topics.map(function (t) { return { t: t, r: RR.result(id, t) || t.sample }; }).filter(function (x) { return x.r; });
+      var ids = Object.keys(race.candidates);
+      var agreedTotal = ranked.reduce(function (n, x) { return n + x.r.agreed.length; }, 0);
+      ballot.querySelector('.hero-eyebrow').textContent = race.officeLong + ' ' + race.seat + ' · ' +
+        (ranked.length ? 'You ranked ' + plural(agreedTotal, 'quote') + ' across ' + plural(ranked.length, 'topic') : 'No topics ranked yet');
+
+      var stats = ids.map(function (c, order) {
+        var agree = 0, quotes = 0, top = 0;
+        ranked.forEach(function (x) {
+          if (x.t.quotes.some(function (q) { return q.c === c; })) quotes++;
+          var i = x.r.agreed.indexOf(c);
+          if (i >= 0) agree++;
+          if (i === 0) top++;
+        });
+        return { c: c, agree: agree, quotes: quotes, top: top, order: order };
+      });
+
+      var d = 0;
+      ballot.querySelector('.matrix thead').innerHTML = '<tr><th scope="col">Candidate</th>' +
+        ranked.map(function (x) { return '<th scope="col" class="topic">' + esc(x.t.name) + '</th>'; }).join('') + '</tr>';
+      ballot.querySelector('.matrix tbody').innerHTML = ranked.length ? ids.map(function (c) {
+        var who = race.candidates[c];
+        return '<tr><th scope="row"><span class="person"><span class="ini" aria-hidden="true">' + esc(who.ini) + '</span>' + esc(who.name) + '</span></th>' +
+          ranked.map(function (x) {
+            var i = x.r.agreed.indexOf(c), cell;
+            if (i === 0) cell = '<span class="mark top" style="--d:' + (d++) + '" role="img" aria-label="Your number 1 pick">1</span>';
+            else if (i > 0) cell = '<span class="mark rank" style="--d:' + (d++) + '" role="img" aria-label="Agreed, ranked ' + (i + 1) + '">' + (i + 1) + '</span>';
+            else if (x.r.disagreed.indexOf(c) >= 0) cell = '<span class="mark no" style="--d:' + (d++) + '" role="img" aria-label="Disagreed">' + XMARK + '</span>';
+            else cell = '<span class="mark none" style="--d:' + (d++) + '" role="img" aria-label="No quote">–</span>';
+            return '<td>' + cell + '</td>';
+          }).join('') + '</tr>';
+      }).join('') : '<tr><td class="empty-row" colspan="1">Rank a topic to see your alignment.</td></tr>';
+
+      stats.sort(function (a, b) { return b.top - a.top || b.agree - a.agree || a.order - b.order; });
+      ballot.querySelector('.stack').innerHTML = stats.map(function (st, rank) {
+        var who = race.candidates[st.c];
+        var meter = '';
+        for (var m = 0; m < Math.max(st.quotes, 1); m++) meter += '<i' + (m < st.agree ? ' class="on"' : '') + '></i>';
+        var said = ranked.map(function (x) {
+          var q = x.t.quotes.filter(function (q) { return q.c === st.c; })[0];
+          if (!q) return '';
+          var i = x.r.agreed.indexOf(st.c);
+          var tag = i === 0 ? '<span class="tag top">#1 pick</span>' : i > 0 ? '<span class="tag top">#' + (i + 1) + '</span>' : '<span class="tag no">Disagreed</span>';
+          return '<li><span class="topic-row">' + esc(x.t.name) + ' ' + tag + '</span><p>' + esc(q.text) + '</p></li>';
+        }).join('');
+        var summary = ranked.length
+          ? 'Agreed with <b>' + st.agree + ' of ' + st.quotes + '</b> · <span class="pick">' + plural(st.top, 'top pick') + '</span>'
+          : 'Not ranked yet';
+        return '<li class="cand">' +
+          '<div class="cand-main">' +
+            '<span class="rank-no"><span class="sr">Rank </span>' + (rank + 1) + '</span>' +
+            '<span class="avatar" aria-hidden="true">' + esc(who.ini) + '</span>' +
+            '<div><h3>' + esc(who.name) + '</h3><p class="office">' + esc(who.office) + '</p></div>' +
+            '<a class="profile" href="#" aria-label="View ' + esc(who.name) + '\'s profile">' + LENS + '</a>' +
+          '</div>' +
+          '<div class="cand-foot">' +
+            '<span class="agree"><span class="meter" aria-hidden="true">' + meter + '</span>' + summary + '</span>' +
+            (said ? '<button class="said-btn" type="button" aria-expanded="false" aria-controls="said-' + st.c + '">See what they said ' + CHEV + '</button>' : '') +
+          '</div>' +
+          (said ? '<div class="said" id="said-' + st.c + '"><div><ul>' + said + '</ul></div></div>' : '') +
+        '</li>';
+      }).join('');
+    }
+
+
     function showBallot() {
       loading.hidden = true;
       ballot.hidden = false;
@@ -558,6 +639,7 @@
     function run(e) {
       var from = e && e.detail && e.detail.from;
       clear();
+      render();
       inform.hidden = false;
       ballot.querySelectorAll('.said').forEach(function (s) { s.classList.remove('open'); });
       ballot.querySelectorAll('.said-btn').forEach(function (b) { b.setAttribute('aria-expanded', 'false'); });
@@ -571,12 +653,11 @@
       timers.push(setTimeout(showBallot, 1850));
     }
 
-    ballot.querySelectorAll('.said-btn').forEach(function (b) {
-      b.addEventListener('click', function () {
-        var open = b.getAttribute('aria-expanded') !== 'true';
-        b.setAttribute('aria-expanded', String(open));
-        document.getElementById(b.getAttribute('aria-controls')).classList.toggle('open', open);
-      });
+    ballot.addEventListener('click', function (e) {
+      var b = e.target.closest('.said-btn'); if (!b) return;
+      var open = b.getAttribute('aria-expanded') !== 'true';
+      b.setAttribute('aria-expanded', String(open));
+      document.getElementById(b.getAttribute('aria-controls')).classList.toggle('open', open);
     });
     document.getElementById('later').addEventListener('click', function () { inform.hidden = true; });
 
