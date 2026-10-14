@@ -256,6 +256,15 @@
     .product img { height: 36px; }
     footer .wrap { padding: 0 16px; }
   }
+  /* Same side margins as the landing page */
+  :root { --side: 16px; }
+  @media (min-width: 561px) { :root { --side: 48px; } }
+  @media (min-width: 640px) { :root { --side: 64px; } }
+  @media (min-width: 1024px) { :root { --side: 96px; } }
+  main.wrap { max-width: none; padding-inline: var(--side); }
+  .bar > .wrap { max-width: none; padding-inline: 0; }
+  .page { max-width: none; }
+  @media (max-width: 900px) { .catnav { margin-inline: calc(-1 * var(--side)); padding-inline: var(--side); } }
   /* end EV layout */
 </style>
 

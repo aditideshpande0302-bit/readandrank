@@ -293,6 +293,15 @@
     .product img { height: 36px; }
     footer .wrap { padding: 0 16px; }
   }
+  /* Same side margins as the landing page */
+  :root { --side: 16px; }
+  @media (min-width: 561px) { :root { --side: 48px; } }
+  @media (min-width: 640px) { :root { --side: 64px; } }
+  @media (min-width: 1024px) { :root { --side: 96px; } }
+  main.wrap { max-width: none; padding-inline: var(--side); }
+  .bar > .wrap { max-width: none; padding-inline: 0; }
+  .page { max-width: none; }
+  @media (max-width: 900px) { .catnav { margin-inline: calc(-1 * var(--side)); padding-inline: var(--side); } }
   /* end EV layout */
 </style>
 
@@ -560,7 +569,7 @@
       spot.style.top = (r.top - pad) + 'px'; spot.style.left = (r.left - pad) + 'px';
       spot.style.width = (r.width + pad * 2) + 'px'; spot.style.height = (r.height + pad * 2) + 'px';
       var pw = pop.offsetWidth, ph = pop.offsetHeight, vw = innerWidth, vh = innerHeight, side = s.side, top, left;
-      if (vw < 640) {
+      if (vw < 900) {
         pop.dataset.side = 'sheet';
         pop.style.left = ((vw - pw) / 2) + 'px'; pop.style.top = (vh - ph - 16) + 'px';
         return;
@@ -582,8 +591,8 @@
     function showTour(i) {
       tourStep = i;
       var s = TOUR[i];
-      document.getElementById(s.target).scrollIntoView({ block: innerWidth < 640 ? 'start' : 'center' });
-      if (innerWidth < 640) scrollBy(0, -16);
+      document.getElementById(s.target).scrollIntoView({ block: innerWidth < 900 ? 'start' : 'center' });
+      if (innerWidth < 900) scrollBy(0, -16);
       shade.hidden = spot.hidden = pop.hidden = false;
       popCount.textContent = (i + 1) + ' of ' + TOUR.length;
       popTitle.textContent = s.title; popBody.textContent = s.body;

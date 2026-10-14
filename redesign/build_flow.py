@@ -31,6 +31,8 @@ def scope_css(css, scope):
     out, stack, buf = [], [], ""
     for ch in css:
         if ch == "{":
+            # Drop comments so a rule like "/* note */ :root {" is still seen as :root.
+            buf = re.sub(r"/\*.*?\*/", "", buf, flags=re.S)
             head = buf.strip()
             in_keyframes = any(h.startswith("@keyframes") for h in stack)
             if head.startswith("@") or in_keyframes or (not stack and head.startswith(":root")):
