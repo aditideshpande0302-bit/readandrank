@@ -105,7 +105,7 @@
   /* Options panel */
   .panel {
     margin-top: 44px;
-    background: var(--surface); border: 1px solid var(--line); border-radius: 20px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
     padding: 28px; box-shadow: var(--shadow);
   }
   .panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
@@ -241,6 +241,22 @@
   @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; }
   }
+  /* EV layout: margins, borders and spacing matched to Treasury Tracker (ev-ui) */
+  :root { --line: #D3D7DE; --radius: 12px; }
+  .wrap { max-width: 1400px; padding-inline: 24px; }
+  .top { border-bottom: 0; }
+  .top .wrap { max-width: 1512px; height: auto; padding: 16px 24px; }
+  .product img { width: auto; height: 43px; }
+  .btn, .continue, .primary, .ghost, .cta, .pop-next, .save, .choice { border-radius: 12px; }
+  footer { padding-block: 32px 40px; font-size: .88rem; border-top: 1px solid var(--line); }
+  footer .wrap { max-width: 1280px; padding: 0 24px; gap: 12px; }
+  @media (max-width: 640px) {
+    .wrap { padding-inline: 16px; }
+    .top .wrap { padding: 12px; }
+    .product img { height: 36px; }
+    footer .wrap { padding: 0 16px; }
+  }
+  /* end EV layout */
 </style>
 
 <header class="top">

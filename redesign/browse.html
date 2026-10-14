@@ -144,14 +144,14 @@
   h1 { margin: 16px 0 0; font-size: clamp(30px, 4vw, 42px); line-height: 1.1; letter-spacing: -.03em; font-weight: 800; }
 
   .tools {
-    margin-top: 24px; padding: 16px; border-radius: 20px;
+    margin-top: 24px; padding: 16px; border-radius: 16px;
     background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow);
     display: grid; gap: 14px;
   }
   .search { position: relative; }
   .search svg { position: absolute; left: 16px; top: 50%; translate: 0 -50%; color: var(--ink-3); pointer-events: none; }
   .search input {
-    width: 100%; height: 52px; padding: 0 44px 0 46px; border-radius: 14px;
+    width: 100%; height: 52px; padding: 0 44px 0 46px; border-radius: 12px;
     border: 1.5px solid var(--line); background: var(--surface-2); color: var(--ink);
     font: 500 16px var(--font);
   }
@@ -194,7 +194,7 @@
   .done-chip { display: inline-flex; align-items: center; gap: 5px; color: var(--ink-2); font-weight: 700; }
   .done-chip svg { color: var(--teal); }
 
-  .none { margin-top: 28px; padding: 40px 20px; border-radius: 18px; border: 1.5px dashed var(--line); text-align: center; color: var(--ink-3); }
+  .none { margin-top: 28px; padding: 40px 20px; border-radius: 16px; border: 1.5px dashed var(--line); text-align: center; color: var(--ink-3); }
   .none b { display: block; color: var(--ink); font-size: 17px; margin-bottom: 4px; }
   .none button { margin-top: 12px; border: 0; background: none; color: var(--teal); font: 700 15px var(--font); cursor: pointer; }
   .none button:hover { text-decoration: underline; text-underline-offset: 3px; }
@@ -223,6 +223,22 @@
     * { transition: none !important; animation: none !important; }
   }
   .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  /* EV layout: margins, borders and spacing matched to Treasury Tracker (ev-ui) */
+  :root { --line: #D3D7DE; --radius: 12px; }
+  .wrap { max-width: 1400px; padding-inline: 24px; }
+  .top { border-bottom: 0; }
+  .top .wrap { max-width: 1512px; height: auto; padding: 16px 24px; }
+  .product img { width: auto; height: 43px; }
+  .btn, .continue, .primary, .ghost, .cta, .pop-next, .save, .choice { border-radius: 12px; }
+  footer { padding-block: 32px 40px; font-size: .88rem; border-top: 1px solid var(--line); }
+  footer .wrap { max-width: 1280px; padding: 0 24px; gap: 12px; }
+  @media (max-width: 640px) {
+    .wrap { padding-inline: 16px; }
+    .top .wrap { padding: 12px; }
+    .product img { height: 36px; }
+    footer .wrap { padding: 0 16px; }
+  }
+  /* end EV layout */
 </style>
 
 <header class="top">

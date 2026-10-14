@@ -209,6 +209,40 @@
   @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; }
   }
+  /* EV layout: margins, borders and spacing matched to Treasury Tracker (ev-ui) */
+  :root { --line: #D3D7DE; --radius: 12px; }
+  .wrap { max-width: 1400px; padding-inline: 24px; }
+  .top { border-bottom: 0; }
+  .top .wrap { max-width: 1512px; height: auto; padding: 16px 24px; }
+  .product img { width: auto; height: 43px; }
+  .btn, .continue, .primary, .ghost, .cta, .pop-next, .save, .choice { border-radius: 12px; }
+  footer { padding-block: 32px 40px; font-size: .88rem; border-top: 1px solid var(--line); }
+  footer .wrap { max-width: 1280px; padding: 0 24px; gap: 12px; }
+  @media (max-width: 640px) {
+    .wrap { padding-inline: 16px; }
+    .top .wrap { padding: 12px; }
+    .product img { height: 36px; }
+    footer .wrap { padding: 0 16px; }
+  }
+
+  /* Landing hero and election list share Treasury Tracker's full-width side margins */
+  .hero.wrap, .elections.wrap { max-width: none; padding-inline: 48px; }
+  .hero { padding-block: 64px; gap: 64px; }
+  .steps { display: grid; gap: 12px; padding: 0; }
+  .steps::before { display: none; }
+  .steps li { grid-template-columns: 32px 1fr; gap: 16px; padding: 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface-2); }
+  .steps li:first-child { border-color: var(--teal); background: var(--teal-tint); }
+  .num { width: 32px; height: 32px; border: 0; font-size: 12px; background: color-mix(in srgb, var(--ink) 6%, transparent); }
+  .steps li:first-child .num { background: color-mix(in srgb, var(--teal) 14%, transparent); color: var(--teal); }
+  .steps h3 { margin-top: 4px; }
+  .elections { padding-block: 0 48px; }
+  @media (min-width: 640px) { .hero.wrap, .elections.wrap { padding-inline: 64px; } }
+  @media (min-width: 1024px) {
+    .hero.wrap, .elections.wrap { padding-inline: 96px; }
+    .hero { grid-template-columns: minmax(0, 1fr) 380px; gap: 96px; }
+  }
+  @media (max-width: 560px) { .hero.wrap, .elections.wrap { padding-inline: 16px; } }
+  /* end EV layout */
 </style>
 
 <header class="top">
