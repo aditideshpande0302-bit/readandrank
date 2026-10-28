@@ -513,10 +513,10 @@
         }
         var STEPS = [
           { title: 'Pick an election', text: 'Local and upcoming races in our Alpha communities.', x: .3, color: '--teal', pose: function (t) { return A.greet.frame(t); }, opts: {} },
-          { title: 'Read the quotes', text: 'Judge positions on their words alone.', x: .62, color: '--yellow', pose: readStanding, opts: { book: true } },
+          { title: 'Read the quotes', text: 'Judge positions on their words alone.', x: .62, color: '--yellow', pose: readStanding, opts: {}, book: '--teal' },
           { title: 'Rank the candidates', text: 'See who earned your trust, and where you align.', x: .36, color: '--coral', pose: holdBoard, opts: {}, board: true }
         ];
-        var HOLD = 5, SPEED = 80, HOP = .38;  // seconds on each step, walking speed (px/s), hop length (s)
+        var HOLD = 3.5, SPEED = 130, HOP = .38;  // seconds on each step, walking speed (px/s), hop length (s)
         var stage = bobit.querySelector('.bobit-stage'), canvas = stage.querySelector('canvas');
         var bubble = bobit.querySelector('.bubble');
         var still = matchMedia('(prefers-reduced-motion: reduce)');
@@ -542,6 +542,18 @@
           phase = still.matches ? 'pose' : 'walk';
           if (still.matches) x = toX;
           clock = 0; held = 0;
+        }
+
+        // The open book (same shape as the rig's), outlined in its own color so it stands out on a yellow Bobit.
+        function drawBook(ctx, bx, by, color) {
+          ctx.save();
+          ctx.translate(bx, by); ctx.rotate(-.24);
+          ctx.fillStyle = '#FFFFFF'; ctx.strokeStyle = color; ctx.lineWidth = 3.5; ctx.lineJoin = 'round';
+          ctx.beginPath();
+          ctx.moveTo(0, -2); ctx.lineTo(-21, -12); ctx.lineTo(-21, 4); ctx.lineTo(0, 13); ctx.closePath();
+          ctx.moveTo(0, -2); ctx.lineTo(27, -9); ctx.lineTo(27, 8); ctx.lineTo(0, 13); ctx.closePath();
+          ctx.fill(); ctx.stroke();
+          ctx.restore();
         }
 
         // The ranking board: three rows slide into order, then the top row lights up.
@@ -570,7 +582,7 @@
           ctx.restore();
         }
 
-        function draw(w, h, pose, opts, color, board) {
+        function draw(w, h, pose, opts, color, board, book) {
           var dpr = window.devicePixelRatio || 1;
           if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) { canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr); }
           var ctx = canvas.getContext('2d');
@@ -585,6 +597,7 @@
           ctx.translate(ox, oy);
           ctx.scale(face * s, s);
           LR.draw(ctx, j, CFG, Object.assign({ color: color }, opts));
+          if (book) drawBook(ctx, (j.hR.x + j.hL.x) / 2, (j.hR.y + j.hL.y) / 2, tone(book));
           ctx.restore();
           if (board) drawBoard(ctx, ox + face * (j.hR.x + 26) * s, oy + j.hR.y * s - 30 * s, s, color, clock);
           var tail = Math.min(88, Math.max(12, x / w * 100));
@@ -613,7 +626,7 @@
             if (held >= HOLD) next(w);
           }
           bubble.style.setProperty('--progress', phase === 'pose' ? Math.min(1, held / HOLD).toFixed(3) : 0);
-          draw(w, h, pose, opts, color, board);
+          draw(w, h, pose, opts, color, board, phase === 'pose' && cur.book);
           start();
         }
         function start() { if (!raf) { if (!last) last = performance.now(); raf = requestAnimationFrame(frame); } }
