@@ -147,8 +147,13 @@
     background: radial-gradient(closest-side, rgba(79, 179, 200, .22), transparent 70%);
     pointer-events: none;
   }
-  .hero-eyebrow { position: relative; margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #B6BACB; }
-  .hero h1 { position: relative; margin: 12px 0 0; font-size: clamp(28px, 4.2vw, 40px); line-height: 1.15; letter-spacing: -.03em; font-weight: 800; }
+  .hero-race {
+    position: relative; display: inline-block; max-width: 100%; margin: 0; padding: 8px 20px; border-radius: 999px;
+    background: rgba(247, 244, 239, .1); border: 1px solid rgba(247, 244, 239, .28);
+    color: #FFFFFF; font-size: clamp(18px, 2.2vw, 24px); font-weight: 800; letter-spacing: -.01em; line-height: 1.25;
+  }
+  .hero-eyebrow { position: relative; margin: 14px 0 0; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #B6BACB; }
+  .hero h1 { position: relative; margin: 16px 0 0; font-size: clamp(28px, 4.2vw, 40px); line-height: 1.15; letter-spacing: -.03em; font-weight: 800; }
   .hero h1 u {
     text-decoration: none;
     background: linear-gradient(var(--yellow), var(--yellow)) no-repeat 0 92% / 0% 5px;
@@ -279,6 +284,7 @@
     .page { padding-block: 20px 48px; }
     .crumbs .where { display: none; }
     .hero { padding: 28px 20px; }
+    .hero-race { padding: 8px 16px; border-radius: 16px; }
     .cand-main { grid-template-columns: auto auto 1fr; gap: 12px; padding: 16px; }
     .cand-main .profile { grid-column: 3; justify-self: start; display: none; }
     .avatar { width: 46px; height: 46px; border-radius: 12px; font-size: 16px; }
@@ -408,9 +414,10 @@
     </div>
 
     <div class="reveal" id="ballot" hidden>
-      <section class="hero" style="--i:0" aria-labelledby="ballot-title">
-        <p class="hero-eyebrow">U.S. Representative District 7 · You ranked 2 quotes across 2 topics</p>
+      <section class="hero" style="--i:0" aria-labelledby="hero-race ballot-title">
+        <p class="hero-race" id="hero-race">U.S. Representative District 7</p>
         <h1 id="ballot-title">Now see <u>who</u> you agreed with</h1>
+        <p class="hero-eyebrow">You ranked 2 quotes across 2 topics</p>
         <span class="ballot-fig once hero-fig" aria-hidden="true"><span class="slip"></span></span>
       </section>
 
@@ -568,7 +575,8 @@
       var ranked = race.topics.map(function (t) { return { t: t, r: RR.result(id, t) || t.sample }; }).filter(function (x) { return x.r; });
       var ids = Object.keys(race.candidates);
       var agreedTotal = ranked.reduce(function (n, x) { return n + x.r.agreed.length; }, 0);
-      ballot.querySelector('.hero-eyebrow').textContent = race.officeLong + ' ' + race.seat + ' · ' +
+      ballot.querySelector('.hero-race').textContent = race.officeLong + ' ' + race.seat;
+      ballot.querySelector('.hero-eyebrow').textContent =
         (ranked.length ? 'You ranked ' + plural(agreedTotal, 'quote') + ' across ' + plural(ranked.length, 'topic') : 'No topics ranked yet');
 
       var stats = ids.map(function (c, order) {
