@@ -130,6 +130,8 @@
   .bubble-step { display: block; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--teal); }
   .bubble h3 { margin: 6px 0 4px; font-size: 19px; font-weight: 800; letter-spacing: -.01em; }
   .bubble p { margin: 0; color: var(--ink-2); font-size: 15px; line-height: 1.5; min-height: 3em; }
+  .bubble-bar { display: block; height: 4px; margin-top: 14px; border-radius: 99px; background: var(--line); overflow: hidden; }
+  .bubble-bar i { display: block; height: 100%; width: 100%; border-radius: inherit; background: var(--step-color, var(--teal)); transform-origin: left; transform: scaleX(var(--progress, 0)); }
   .bubble.swap > * { animation: bubble-in .35s ease both; }
   @keyframes bubble-in { from { opacity: 0; translate: 0 6px; } }
   .bobit-stage { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 16px; }
@@ -289,6 +291,7 @@
         <span class="bubble-step">Step <span id="bobit-n">1</span> of 3</span>
         <h3 id="bobit-title">Pick an election</h3>
         <p id="bobit-text">Local and upcoming races in our Alpha communities.</p>
+        <span class="bubble-bar" aria-hidden="true"><i></i></span>
       </div>
       <button class="bobit-stage" type="button" aria-label="Next step"><canvas aria-hidden="true"></canvas></button>
     </figure>
@@ -485,36 +488,49 @@
       }, true);
     }
 
-    // How it works: Bobit plays through the three steps by himself, walking to a new spot between
-    // them. Hover or focus pauses him; clicking him moves on to the next step.
+    // How it works: Bobit plays through the three steps by himself, walking to a new spot (and a new
+    // logo color) between them. Hover pauses the timer and he turns toward the pointer; a click makes
+    // him hop and move on, even mid-walk.
     var bobit = document.getElementById('bobit');
     if (bobit && window.LeremyRig && !bobit.dataset.bound) {
       bobit.dataset.bound = '1';
       (function () {
         var LR = window.LeremyRig, A = LR.ANIMATIONS;
-        var CFG = Object.assign({}, LR.CFG, { R: 28, torsoW: 21, neckW: 19, armW: 10.5, legW: 12.5 }); // a thinner Bobit
+        var CFG = Object.assign({}, LR.CFG, { R: 28, torsoW: 21, neckW: 19, armW: 10.5, legW: 12.5 }); // a slightly thinner Bobit
+        function wave(t, hz) { return Math.sin(t * hz * Math.PI * 2); }
         function readStanding(t) {
           var p = A.present.frame(t), r = A.read.frame(t);
           p.lean = 2; p.hunch = -10; p.headTilt = r.headTilt; p.bob = r.bob;
           p.armRU = r.armRU; p.armRF = r.armRF; p.armLU = r.armLU; p.armLF = r.armLF;
           return p;
         }
+        function holdBoard(t) {             // ranking board held out to the side at shoulder height
+          var p = A.present.frame(t);
+          p.armRU = 62 + wave(t, .6) * 3; p.armRF = 150 + wave(t, .6) * 4;
+          p.headTilt = -12 + wave(t, .3) * 3;
+          p.bob = 1 + wave(t, .9) * 1.5;
+          return p;
+        }
         var STEPS = [
-          { title: 'Pick an election', text: 'Local and upcoming races in our Alpha communities.', x: .3, pose: function (t) { return A.greet.frame(t); }, opts: {} },
-          { title: 'Read the quotes', text: 'Judge positions on their words alone.', x: .66, pose: readStanding, opts: { book: true } },
-          { title: 'Rank the candidates', text: 'See who earned your trust, and where you align.', x: .44, pose: function (t) { return A.tap.frame(t); }, opts: { phone: true } }
+          { title: 'Pick an election', text: 'Local and upcoming races in our Alpha communities.', x: .3, color: '--teal', pose: function (t) { return A.greet.frame(t); }, opts: {} },
+          { title: 'Read the quotes', text: 'Judge positions on their words alone.', x: .62, color: '--yellow', pose: readStanding, opts: { book: true } },
+          { title: 'Rank the candidates', text: 'See who earned your trust, and where you align.', x: .36, color: '--coral', pose: holdBoard, opts: {}, board: true }
         ];
-        var HOLD = 5, SPEED = 75;            // seconds on each step, walking speed (px/s)
+        var HOLD = 5, SPEED = 80, HOP = .38;  // seconds on each step, walking speed (px/s), hop length (s)
         var stage = bobit.querySelector('.bobit-stage'), canvas = stage.querySelector('canvas');
         var bubble = bobit.querySelector('.bubble');
         var still = matchMedia('(prefers-reduced-motion: reduce)');
-        var step = 0, phase = 'pose', clock = 0, held = 0, x = null, fromX = 0, toX = 0, dur = 1, face = 1;
-        var paused = false, visible = true, raf = 0, last = 0;
+        var step = 0, phase = 'pose', clock = 0, held = 0, hop = 9, x = null, fromX = 0, toX = 0, dur = 1, face = 1;
+        var paused = false, pointerX = null, visible = true, raf = 0, last = 0;
+
+        // A step's color, read from the page's tokens so dark mode follows.
+        function tone(name) { return getComputedStyle(canvas).getPropertyValue(name).trim() || '#0E6A80'; }
 
         function show(i) {
           document.getElementById('bobit-n').textContent = i + 1;
           document.getElementById('bobit-title').textContent = STEPS[i].title;
           document.getElementById('bobit-text').textContent = STEPS[i].text;
+          bubble.style.setProperty('--step-color', 'var(' + STEPS[i].color + ')');
           bubble.classList.remove('swap'); void bubble.offsetWidth; bubble.classList.add('swap');
         }
         function next(w) {
@@ -527,20 +543,50 @@
           if (still.matches) x = toX;
           clock = 0; held = 0;
         }
-        function draw(w, h, pose, opts) {
+
+        // The ranking board: three rows slide into order, then the top row lights up.
+        function drawBoard(ctx, cx, cy, s, color, t) {
+          var bw = 74 * s, bh = 82 * s, r = 9 * s;
+          ctx.save();
+          ctx.translate(cx - bw / 2, cy - bh / 2);
+          ctx.fillStyle = '#FFFFFF'; ctx.strokeStyle = color; ctx.lineWidth = 3.5 * s;
+          ctx.beginPath(); ctx.roundRect(0, 0, bw, bh, r); ctx.fill(); ctx.stroke();
+          var cyc = t % 4, k = Math.min(1, Math.max(0, (cyc - .8) / .7));      // 0 = shuffled, 1 = ranked
+          k = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+          var widths = [1, .72, .46], shuffled = [1, 2, 0];                     // bar i sits in row shuffled[i] before ranking
+          var row = function (n) { return 13 * s + n * 23 * s; };
+          for (var n = 0; n < 3; n++) {
+            ctx.fillStyle = color;
+            ctx.beginPath(); ctx.arc(14 * s, row(n) + 6 * s, 7 * s, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#FFFFFF'; ctx.font = '800 ' + (9 * s) + 'px Manrope, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText(String(n + 1), 14 * s, row(n) + 6.5 * s);
+          }
+          for (var i = 0; i < 3; i++) {
+            var y = row(shuffled[i]) + (row(i) - row(shuffled[i])) * k;
+            var top = i === 0 && k >= 1 && cyc > 1.6;
+            ctx.fillStyle = top ? tone('--yellow') : 'rgba(122, 125, 146, .45)';
+            ctx.beginPath(); ctx.roundRect(27 * s, y + 2 * s, 38 * s * widths[i], 8 * s, 4 * s); ctx.fill();
+          }
+          ctx.restore();
+        }
+
+        function draw(w, h, pose, opts, color, board) {
           var dpr = window.devicePixelRatio || 1;
           if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) { canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr); }
           var ctx = canvas.getContext('2d');
           ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
           ctx.clearRect(0, 0, w, h);
-          var s = (h - 14) / 250, ground = h - 8;
-          var color = getComputedStyle(canvas).color;
-          LR.drawShadow(ctx, x, ground, 34 * s * 2, 'rgba(120, 125, 146, .18)');
+          var s = (h - 14) / 270, ground = h - 8;
+          var lift = hop < HOP ? Math.sin(hop / HOP * Math.PI) * 22 : 0;
+          LR.drawShadow(ctx, x, ground, 34 * s * 2 * (1 - lift / 60), 'rgba(120, 125, 146, .18)');
+          var j = LR.computePose(pose, CFG, { x: 0, y: 0 });
+          var ox = x, oy = ground - 112 * s - lift;
           ctx.save();
-          ctx.translate(x, ground - 112 * s);
+          ctx.translate(ox, oy);
           ctx.scale(face * s, s);
-          LR.draw(ctx, LR.computePose(pose, CFG, { x: 0, y: 0 }), CFG, Object.assign({ color: color }, opts));
+          LR.draw(ctx, j, CFG, Object.assign({ color: color }, opts));
           ctx.restore();
+          if (board) drawBoard(ctx, ox + face * (j.hR.x + 26) * s, oy + j.hR.y * s - 30 * s, s, color, clock);
           var tail = Math.min(88, Math.max(12, x / w * 100));
           bubble.style.setProperty('--tail', tail + '%');
         }
@@ -549,30 +595,43 @@
           var w = canvas.clientWidth, h = canvas.clientHeight;
           if (!w || !visible || document.hidden) return;   // off screen: stop until shown again
           var dt = Math.min(.1, (now - last) / 1000); last = now;
-          if (x === null) x = STEPS[step].x * w;
-          clock += dt;
-          if (!paused) held += dt;
-          var pose, opts = STEPS[step].opts;
+          if (x === null) { x = STEPS[step].x * w; show(step); }
+          clock += dt; hop += dt;
+          if (!paused && phase === 'pose') held += dt;
+          var cur = STEPS[step], pose, opts = cur.opts, color, board = false;
           if (phase === 'walk') {
             var k = Math.min(1, clock / dur);
             x = fromX + (toX - fromX) * k;
             pose = A.stroll.frame(clock); opts = {};
+            color = tone(cur.color);
             if (k >= 1) { phase = 'pose'; clock = 0; held = 0; }
           } else {
-            pose = STEPS[step].pose(still.matches ? 1.2 : clock);
+            if (paused && pointerX !== null && Math.abs(pointerX - x) > 24) face = pointerX > x ? 1 : -1;
+            pose = cur.pose(still.matches ? 1.2 : clock);
+            color = tone(cur.color);
+            board = !!cur.board;
             if (held >= HOLD) next(w);
           }
-          draw(w, h, pose, opts);
+          bubble.style.setProperty('--progress', phase === 'pose' ? Math.min(1, held / HOLD).toFixed(3) : 0);
+          draw(w, h, pose, opts, color, board);
           start();
         }
         function start() { if (!raf) { if (!last) last = performance.now(); raf = requestAnimationFrame(frame); } }
         function restart() { last = performance.now(); start(); }
 
-        bobit.addEventListener('mouseenter', function () { paused = true; });
-        bobit.addEventListener('mouseleave', function () { paused = false; });
+        bobit.addEventListener('pointerenter', function () { paused = true; });
+        bobit.addEventListener('pointerleave', function () { paused = false; pointerX = null; });
+        stage.addEventListener('pointermove', function (e) { pointerX = e.clientX - canvas.getBoundingClientRect().left; });
         bobit.addEventListener('focusin', function () { if (stage.matches(':focus-visible')) paused = true; });
         bobit.addEventListener('focusout', function () { paused = false; });
-        stage.addEventListener('click', function () { if (phase === 'pose') next(canvas.clientWidth); });
+        // Every click counts: mid-walk he finishes the walk at once, then moves on.
+        stage.addEventListener('click', function () {
+          if (x === null) return;
+          if (phase === 'walk') { x = toX; phase = 'pose'; }
+          hop = still.matches ? HOP : 0;
+          next(canvas.clientWidth);
+          restart();
+        });
         if ('IntersectionObserver' in window) {
           new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; if (visible) restart(); }).observe(canvas);
         }
