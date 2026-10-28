@@ -1048,19 +1048,30 @@
   #s-ballot h2.title { margin: 40px 0 14px; font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
 
   
-  #s-ballot .glance { margin-top: 32px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px 24px 24px; }
-  #s-ballot .glance-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 24px; margin-bottom: 16px; }
-  #s-ballot .glance .label { margin: 0; }
-  #s-ballot .glance-key { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 14px; font-weight: 700; }
-  #s-ballot .glance-key li { display: flex; align-items: center; gap: 8px; min-width: 0; }
-  #s-ballot .glance-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
-  #s-ballot .topic-tile { min-width: 0; background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
-  #s-ballot .topic-tile h3 { margin: 0 0 12px; font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); overflow-wrap: anywhere; }
-  #s-ballot .topic-tile ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-  #s-ballot .topic-tile li { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  #s-ballot .glance .ini { width: 28px; height: 28px; font-size: 12px; }
-  #s-ballot .topic-tile .mark { width: 30px; height: 30px; }
-  #s-ballot .glance-empty { margin: 0; color: var(--ink-3); font-size: 14px; }
+  #s-ballot .glance { margin-top: 32px; }
+  #s-ballot .glance .label { margin: 0 0 12px; }
+  #s-ballot .glance-wrap { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+  #s-ballot .glance-table { width: 100%; border-collapse: collapse; }
+  #s-ballot .glance-table th, #s-ballot .glance-table td { padding: 14px 24px; text-align: left; }
+  #s-ballot .glance-table thead > tr > * { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); line-height: 1.35; border-bottom: 1px solid var(--line); background: var(--surface-2); vertical-align: middle; }
+  #s-ballot .glance-table thead th.topic { text-align: center; width: 120px; padding-inline: 12px; }
+  #s-ballot .glance-table .cand-col { width: 220px; }
+  #s-ballot .glance-table tbody tr + tr > * { border-top: 1px solid var(--line); }
+  #s-ballot .glance-table tbody th { font-weight: 600; font-size: 16px; }
+  #s-ballot .glance-table td { text-align: center; padding-inline: 12px; }
+  #s-ballot .glance-table .fill { width: auto; padding: 0; }
+  #s-ballot .glance-empty { color: var(--ink-3); font-size: 14px; }
+  #s-ballot .glance-table .mark { width: 30px; height: 30px; }
+  
+  #s-ballot .glance-table.stacked thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  #s-ballot .glance-table.stacked tbody tr { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; padding: 16px 20px; }
+  #s-ballot .glance-table.stacked tbody tr + tr { border-top: 1px solid var(--line); }
+  #s-ballot .glance-table.stacked tbody tr + tr > * { border-top: 0; }
+  #s-ballot .glance-table.stacked tbody th { flex: 1 0 100%; padding: 0; }
+  #s-ballot .glance-table.stacked td { display: inline-flex; align-items: center; gap: 8px; padding: 0; }
+  #s-ballot .glance-table.stacked td::before { content: attr(data-topic); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+  #s-ballot .glance-table.stacked .fill { display: none; }
+  #s-ballot .glance-table.stacked td.glance-empty::before { content: none; }
   #s-ballot .ini { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 800; background: var(--teal-tint); color: var(--teal); flex: none; }
   #s-ballot .mark { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; scale: 0; }
   #s-ballot .reveal.in .mark { animation: pop .4s cubic-bezier(.3,1.6,.5,1) forwards; animation-delay: calc(.6s + var(--d, 0) * 120ms); }
@@ -1164,9 +1175,6 @@
     #s-ballot .inform-actions { grid-column: 1; grid-row: auto; margin-top: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
     #s-ballot .inform .btn { white-space: normal; text-align: center; }
     #s-ballot .end .btn { width: 100%; }
-    #s-ballot .glance { padding: 16px; }
-    #s-ballot .glance-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
-    #s-ballot .topic-tile { padding: 12px; }
     #s-ballot footer .wrap { flex-direction: column; align-items: start; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -2778,17 +2786,18 @@
       </section>
 
       <section class="glance" style="--i:1" aria-labelledby="glance-title">
-        <div class="glance-head">
-          <h2 class="label" id="glance-title">Your alignment at a glance</h2>
-          <ul class="glance-key">
-            <li><span class="ini" aria-hidden="true">AC</span>André Carson</li>
-            <li><span class="ini" aria-hidden="true">PM</span>Patrick Mcauley</li>
-          </ul>
+        <h2 class="label" id="glance-title">Your alignment at a glance</h2>
+        <div class="glance-wrap">
+          <table class="glance-table">
+            <thead>
+              <tr><th scope="col" class="cand-col">Candidate</th><th scope="col" class="topic">Housing</th><th scope="col" class="topic">Immigration</th><td class="fill" aria-hidden="true"></td></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">André Carson</th><td data-topic="Housing"><span class="mark no" style="--d:0" role="img" aria-label="Disagreed"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span></td><td data-topic="Immigration"><span class="mark top" style="--d:1" role="img" aria-label="Your number 1 pick">1</span></td><td class="fill" aria-hidden="true"></td></tr>
+              <tr><th scope="row">Patrick Mcauley</th><td data-topic="Housing"><span class="mark top" style="--d:2" role="img" aria-label="Your number 1 pick">1</span></td><td data-topic="Immigration"><span class="mark no" style="--d:3" role="img" aria-label="Disagreed"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span></td><td class="fill" aria-hidden="true"></td></tr>
+            </tbody>
+          </table>
         </div>
-        <ul class="glance-grid">
-            <li class="topic-tile"><h3>Housing</h3><ul><li><span class="ini" aria-hidden="true">AC</span><span class="sr">André Carson: </span><span class="mark no" style="--d:0" role="img" aria-label="Disagreed"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span></li><li><span class="ini" aria-hidden="true">PM</span><span class="sr">Patrick Mcauley: </span><span class="mark top" style="--d:1" role="img" aria-label="Your number 1 pick">1</span></li></ul></li>
-            <li class="topic-tile"><h3>Immigration</h3><ul><li><span class="ini" aria-hidden="true">AC</span><span class="sr">André Carson: </span><span class="mark top" style="--d:2" role="img" aria-label="Your number 1 pick">1</span></li><li><span class="ini" aria-hidden="true">PM</span><span class="sr">Patrick Mcauley: </span><span class="mark no" style="--d:3" role="img" aria-label="Disagreed"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span></li></ul></li>
-        </ul>
       </section>
 
       <div class="layout">
@@ -4178,6 +4187,14 @@
     var LENS = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="7" class="lens" stroke="currentColor"/><circle cx="10" cy="8.5" r="2.2"/><path d="M6.5 14c.8-1.6 2-2.4 3.5-2.4s2.7.8 3.5 2.4"/><path d="M15.5 15.5L21 21" class="lens" stroke="currentColor"/></svg>';
     var CHEV = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
     function esc(t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+    // Stack the alignment table when its topic columns don't fit the width (no sideways scrolling).
+    function fitGlance() {
+      var wrap = ballot.querySelector('.glance-wrap'), table = wrap.querySelector('.glance-table');
+      if (!wrap.clientWidth) return;
+      table.classList.remove('stacked');
+      table.classList.toggle('stacked', innerWidth <= 560 || table.scrollWidth > wrap.clientWidth + 1);
+    }
+    if (window.ResizeObserver) new ResizeObserver(fitGlance).observe(ballot.querySelector('.glance-wrap'));
     function plural(n, w) { return n + ' ' + w + (n === 1 ? '' : 's'); }
 
     // Build the ballot for the race picked earlier (window.RR) from the rankings made on the
@@ -4205,20 +4222,21 @@
       });
 
       var d = 0;
-      ballot.querySelector('.glance-key').innerHTML = ids.map(function (c) {
-        var who = race.candidates[c];
-        return '<li><span class="ini" aria-hidden="true">' + esc(who.ini) + '</span>' + esc(who.name) + '</li>';
-      }).join('');
-      ballot.querySelector('.glance-grid').innerHTML = ranked.length ? ranked.map(function (x) {
-        return '<li class="topic-tile"><h3>' + esc(x.t.name) + '</h3><ul>' + ids.map(function (c) {
-          var who = race.candidates[c], i = x.r.agreed.indexOf(c), cell;
-          if (i === 0) cell = '<span class="mark top" style="--d:' + (d++) + '" role="img" aria-label="Your number 1 pick">1</span>';
-          else if (i > 0) cell = '<span class="mark rank" style="--d:' + (d++) + '" role="img" aria-label="Agreed, ranked ' + (i + 1) + '">' + (i + 1) + '</span>';
-          else if (x.r.disagreed.indexOf(c) >= 0) cell = '<span class="mark no" style="--d:' + (d++) + '" role="img" aria-label="Disagreed">' + XMARK + '</span>';
-          else cell = '<span class="mark none" style="--d:' + (d++) + '" role="img" aria-label="No quote">–</span>';
-          return '<li><span class="ini" aria-hidden="true">' + esc(who.ini) + '</span><span class="sr">' + esc(who.name) + ': </span>' + cell + '</li>';
-        }).join('') + '</ul></li>';
-      }).join('') : '<li><p class="glance-empty">Rank a topic to see your alignment.</p></li>';
+      var FILL = '<td class="fill" aria-hidden="true"></td>';
+      ballot.querySelector('.glance-table thead').innerHTML = '<tr><th scope="col" class="cand-col">Candidate</th>' +
+        ranked.map(function (x) { return '<th scope="col" class="topic">' + esc(x.t.name) + '</th>'; }).join('') + FILL + '</tr>';
+      ballot.querySelector('.glance-table tbody').innerHTML = ranked.length ? ids.map(function (c) {
+        return '<tr><th scope="row">' + esc(race.candidates[c].name) + '</th>' +
+          ranked.map(function (x) {
+            var i = x.r.agreed.indexOf(c), cell;
+            if (i === 0) cell = '<span class="mark top" style="--d:' + (d++) + '" role="img" aria-label="Your number 1 pick">1</span>';
+            else if (i > 0) cell = '<span class="mark rank" style="--d:' + (d++) + '" role="img" aria-label="Agreed, ranked ' + (i + 1) + '">' + (i + 1) + '</span>';
+            else if (x.r.disagreed.indexOf(c) >= 0) cell = '<span class="mark no" style="--d:' + (d++) + '" role="img" aria-label="Disagreed">' + XMARK + '</span>';
+            else cell = '<span class="mark none" style="--d:' + (d++) + '" role="img" aria-label="No quote">–</span>';
+            return '<td data-topic="' + esc(x.t.name) + '">' + cell + '</td>';
+          }).join('') + FILL + '</tr>';
+      }).join('') : '<tr><td class="glance-empty" colspan="2">Rank a topic to see your alignment.</td></tr>';
+      fitGlance();
 
       stats.sort(function (a, b) { return b.top - a.top || b.agree - a.agree || a.order - b.order; });
       ballot.querySelector('.stack').innerHTML = stats.map(function (st, rank) {
