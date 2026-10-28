@@ -117,59 +117,26 @@
   .link:hover { text-decoration: underline; text-underline-offset: 3px; }
   .link small { color: var(--ink-3); font-weight: 500; font-size: 13px; margin-left: 4px; }
 
-  /* How it works: Bobit explains the three steps */
-  .how { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: 24px 0 0; }
-  .how-label { font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
-  .how ol { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; }
-  .how li { display: flex; align-items: center; }
-  .how li + li::before { content: ""; width: 20px; height: 2px; background: var(--line); }
-  .dot {
-    width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
-    background: var(--surface); border: 2px solid var(--line); color: var(--ink-2);
-    font: 800 14px/1 var(--font); font-variant-numeric: tabular-nums;
-    transition: background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease;
-  }
-  .dot:hover { border-color: var(--teal); color: var(--teal); }
-  .dot[aria-pressed="true"] { background: var(--teal); border-color: var(--teal); color: var(--on-teal); transform: scale(1.08); }
-  .dot:focus-visible { outline: 3px solid color-mix(in srgb, var(--teal) 40%, transparent); outline-offset: 2px; }
-
-  .bobit { margin: 0; display: grid; justify-items: center; gap: 6px; }
+  /* How it works: an animated Bobit (Empowered Vote's Leremy rig) walks through the three steps on his own */
+  .bobit { margin: 0; display: grid; gap: 4px; width: 100%; max-width: 420px; justify-self: center; }
   .bubble {
-    position: relative; width: 100%; padding: 18px 20px; border-radius: 16px;
+    position: relative; padding: 18px 20px; border-radius: 16px;
     background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow, none);
   }
   .bubble::after {
-    content: ""; position: absolute; left: 50%; bottom: -9px; width: 16px; height: 16px; margin-left: -8px;
+    content: ""; position: absolute; left: var(--tail, 50%); bottom: -9px; width: 16px; height: 16px; margin-left: -8px;
     background: var(--surface); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); rotate: 45deg;
   }
   .bubble-step { display: block; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--teal); }
   .bubble h3 { margin: 6px 0 4px; font-size: 19px; font-weight: 800; letter-spacing: -.01em; }
-  .bubble p { margin: 0; color: var(--ink-2); font-size: 15px; }
-  .bobit-fig {
-    width: 168px; aspect-ratio: 1; background: var(--teal);
-    -webkit-mask: var(--pose) center bottom / contain no-repeat; mask: var(--pose) center bottom / contain no-repeat;
-  }
-  .bobit[data-step="0"] .bobit-fig { --pose: url("assets/bobit-explain.png"); }
-  .bobit[data-step="1"] .bobit-fig { --pose: url("assets/bobit-read.png"); }
-  .bobit[data-step="2"] .bobit-fig { --pose: url("assets/ballot-figure.png"); }
-  .bobit.swap .bubble { animation: bubble-in .3s ease both; }
-  .bobit.swap .bobit-fig { animation: bobit-hop .4s cubic-bezier(.3,1.5,.5,1) both; }
+  .bubble p { margin: 0; color: var(--ink-2); font-size: 15px; line-height: 1.5; min-height: 3em; }
+  .bubble.swap > * { animation: bubble-in .35s ease both; }
   @keyframes bubble-in { from { opacity: 0; translate: 0 6px; } }
-  @keyframes bobit-hop { from { scale: .92; translate: 0 6px; } }
-  @media (prefers-reduced-motion: reduce) { .bobit.swap .bubble, .bobit.swap .bobit-fig { animation: none; } }
-  @media (max-width: 880px) {
-    .bobit { grid-template-columns: 128px minmax(0, 1fr); align-items: end; justify-items: stretch; gap: 0 14px; max-width: 520px; }
-    .bobit-fig { grid-row: 1; width: 128px; }
-    .bubble { grid-column: 2; grid-row: 1; align-self: center; }
-    .bubble::after { left: -9px; bottom: auto; top: 50%; margin: -8px 0 0; border: 0; border-left: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-  }
-  @media (max-width: 400px) {
-    .bobit { grid-template-columns: 100px minmax(0, 1fr); gap: 0 10px; }
-    .bobit-fig { width: 100px; }
-    .bubble { padding: 14px 16px; }
-    .bubble h3 { font-size: 17px; }
-    .bubble p { font-size: 14px; }
-  }
+  .bobit-stage { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 16px; }
+  .bobit-stage:focus-visible { outline: 3px solid color-mix(in srgb, var(--teal) 40%, transparent); outline-offset: 2px; }
+  .bobit canvas { display: block; width: 100%; height: 230px; color: var(--teal); }
+  @media (prefers-reduced-motion: reduce) { .bubble.swap > * { animation: none; } }
+  @media (max-width: 880px) { .bobit canvas { height: 180px; } }
 
   /* Elections */
   .elections { padding-block: 8px 72px; }
@@ -308,14 +275,6 @@
     <div>
       <p class="eyebrow">Read &amp; Rank</p>
       <h1>Read candidates blind, <em>rank by what they said.</em></h1>
-      <div class="how">
-        <span class="how-label" id="how-label">How it works</span>
-        <ol aria-labelledby="how-label">
-          <li><button class="dot" type="button" data-step="0" aria-pressed="true" aria-controls="bobit" aria-label="Step 1: Pick an election">1</button></li>
-          <li><button class="dot" type="button" data-step="1" aria-pressed="false" aria-controls="bobit" aria-label="Step 2: Read the quotes">2</button></li>
-          <li><button class="dot" type="button" data-step="2" aria-pressed="false" aria-controls="bobit" aria-label="Step 3: Rank the candidates">3</button></li>
-        </ol>
-      </div>
       <p class="lede">Real quotes from real candidates, with no names and no parties. Form your own view, then see who you actually agree with.</p>
       <div class="cta-row">
         <a class="btn" href="#elections">
@@ -325,13 +284,13 @@
       </div>
     </div>
 
-    <figure class="bobit" id="bobit" data-step="0">
+    <figure class="bobit" id="bobit" aria-label="How it works">
       <div class="bubble" aria-live="polite">
         <span class="bubble-step">Step <span id="bobit-n">1</span> of 3</span>
         <h3 id="bobit-title">Pick an election</h3>
         <p id="bobit-text">Local and upcoming races in our Alpha communities.</p>
       </div>
-      <span class="bobit-fig" aria-hidden="true"></span>
+      <button class="bobit-stage" type="button" aria-label="Next step"><canvas aria-hidden="true"></canvas></button>
     </figure>
   </section>
 
@@ -461,6 +420,8 @@
   </div>
 </footer>
 
+<script src="assets/leremy-rig.js"></script>
+<script src="assets/ev-anim-extras.js"></script>
 <script>
   (function () {
     // Shared race data for the clickable prototype. District 7 uses the content from the live
@@ -524,27 +485,102 @@
       }, true);
     }
 
-    // How it works: each step circle switches Bobit's pose and speech bubble.
-    var BOBIT_STEPS = [
-      ['Pick an election', 'Local and upcoming races in our Alpha communities.'],
-      ['Read the quotes', 'Judge positions on their words alone.'],
-      ['Rank the candidates', 'See who earned your trust, and where you align.']
-    ];
+    // How it works: Bobit plays through the three steps by himself, walking to a new spot between
+    // them. Hover or focus pauses him; clicking him moves on to the next step.
     var bobit = document.getElementById('bobit');
-    if (bobit && !bobit.dataset.bound) {
+    if (bobit && window.LeremyRig && !bobit.dataset.bound) {
       bobit.dataset.bound = '1';
-      var dots = document.querySelectorAll('.how .dot');
-      dots.forEach(function (dot) {
-        dot.addEventListener('click', function () {
-          var i = +dot.dataset.step;
-          dots.forEach(function (d) { d.setAttribute('aria-pressed', d === dot ? 'true' : 'false'); });
-          bobit.dataset.step = i;
+      (function () {
+        var LR = window.LeremyRig, A = LR.ANIMATIONS;
+        var CFG = Object.assign({}, LR.CFG, { R: 28, torsoW: 21, neckW: 19, armW: 10.5, legW: 12.5 }); // a thinner Bobit
+        function readStanding(t) {
+          var p = A.present.frame(t), r = A.read.frame(t);
+          p.lean = 2; p.hunch = -10; p.headTilt = r.headTilt; p.bob = r.bob;
+          p.armRU = r.armRU; p.armRF = r.armRF; p.armLU = r.armLU; p.armLF = r.armLF;
+          return p;
+        }
+        var STEPS = [
+          { title: 'Pick an election', text: 'Local and upcoming races in our Alpha communities.', x: .3, pose: function (t) { return A.greet.frame(t); }, opts: {} },
+          { title: 'Read the quotes', text: 'Judge positions on their words alone.', x: .66, pose: readStanding, opts: { book: true } },
+          { title: 'Rank the candidates', text: 'See who earned your trust, and where you align.', x: .44, pose: function (t) { return A.tap.frame(t); }, opts: { phone: true } }
+        ];
+        var HOLD = 5, SPEED = 75;            // seconds on each step, walking speed (px/s)
+        var stage = bobit.querySelector('.bobit-stage'), canvas = stage.querySelector('canvas');
+        var bubble = bobit.querySelector('.bubble');
+        var still = matchMedia('(prefers-reduced-motion: reduce)');
+        var step = 0, phase = 'pose', clock = 0, held = 0, x = null, fromX = 0, toX = 0, dur = 1, face = 1;
+        var paused = false, visible = true, raf = 0, last = 0;
+
+        function show(i) {
           document.getElementById('bobit-n').textContent = i + 1;
-          document.getElementById('bobit-title').textContent = BOBIT_STEPS[i][0];
-          document.getElementById('bobit-text').textContent = BOBIT_STEPS[i][1];
-          bobit.classList.remove('swap'); void bobit.offsetWidth; bobit.classList.add('swap');
-        });
-      });
+          document.getElementById('bobit-title').textContent = STEPS[i].title;
+          document.getElementById('bobit-text').textContent = STEPS[i].text;
+          bubble.classList.remove('swap'); void bubble.offsetWidth; bubble.classList.add('swap');
+        }
+        function next(w) {
+          step = (step + 1) % STEPS.length;
+          show(step);
+          fromX = x; toX = STEPS[step].x * w;
+          face = toX >= fromX ? 1 : -1;
+          dur = Math.max(.5, Math.abs(toX - fromX) / SPEED);
+          phase = still.matches ? 'pose' : 'walk';
+          if (still.matches) x = toX;
+          clock = 0; held = 0;
+        }
+        function draw(w, h, pose, opts) {
+          var dpr = window.devicePixelRatio || 1;
+          if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) { canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr); }
+          var ctx = canvas.getContext('2d');
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          ctx.clearRect(0, 0, w, h);
+          var s = (h - 14) / 250, ground = h - 8;
+          var color = getComputedStyle(canvas).color;
+          LR.drawShadow(ctx, x, ground, 34 * s * 2, 'rgba(120, 125, 146, .18)');
+          ctx.save();
+          ctx.translate(x, ground - 112 * s);
+          ctx.scale(face * s, s);
+          LR.draw(ctx, LR.computePose(pose, CFG, { x: 0, y: 0 }), CFG, Object.assign({ color: color }, opts));
+          ctx.restore();
+          var tail = Math.min(88, Math.max(12, x / w * 100));
+          bubble.style.setProperty('--tail', tail + '%');
+        }
+        function frame(now) {
+          raf = 0;
+          var w = canvas.clientWidth, h = canvas.clientHeight;
+          if (!w || !visible || document.hidden) return;   // off screen: stop until shown again
+          var dt = Math.min(.1, (now - last) / 1000); last = now;
+          if (x === null) x = STEPS[step].x * w;
+          clock += dt;
+          if (!paused) held += dt;
+          var pose, opts = STEPS[step].opts;
+          if (phase === 'walk') {
+            var k = Math.min(1, clock / dur);
+            x = fromX + (toX - fromX) * k;
+            pose = A.stroll.frame(clock); opts = {};
+            if (k >= 1) { phase = 'pose'; clock = 0; held = 0; }
+          } else {
+            pose = STEPS[step].pose(still.matches ? 1.2 : clock);
+            if (held >= HOLD) next(w);
+          }
+          draw(w, h, pose, opts);
+          start();
+        }
+        function start() { if (!raf) { if (!last) last = performance.now(); raf = requestAnimationFrame(frame); } }
+        function restart() { last = performance.now(); start(); }
+
+        bobit.addEventListener('mouseenter', function () { paused = true; });
+        bobit.addEventListener('mouseleave', function () { paused = false; });
+        bobit.addEventListener('focusin', function () { if (stage.matches(':focus-visible')) paused = true; });
+        bobit.addEventListener('focusout', function () { paused = false; });
+        stage.addEventListener('click', function () { if (phase === 'pose') next(canvas.clientWidth); });
+        if ('IntersectionObserver' in window) {
+          new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; if (visible) restart(); }).observe(canvas);
+        }
+        document.addEventListener('visibilitychange', restart);
+        var screenEl = bobit.closest('.screen');
+        if (screenEl) screenEl.addEventListener('screen:show', restart);
+        restart();
+      })();
     }
 
     var root = document.documentElement;
