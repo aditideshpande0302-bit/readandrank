@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 
 HERE = Path(__file__).parent
-SCREENS = [("landing", "landing.html"), ("issues", "issues.html"), ("read", "read.html"), ("ballot", "ballot.html"), ("browse", "browse.html"), ("compass", "compass.html"), ("stances", "stances.html"), ("ready", "ready.html")]
+SCREENS = [("landing", "landing.html"), ("issues", "issues.html"), ("read", "read.html"), ("ballot", "ballot.html"), ("compass", "compass.html"), ("stances", "stances.html"), ("ready", "ready.html")]
 GLOBAL = (":root", "*", "body", "@")
 
 
