@@ -160,17 +160,21 @@
   .label { margin: 40px 0 12px; font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
   h2.title { margin: 40px 0 14px; font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
 
-  /* Alignment matrix */
-  .matrix-wrap { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow-x: auto; }
-  .matrix { width: 100%; border-collapse: collapse; min-width: 420px; }
-  .matrix th, .matrix td { padding: 14px 18px; text-align: left; }
-  .matrix thead th { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); border-bottom: 1px solid var(--line); background: var(--surface-2); }
-  .matrix thead th.topic { text-align: center; width: 130px; }
-  .matrix tbody tr + tr td, .matrix tbody tr + tr th { border-top: 1px solid var(--line); }
-  .matrix tbody th { font-weight: 700; font-size: 15px; }
-  .person { display: flex; align-items: center; gap: 12px; }
+  /* Alignment at a glance: full-width row of topic tiles that wraps */
+  .glance { margin-top: 32px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px 24px 24px; }
+  .glance-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 24px; margin-bottom: 16px; }
+  .glance .label { margin: 0; }
+  .glance-key { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 14px; font-weight: 700; }
+  .glance-key li { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .glance-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .topic-tile { min-width: 0; background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+  .topic-tile h3 { margin: 0 0 12px; font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); overflow-wrap: anywhere; }
+  .topic-tile ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .topic-tile li { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .glance .ini { width: 28px; height: 28px; font-size: 12px; }
+  .topic-tile .mark { width: 30px; height: 30px; }
+  .glance-empty { margin: 0; color: var(--ink-3); font-size: 14px; }
   .ini { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 800; background: var(--teal-tint); color: var(--teal); flex: none; }
-  .matrix td { text-align: center; }
   .mark { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; scale: 0; }
   .reveal.in .mark { animation: pop .4s cubic-bezier(.3,1.6,.5,1) forwards; animation-delay: calc(.6s + var(--d, 0) * 120ms); }
   @keyframes pop { to { scale: 1; } }
@@ -273,11 +277,9 @@
     .inform-actions { grid-column: 1; grid-row: auto; margin-top: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
     .inform .btn { white-space: normal; text-align: center; }
     .end .btn { width: 100%; }
-    .matrix { min-width: 0; }
-    .matrix th, .matrix td { padding: 12px 10px; }
-    .matrix thead th { font-size: 11px; letter-spacing: .06em; }
-    .matrix thead th.topic { width: auto; }
-    .matrix .ini { display: none; }
+    .glance { padding: 16px; }
+    .glance-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+    .topic-tile { padding: 12px; }
     footer .wrap { flex-direction: column; align-items: start; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -309,14 +311,11 @@
   .reveal > .layout { opacity: 1; translate: none; animation: none; }
   .col-main > *, .col-side > * { opacity: 0; translate: 0 14px; }
   .reveal.in .col-main > *, .reveal.in .col-side > * { animation: rise .55s cubic-bezier(.2,.7,.2,1) forwards; animation-delay: calc(var(--i, 0) * 110ms); }
-  .col-main h2.title, .col-side .label { margin-top: 0; }
+  .col-main h2.title { margin-top: 0; }
   .col-main .end { justify-content: flex-start; margin-top: 24px; }
   .col-side { display: grid; gap: 0; align-content: start; }
-  .col-side .inform { margin-top: 24px; grid-template-columns: 1fr; padding: 24px; }
+  .col-side .inform { margin-top: 0; grid-template-columns: 1fr; padding: 24px; }
   .col-side .inform-actions { grid-column: 1; grid-row: auto; margin-top: 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; justify-items: start; }
-  .col-side .matrix { min-width: 0; }
-  .col-side .matrix th, .col-side .matrix td { padding: 12px 14px; }
-  .col-side .matrix thead th.topic { width: auto; }
   @media (min-width: 640px) { main.wrap { padding-inline: 64px; } }
   @media (min-width: 1024px) {
     main.wrap { padding-inline: 96px; }
@@ -326,8 +325,6 @@
   @media (max-width: 1023px) {
     .layout { display: flex; flex-direction: column; gap: 0; }
     .col-main, .col-side { display: contents; }
-    .col-side .label { order: 1; }
-    .col-side .matrix-wrap { order: 2; margin-bottom: 32px; }
     .col-main .title { order: 3; }
     .col-main .stack { order: 4; }
     .col-side .inform { order: 5; }
@@ -360,7 +357,6 @@
   @media (max-width: 1023px) { .hero-fig { display: none; } }
   .mark.rank { background: var(--teal-tint); color: var(--teal); font-weight: 800; font-size: 14px; }
   .mark.none { color: var(--ink-3); font-weight: 700; }
-  .matrix .empty-row { text-align: left; color: var(--ink-3); font-size: 14px; }
   /* end EV layout */
 </style>
 
@@ -410,10 +406,24 @@
         <span class="ballot-fig once hero-fig" aria-hidden="true"><span class="slip"></span></span>
       </section>
 
+      <section class="glance" style="--i:1" aria-labelledby="glance-title">
+        <div class="glance-head">
+          <h2 class="label" id="glance-title">Your alignment at a glance</h2>
+          <ul class="glance-key">
+            <li><span class="ini" aria-hidden="true">AC</span>André Carson</li>
+            <li><span class="ini" aria-hidden="true">PM</span>Patrick Mcauley</li>
+          </ul>
+        </div>
+        <ul class="glance-grid">
+            <li class="topic-tile"><h3>Housing</h3><ul><li><span class="ini" aria-hidden="true">AC</span><span class="sr">André Carson: </span><span class="mark no" style="--d:0" role="img" aria-label="Disagreed"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span></li><li><span class="ini" aria-hidden="true">PM</span><span class="sr">Patrick Mcauley: </span><span class="mark top" style="--d:1" role="img" aria-label="Your number 1 pick">1</span></li></ul></li>
+            <li class="topic-tile"><h3>Immigration</h3><ul><li><span class="ini" aria-hidden="true">AC</span><span class="sr">André Carson: </span><span class="mark top" style="--d:2" role="img" aria-label="Your number 1 pick">1</span></li><li><span class="ini" aria-hidden="true">PM</span><span class="sr">Patrick Mcauley: </span><span class="mark no" style="--d:3" role="img" aria-label="Disagreed"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span></li></ul></li>
+        </ul>
+      </section>
+
       <div class="layout">
         <div class="col-main">
-              <h2 class="title" style="--i:1">How the candidates stack up</h2>
-              <ol class="stack" style="--i:2">
+              <h2 class="title" style="--i:0">How the candidates stack up</h2>
+              <ol class="stack" style="--i:1">
                 <li class="cand">
                   <div class="cand-main">
                     <span class="rank-no"><span class="sr">Rank </span>1</span>
@@ -470,34 +480,13 @@
                 </li>
               </ol>
 
-              <div class="end" style="--i:3">
+              <div class="end" style="--i:2">
                 <a class="btn" href="#elections">Play another race near you</a>
                 <a class="btn ghost" href="#issues">Review a topic</a>
               </div>
         </div>
         <aside class="col-side" aria-label="Summary">
-              <p class="label" style="--i:2">Your alignment at a glance</p>
-              <div class="matrix-wrap" style="--i:3">
-                <table class="matrix">
-                  <thead>
-                    <tr><th scope="col">Candidate</th><th scope="col" class="topic">Housing</th><th scope="col" class="topic">Immigration</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th scope="row"><span class="person"><span class="ini" aria-hidden="true">AC</span>André Carson</span></th>
-                      <td><span class="mark no" style="--d:0" role="img" aria-label="Disagreed"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span></td>
-                      <td><span class="mark top" style="--d:1" role="img" aria-label="Your number 1 pick">1</span></td>
-                    </tr>
-                    <tr>
-                      <th scope="row"><span class="person"><span class="ini" aria-hidden="true">PM</span>Patrick Mcauley</span></th>
-                      <td><span class="mark top" style="--d:2" role="img" aria-label="Your number 1 pick">1</span></td>
-                      <td><span class="mark no" style="--d:3" role="img" aria-label="Disagreed"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <section class="inform" id="inform" style="--i:4" aria-labelledby="inform-title">
+              <section class="inform" id="inform" style="--i:2" aria-labelledby="inform-title">
                 <span class="badge">Inform</span>
                 <h3 id="inform-title">Map where you stand on every issue.</h3>
                 <p>Compass helps you place yourself on every issue, and your next Read &amp; Rank will start with what you care about.</p>
@@ -578,20 +567,20 @@
       });
 
       var d = 0;
-      ballot.querySelector('.matrix thead').innerHTML = '<tr><th scope="col">Candidate</th>' +
-        ranked.map(function (x) { return '<th scope="col" class="topic">' + esc(x.t.name) + '</th>'; }).join('') + '</tr>';
-      ballot.querySelector('.matrix tbody').innerHTML = ranked.length ? ids.map(function (c) {
+      ballot.querySelector('.glance-key').innerHTML = ids.map(function (c) {
         var who = race.candidates[c];
-        return '<tr><th scope="row"><span class="person"><span class="ini" aria-hidden="true">' + esc(who.ini) + '</span>' + esc(who.name) + '</span></th>' +
-          ranked.map(function (x) {
-            var i = x.r.agreed.indexOf(c), cell;
-            if (i === 0) cell = '<span class="mark top" style="--d:' + (d++) + '" role="img" aria-label="Your number 1 pick">1</span>';
-            else if (i > 0) cell = '<span class="mark rank" style="--d:' + (d++) + '" role="img" aria-label="Agreed, ranked ' + (i + 1) + '">' + (i + 1) + '</span>';
-            else if (x.r.disagreed.indexOf(c) >= 0) cell = '<span class="mark no" style="--d:' + (d++) + '" role="img" aria-label="Disagreed">' + XMARK + '</span>';
-            else cell = '<span class="mark none" style="--d:' + (d++) + '" role="img" aria-label="No quote">–</span>';
-            return '<td>' + cell + '</td>';
-          }).join('') + '</tr>';
-      }).join('') : '<tr><td class="empty-row" colspan="1">Rank a topic to see your alignment.</td></tr>';
+        return '<li><span class="ini" aria-hidden="true">' + esc(who.ini) + '</span>' + esc(who.name) + '</li>';
+      }).join('');
+      ballot.querySelector('.glance-grid').innerHTML = ranked.length ? ranked.map(function (x) {
+        return '<li class="topic-tile"><h3>' + esc(x.t.name) + '</h3><ul>' + ids.map(function (c) {
+          var who = race.candidates[c], i = x.r.agreed.indexOf(c), cell;
+          if (i === 0) cell = '<span class="mark top" style="--d:' + (d++) + '" role="img" aria-label="Your number 1 pick">1</span>';
+          else if (i > 0) cell = '<span class="mark rank" style="--d:' + (d++) + '" role="img" aria-label="Agreed, ranked ' + (i + 1) + '">' + (i + 1) + '</span>';
+          else if (x.r.disagreed.indexOf(c) >= 0) cell = '<span class="mark no" style="--d:' + (d++) + '" role="img" aria-label="Disagreed">' + XMARK + '</span>';
+          else cell = '<span class="mark none" style="--d:' + (d++) + '" role="img" aria-label="No quote">–</span>';
+          return '<li><span class="ini" aria-hidden="true">' + esc(who.ini) + '</span><span class="sr">' + esc(who.name) + ': </span>' + cell + '</li>';
+        }).join('') + '</ul></li>';
+      }).join('') : '<li><p class="glance-empty">Rank a topic to see your alignment.</p></li>';
 
       stats.sort(function (a, b) { return b.top - a.top || b.agree - a.agree || a.order - b.order; });
       ballot.querySelector('.stack').innerHTML = stats.map(function (st, rank) {
