@@ -233,6 +233,12 @@
   .page { max-width: none; }
   @media (max-width: 900px) { .catnav { margin-inline: calc(-1 * var(--side)); padding-inline: var(--side); } }
   /* end EV layout */
+  /* Read & Rank logo: official dark-theme version in dark mode */
+  :root { --logo-light: block; --logo-dark: none; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --logo-light: none; --logo-dark: block; } }
+  :root[data-theme="dark"] { --logo-light: none; --logo-dark: block; }
+  .product .logo-light { display: var(--logo-light); }
+  .product .logo-dark { display: var(--logo-dark); }
 </style>
 
 <header class="top">
@@ -241,7 +247,7 @@
       <img src="assets/empowered-vote-logo.png" width="133" height="30" alt="empowered.vote">
     </a>
     <a class="product" href="#top" aria-label="Read and Rank">
-      <img src="assets/read-rank-logo.png" width="107" height="48" alt="read &amp; rank">
+      <img class="logo-light" src="assets/read-rank-logo.png" width="107" height="48" alt="read &amp; rank"><img class="logo-dark" src="assets/read-rank-logo-dark.svg" width="124" height="48" alt="read &amp; rank">
     </a>
     <div class="actions">
       <button class="icon-btn" data-theme-toggle type="button" aria-label="Switch color theme">
