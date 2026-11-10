@@ -1079,7 +1079,20 @@
 
   
   #s-ballot .glance { margin-top: 32px; }
-  #s-ballot .glance .label { margin: 0 0 12px; }
+  #s-ballot .glance .label { margin: 0; }
+  #s-ballot .glance-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; margin-bottom: 12px; }
+  
+  #s-ballot .preview-toggle {
+    display: inline-flex; align-items: center; gap: 8px; padding: 4px 10px 4px 4px; border-radius: 999px; cursor: pointer;
+    background: var(--surface); border: 1px solid var(--line); color: var(--ink-2); font: 600 13px/1.2 var(--font); text-align: left;
+  }
+  #s-ballot .preview-toggle:hover { border-color: var(--teal); color: var(--ink); }
+  #s-ballot .preview-toggle:focus-visible { outline: 3px solid color-mix(in srgb, var(--teal) 40%, transparent); outline-offset: 2px; }
+  #s-ballot .preview-toggle .switch { position: relative; flex: none; width: 30px; height: 18px; border-radius: 999px; background: var(--line); transition: background .15s ease; }
+  #s-ballot .preview-toggle .switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 1px 2px rgba(0,0,0,.25); transition: translate .15s ease; }
+  #s-ballot .preview-toggle[aria-checked="true"] { border-color: var(--teal); color: var(--ink); }
+  #s-ballot .preview-toggle[aria-checked="true"] .switch { background: var(--teal); }
+  #s-ballot .preview-toggle[aria-checked="true"] .switch::after { translate: 12px 0; }
   #s-ballot .glance-wrap { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
   #s-ballot .glance-table { width: 100%; border-collapse: collapse; }
   #s-ballot .glance-table th, #s-ballot .glance-table td { padding: 14px 24px; text-align: left; }
@@ -2873,7 +2886,12 @@
       </section>
 
       <section class="glance" style="--i:1" aria-labelledby="glance-title">
-        <h2 class="label" id="glance-title">Your alignment at a glance</h2>
+        <div class="glance-head">
+          <h2 class="label" id="glance-title">Your alignment at a glance</h2>
+          <button class="preview-toggle" type="button" role="switch" aria-checked="false" id="preview-toggle">
+            <span class="switch" aria-hidden="true"></span>Preview with 8 issues and 4 candidates
+          </button>
+        </div>
         <div class="glance-wrap">
           <table class="glance-table">
             <thead>
@@ -4452,9 +4470,39 @@
 
     // Build the ballot for the race picked earlier (window.RR) from the rankings made on the
     // reading screen. Without window.RR the District 7 markup above stays as is.
+    // Prototype-only sample for the "Preview with 8 issues and 4 candidates" switch. Fictional
+    // candidates and bracketed placeholder quotes, like the rest of this screen's sample content.
+    var PREVIEW = (function () {
+      var ids = ['p1', 'p2', 'p3', 'p4'];
+      var names = ['Housing', 'Immigration', 'Health Care', 'Climate and Energy', 'Education', 'Public Safety', 'Taxes and Budget', 'Reproductive Rights'];
+      var topics = names.map(function (n, i) {
+        var order = ids.slice(i % 4).concat(ids.slice(0, i % 4)), cut = 2 + (i % 2);
+        var quoted = i === 5 ? ids.slice(0, 3) : ids;                      // one candidate has no quote on Public Safety
+        return {
+          key: 'preview-' + i, name: n, q: '[Question for ' + n + ']',
+          quotes: quoted.map(function (c) { return { c: c, text: '[Sample quote on ' + n + ']' }; }),
+          ranked: {
+            agreed: order.slice(0, cut).filter(function (c) { return quoted.indexOf(c) >= 0; }),
+            disagreed: order.slice(cut).filter(function (c) { return quoted.indexOf(c) >= 0; })
+          }
+        };
+      });
+      return {
+        office: 'US Representative', officeLong: 'U.S. Representative', seat: 'Sample District', state: 'Preview',
+        candidates: {
+          p1: { name: 'Rosa Lindqvist', ini: 'RL', office: 'U.S. House of Representatives - Sample District' },
+          p2: { name: 'Dev Ramanathan', ini: 'DR', office: 'Candidate' },
+          p3: { name: 'Marisol Okafor', ini: 'MO', office: 'Candidate' },
+          p4: { name: 'Theo Brandt-Whitfield', ini: 'TB', office: 'Candidate' }
+        },
+        topics: topics
+      };
+    })();
+    var preview = false;
+
     function render() {
       var RR = window.RR; if (!RR) return;
-      var race = RR.race(), id = RR.active;
+      var race = preview ? PREVIEW : RR.race(), id = preview ? 'preview' : RR.active;
       var where = ballot.closest('.page').querySelector('.crumbs .where:not(.sep)');
       if (where) where.textContent = race.office + ', ' + race.seat + ' · ' + race.state;
       var ranked = race.topics.map(function (t) { return { t: t, r: RR.result(id, t) || t.sample }; }).filter(function (x) { return x.r; });
@@ -4475,7 +4523,9 @@
         return { c: c, agree: agree, quotes: quotes, top: top, order: order };
       });
 
-      var d = 0;
+      // Marks pop in one after another; spread over ~1.2s whatever the table size.
+      var d = 0, step = Math.min(1, 10 / Math.max(1, ranked.length * ids.length));
+      function stagger() { return (d++ * step).toFixed(2); }
       var FILL = '<td class="fill" aria-hidden="true"></td>';
       ballot.querySelector('.glance-table thead').innerHTML = '<tr><th scope="col" class="cand-col">Candidate</th>' +
         ranked.map(function (x) { return '<th scope="col" class="topic">' + esc(x.t.name) + '</th>'; }).join('') + FILL + '</tr>';
@@ -4483,10 +4533,10 @@
         return '<tr><th scope="row">' + esc(race.candidates[c].name) + '</th>' +
           ranked.map(function (x) {
             var i = x.r.agreed.indexOf(c), cell;
-            if (i === 0) cell = '<span class="mark top" style="--d:' + (d++) + '" role="img" aria-label="Your number 1 pick">1</span>';
-            else if (i > 0) cell = '<span class="mark rank" style="--d:' + (d++) + '" role="img" aria-label="Agreed, ranked ' + (i + 1) + '">' + (i + 1) + '</span>';
-            else if (x.r.disagreed.indexOf(c) >= 0) cell = '<span class="mark no" style="--d:' + (d++) + '" role="img" aria-label="Disagreed">' + XMARK + '</span>';
-            else cell = '<span class="mark none" style="--d:' + (d++) + '" role="img" aria-label="No quote">–</span>';
+            if (i === 0) cell = '<span class="mark top" style="--d:' + stagger() + '" role="img" aria-label="Your number 1 pick">1</span>';
+            else if (i > 0) cell = '<span class="mark rank" style="--d:' + stagger() + '" role="img" aria-label="Agreed, ranked ' + (i + 1) + '">' + (i + 1) + '</span>';
+            else if (x.r.disagreed.indexOf(c) >= 0) cell = '<span class="mark no" style="--d:' + stagger() + '" role="img" aria-label="Disagreed">' + XMARK + '</span>';
+            else cell = '<span class="mark none" style="--d:' + stagger() + '" role="img" aria-label="No quote">–</span>';
             return '<td data-topic="' + esc(x.t.name) + '">' + cell + '</td>';
           }).join('') + FILL + '</tr>';
       }).join('') : '<tr><td class="glance-empty" colspan="2">Rank a topic to see your alignment.</td></tr>';
@@ -4559,6 +4609,11 @@
       document.getElementById(b.getAttribute('aria-controls')).classList.toggle('open', open);
     });
     document.getElementById('later').addEventListener('click', function () { inform.hidden = true; });
+    document.getElementById('preview-toggle').addEventListener('click', function () {
+      preview = !preview;
+      this.setAttribute('aria-checked', String(preview));
+      render();
+    });
 
     if (screen === document.body) run();
     screen.addEventListener('screen:show', run);
