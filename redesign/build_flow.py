@@ -69,22 +69,26 @@ def main():
   (function () {
     var screens = {};
     document.querySelectorAll('.screen').forEach(function (el) { screens[el.id.slice(2)] = el; });
-    var active = 'landing';
+    var active = 'landing', activeView = 'landing';
+    // Views that reuse another screen: the results page for someone who already has a compass.
+    var ALIAS = { 'ballot-compass': 'ballot' };
     function go(target) {
-      var name = screens[target] && target !== 'landing' ? target : 'landing';
-      var changed = name !== active, prev = active;
+      var name = ALIAS[target] || target;
+      name = screens[name] && name !== 'landing' ? name : 'landing';
+      var view = ALIAS[target] ? target : name;
+      var changed = view !== activeView, prev = active;
       Object.keys(screens).forEach(function (k) { screens[k].hidden = k !== name; });
-      active = name;
+      active = name; activeView = view;
       var anchor = name === 'landing' && target && target !== 'top' && document.getElementById(target);
       if (anchor) anchor.scrollIntoView({ block: 'start' });
       else if (changed || target === 'top') window.scrollTo(0, 0);
       if (changed) {
         if (screens[prev]) screens[prev].dispatchEvent(new CustomEvent('screen:hide'));
-        screens[name].dispatchEvent(new CustomEvent('screen:show', { detail: { from: prev } }));
+        screens[name].dispatchEvent(new CustomEvent('screen:show', { detail: { from: prev, view: view } }));
         var h = screens[name].querySelector('h1, h2');
         if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
       }
-      try { history.replaceState(null, '', name === 'landing' ? location.pathname + location.search : '#' + name); } catch (err) {}
+      try { history.replaceState(null, '', name === 'landing' ? location.pathname + location.search : '#' + view); } catch (err) {}
     }
     document.addEventListener('click', function (e) {
       var a = e.target.closest('a[href^="#"]');
@@ -97,8 +101,9 @@ def main():
     document.addEventListener('submit', function (e) {
       if (e.target.id === 'issues-form') go('read');
     });
+    window.RRGo = go;
     var initial = location.hash.slice(1);
-    if (screens[initial]) go(initial);
+    if (screens[initial] || ALIAS[initial]) go(initial);
   })();
 </script>"""
 

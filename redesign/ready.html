@@ -376,7 +376,7 @@
     function reset() {
       clear();
       chart.classList.remove('comparing');
-      cta.removeAttribute('aria-busy'); cta.disabled = false;
+      cta.removeAttribute('aria-busy'); cta.disabled = false; delete cta.dataset.done;
       ctaLabel.textContent = 'Compare & Discover'; ctaArrow.hidden = false;
       var sp = cta.querySelector('.spinner'); if (sp) sp.remove();
       statusEl.textContent = '';
@@ -392,6 +392,8 @@
 
     cta.addEventListener('click', function () {
       if (cta.getAttribute('aria-busy') === 'true') return;
+      // After the comparison, "See your matches" opens the results page with the new compass on it.
+      if (cta.dataset.done) { if (window.RRGo) window.RRGo('ballot-compass'); else location.href = 'ballot.html#ballot-compass'; return; }
       cta.setAttribute('aria-busy', 'true');
       ctaArrow.hidden = true;
       var sp = document.createElement('span'); sp.className = 'spinner'; sp.setAttribute('aria-hidden', 'true'); cta.prepend(sp);
@@ -406,8 +408,7 @@
           chart.classList.remove('comparing');
           cta.removeAttribute('aria-busy'); sp.remove(); ctaArrow.hidden = false;
           ctaLabel.textContent = 'See your matches';
-          toast.textContent = 'Your match results are the next screen.'; toast.hidden = false;
-          timers.push(setTimeout(function () { toast.hidden = true; }, 2600));
+          cta.dataset.done = '1';
         }]
       ];
       steps.forEach(function (s) {
