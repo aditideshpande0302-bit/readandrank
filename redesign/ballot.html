@@ -348,7 +348,7 @@
   @media (prefers-reduced-motion: reduce) { .col-main > *, .col-side > * { opacity: 1; translate: none; } }
 
   /* Ballot-casting figure from empowered.vote (icons/Sticks/noun_ballot), recolored with a mask */
-  .ballot-fig { position: relative; display: inline-block; width: 112px; aspect-ratio: 1; flex: none; }
+  .ballot-fig { position: relative; display: inline-block; width: 84px; aspect-ratio: 1; flex: none; }
   .ballot-fig::before {
     content: ""; position: absolute; inset: 0; background: var(--fig, var(--teal));
     -webkit-mask: url("assets/ballot-figure.png") center / contain no-repeat;
@@ -367,7 +367,7 @@
     100% { transform: translateY(100%); opacity: 0; }
   }
   @media (prefers-reduced-motion: reduce) { .ballot-fig .slip { animation: none !important; opacity: 1; } }
-  .hero-fig { position: absolute; right: 48px; bottom: -8px; width: 100px; --fig: rgba(247, 244, 239, .92); --slip-edge: #1B1E3B; --slip-delay: 1s; }
+  .hero-fig { position: absolute; right: 48px; bottom: -6px; width: 76px; --fig: rgba(247, 244, 239, .92); --slip-edge: #1B1E3B; --slip-delay: 1s; }
   @media (max-width: 1023px) { .hero-fig { display: none; } }
   .mark.rank { background: var(--teal-tint); color: var(--teal); font-weight: 800; font-size: 14px; }
   .mark.none { color: var(--ink-3); font-weight: 700; }
