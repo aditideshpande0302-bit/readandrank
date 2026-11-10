@@ -137,9 +137,9 @@
   @keyframes bubble-in { from { opacity: 0; translate: 0 6px; } }
   #s-landing .bobit-stage { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 16px; }
   #s-landing .bobit-stage:focus-visible { outline: 3px solid color-mix(in srgb, var(--teal) 40%, transparent); outline-offset: 2px; }
-  #s-landing .bobit canvas { display: block; width: 100%; height: 230px; color: var(--teal); }
+  #s-landing .bobit canvas { display: block; width: 100%; height: 175px; color: var(--teal); }
   @media (prefers-reduced-motion: reduce) { #s-landing .bubble.swap > * { animation: none; } }
-  @media (max-width: 880px) { #s-landing .bobit canvas { height: 180px; } }
+  @media (max-width: 880px) { #s-landing .bobit canvas { height: 140px; } }
 
   
   #s-landing .elections { padding-block: 8px 72px; }
@@ -881,7 +881,7 @@
   @media (max-width: 900px) { #s-read .catnav { margin-inline: calc(-1 * var(--side)); padding-inline: var(--side); } }
 
   
-  #s-read .ballot-fig { position: relative; display: inline-block; width: 150px; aspect-ratio: 1; flex: none; }
+  #s-read .ballot-fig { position: relative; display: inline-block; width: 112px; aspect-ratio: 1; flex: none; }
   #s-read .ballot-fig::before {
     content: ""; position: absolute; inset: 0; background: var(--fig, var(--teal));
     -webkit-mask: url("assets/ballot-figure.png") center / contain no-repeat;
@@ -900,7 +900,7 @@
     100% { transform: translateY(100%); opacity: 0; }
   }
   @media (prefers-reduced-motion: reduce) { #s-read .ballot-fig .slip { animation: none !important; opacity: 1; } }
-  #s-read .done-fig { width: 120px; margin-bottom: -8px; }
+  #s-read .done-fig { width: 90px; margin-bottom: -6px; }
   
   
   :root { --logo-light: block; --logo-dark: none; }
@@ -1255,7 +1255,7 @@
   @media (prefers-reduced-motion: reduce) { #s-ballot .col-main > *, #s-ballot .col-side > * { opacity: 1; translate: none; } }
 
   
-  #s-ballot .ballot-fig { position: relative; display: inline-block; width: 150px; aspect-ratio: 1; flex: none; }
+  #s-ballot .ballot-fig { position: relative; display: inline-block; width: 112px; aspect-ratio: 1; flex: none; }
   #s-ballot .ballot-fig::before {
     content: ""; position: absolute; inset: 0; background: var(--fig, var(--teal));
     -webkit-mask: url("assets/ballot-figure.png") center / contain no-repeat;
@@ -1274,7 +1274,7 @@
     100% { transform: translateY(100%); opacity: 0; }
   }
   @media (prefers-reduced-motion: reduce) { #s-ballot .ballot-fig .slip { animation: none !important; opacity: 1; } }
-  #s-ballot .hero-fig { position: absolute; right: 48px; bottom: -10px; width: 132px; --fig: rgba(247, 244, 239, .92); --slip-edge: #1B1E3B; --slip-delay: 1s; }
+  #s-ballot .hero-fig { position: absolute; right: 48px; bottom: -8px; width: 100px; --fig: rgba(247, 244, 239, .92); --slip-edge: #1B1E3B; --slip-delay: 1s; }
   @media (max-width: 1023px) { #s-ballot .hero-fig { display: none; } }
   #s-ballot .mark.rank { background: var(--teal-tint); color: var(--teal); font-weight: 800; font-size: 14px; }
   #s-ballot .mark.none { color: var(--ink-3); font-weight: 700; }

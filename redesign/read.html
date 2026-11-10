@@ -359,7 +359,7 @@
   @media (max-width: 900px) { .catnav { margin-inline: calc(-1 * var(--side)); padding-inline: var(--side); } }
 
   /* Ballot-casting figure from empowered.vote (icons/Sticks/noun_ballot), recolored with a mask */
-  .ballot-fig { position: relative; display: inline-block; width: 150px; aspect-ratio: 1; flex: none; }
+  .ballot-fig { position: relative; display: inline-block; width: 112px; aspect-ratio: 1; flex: none; }
   .ballot-fig::before {
     content: ""; position: absolute; inset: 0; background: var(--fig, var(--teal));
     -webkit-mask: url("assets/ballot-figure.png") center / contain no-repeat;
@@ -378,7 +378,7 @@
     100% { transform: translateY(100%); opacity: 0; }
   }
   @media (prefers-reduced-motion: reduce) { .ballot-fig .slip { animation: none !important; opacity: 1; } }
-  .done-fig { width: 120px; margin-bottom: -8px; }
+  .done-fig { width: 90px; margin-bottom: -6px; }
   /* end EV layout */
   /* Read & Rank logo: official dark-theme version in dark mode */
   :root { --logo-light: block; --logo-dark: none; }
