@@ -182,14 +182,25 @@
   .glance-table .mark { width: 30px; height: 30px; }
   /* Stacked: each candidate becomes a row of labeled marks that wraps */
   .glance-table.stacked thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-  .glance-table.stacked tbody tr { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; padding: 16px 20px; }
+  .glance-table.stacked tbody tr { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; padding: 16px 20px; }
   .glance-table.stacked tbody tr + tr { border-top: 1px solid var(--line); }
   .glance-table.stacked tbody tr + tr > * { border-top: 0; }
-  .glance-table.stacked tbody th { flex: 1 0 100%; padding: 0; }
-  .glance-table.stacked td { display: inline-flex; align-items: center; gap: 8px; padding: 0; }
-  .glance-table.stacked td::before { content: attr(data-topic); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+  .glance-table.stacked tbody th { grid-column: 1 / -1; padding: 0 0 4px; }
+  .glance-table.stacked td {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0;
+    padding: 6px 6px 6px 12px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--line); text-align: left;
+  }
+  .glance-table.stacked td::before { content: attr(data-topic); min-width: 0; font-size: 11px; font-weight: 800; letter-spacing: .06em; line-height: 1.3; text-transform: uppercase; color: var(--ink-2); }
+  .glance-table.stacked .mark { flex: none; }
   .glance-table.stacked .fill { display: none; }
+  .glance-table.stacked td.glance-empty { grid-column: 1 / -1; background: none; border: 0; padding: 0; }
   .glance-table.stacked td.glance-empty::before { content: none; }
+  @media (max-width: 400px) {
+    .glance-table.stacked tbody tr { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 14px; }
+    .glance-table.stacked td { padding: 5px 5px 5px 9px; }
+    .glance-table.stacked td::before { font-size: 10px; letter-spacing: .04em; }
+    .glance-table.stacked .mark { width: 26px; height: 26px; }
+  }
   .ini { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 800; background: var(--teal-tint); color: var(--teal); flex: none; }
   .mark { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; scale: 0; }
   .reveal.in .mark { animation: pop .4s cubic-bezier(.3,1.6,.5,1) forwards; animation-delay: calc(.6s + var(--d, 0) * 120ms); }
