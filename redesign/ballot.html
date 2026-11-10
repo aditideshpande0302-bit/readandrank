@@ -372,6 +372,15 @@
   .mark.rank { background: var(--teal-tint); color: var(--teal); font-weight: 800; font-size: 14px; }
   .mark.none { color: var(--ink-3); font-weight: 700; }
   /* end EV layout */
+
+  .proto-note {
+    display: flex; gap: 10px; align-items: flex-start;
+    margin: 20px 0 0; padding: 12px 14px;
+    background: color-mix(in srgb, var(--yellow) 16%, var(--surface)); border: 1px solid color-mix(in srgb, var(--yellow) 45%, var(--line)); border-left: 4px solid var(--yellow);
+    border-radius: 10px; color: var(--ink-2); font-size: 13.5px; line-height: 1.45;
+  }
+  .proto-note b { color: var(--ink); }
+  .proto-note + .hero { margin-top: 16px; }
   /* Read & Rank logo: official dark-theme version in dark mode */
   :root { --logo-light: block; --logo-dark: none; }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --logo-light: none; --logo-dark: block; } }
@@ -420,6 +429,11 @@
     </div>
 
     <div class="reveal" id="ballot" hidden>
+      <p class="proto-note" role="note" style="--i:0">
+        <span aria-hidden="true">⚠️</span>
+        <span><b>Prototype — sample content.</b> The names, quotes and results on this screen are
+        invented for design review. They are not real candidates and not real statements.</span>
+      </p>
       <section class="hero" style="--i:0" aria-labelledby="hero-race ballot-title">
         <p class="hero-race" id="hero-race">U.S. Representative District 7</p>
         <h1 id="ballot-title">Now see <u>who</u> you agreed with</h1>
@@ -435,8 +449,8 @@
               <tr><th scope="col" class="cand-col">Candidate</th><th scope="col" class="topic">Housing</th><th scope="col" class="topic">Immigration</th><td class="fill" aria-hidden="true"></td></tr>
             </thead>
             <tbody>
-              <tr><th scope="row">André Carson</th><td data-topic="Housing"><span class="mark no" style="--d:0" role="img" aria-label="Disagreed"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span></td><td data-topic="Immigration"><span class="mark top" style="--d:1" role="img" aria-label="Your number 1 pick">1</span></td><td class="fill" aria-hidden="true"></td></tr>
-              <tr><th scope="row">Patrick Mcauley</th><td data-topic="Housing"><span class="mark top" style="--d:2" role="img" aria-label="Your number 1 pick">1</span></td><td data-topic="Immigration"><span class="mark no" style="--d:3" role="img" aria-label="Disagreed"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span></td><td class="fill" aria-hidden="true"></td></tr>
+              <tr><th scope="row">Rosa Lindqvist</th><td data-topic="Housing"><span class="mark no" style="--d:0" role="img" aria-label="Disagreed"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span></td><td data-topic="Immigration"><span class="mark top" style="--d:1" role="img" aria-label="Your number 1 pick">1</span></td><td class="fill" aria-hidden="true"></td></tr>
+              <tr><th scope="row">Dev Ramanathan</th><td data-topic="Housing"><span class="mark top" style="--d:2" role="img" aria-label="Your number 1 pick">1</span></td><td data-topic="Immigration"><span class="mark no" style="--d:3" role="img" aria-label="Disagreed"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span></td><td class="fill" aria-hidden="true"></td></tr>
             </tbody>
           </table>
         </div>
@@ -449,22 +463,22 @@
                 <li class="cand">
                   <div class="cand-main">
                     <span class="rank-no"><span class="sr">Rank </span>1</span>
-                    <span class="avatar" aria-hidden="true">AC</span>
+                    <span class="avatar" aria-hidden="true">RL</span>
                     <div>
-                      <h3>André Carson</h3>
-                      <p class="office">U.S. House of Representatives - Indiana 7th Congressional District</p>
+                      <h3>Rosa Lindqvist</h3>
+                      <p class="office">U.S. House of Representatives - Sample District</p>
                     </div>
-                    <a class="profile" href="#" aria-label="View André Carson's profile">
+                    <a class="profile" href="#" aria-label="View Rosa Lindqvist's profile">
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="7" class="lens" stroke="currentColor"/><circle cx="10" cy="8.5" r="2.2"/><path d="M6.5 14c.8-1.6 2-2.4 3.5-2.4s2.7.8 3.5 2.4"/><path d="M15.5 15.5L21 21" class="lens" stroke="currentColor"/></svg>
                     </a>
                   </div>
                   <div class="cand-foot">
                     <span class="agree"><span class="meter" aria-hidden="true"><i class="on"></i><i></i></span>Agreed with <b>1 of 2</b> · <span class="pick">1 top pick</span></span>
-                    <button class="said-btn" type="button" aria-expanded="false" aria-controls="said-ac">See what they said
+                    <button class="said-btn" type="button" aria-expanded="false" aria-controls="said-rl">See what they said
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
                     </button>
                   </div>
-                  <div class="said" id="said-ac">
+                  <div class="said" id="said-rl">
                     <div>
                       <ul>
                         <li><span class="topic-row">Housing <span class="tag no">Disagreed</span></span><p>Local zoning should allow more homes near jobs and transit, so rents come down over time.</p></li>
@@ -476,22 +490,22 @@
                 <li class="cand">
                   <div class="cand-main">
                     <span class="rank-no"><span class="sr">Rank </span>2</span>
-                    <span class="avatar" aria-hidden="true">PM</span>
+                    <span class="avatar" aria-hidden="true">DR</span>
                     <div>
-                      <h3>Patrick Mcauley</h3>
+                      <h3>Dev Ramanathan</h3>
                       <p class="office">Candidate</p>
                     </div>
-                    <a class="profile" href="#" aria-label="View Patrick Mcauley's profile">
+                    <a class="profile" href="#" aria-label="View Dev Ramanathan's profile">
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="7" class="lens" stroke="currentColor"/><circle cx="10" cy="8.5" r="2.2"/><path d="M6.5 14c.8-1.6 2-2.4 3.5-2.4s2.7.8 3.5 2.4"/><path d="M15.5 15.5L21 21" class="lens" stroke="currentColor"/></svg>
                     </a>
                   </div>
                   <div class="cand-foot">
                     <span class="agree"><span class="meter" aria-hidden="true"><i class="on"></i><i></i></span>Agreed with <b>1 of 2</b> · <span class="pick">1 top pick</span></span>
-                    <button class="said-btn" type="button" aria-expanded="false" aria-controls="said-pm">See what they said
+                    <button class="said-btn" type="button" aria-expanded="false" aria-controls="said-dr">See what they said
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
                     </button>
                   </div>
-                  <div class="said" id="said-pm">
+                  <div class="said" id="said-dr">
                     <div>
                       <ul>
                         <li><span class="topic-row">Housing <span class="tag top">#1 pick</span></span><p>We will update policies and introduce legislation that create stronger pathways to homeownership.</p></li>

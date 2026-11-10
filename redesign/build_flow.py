@@ -1,6 +1,6 @@
 """Combine the individual screen files into one clickable prototype (index.html).
 
-Each screen's CSS is scoped to its own container so shared class names
+Emits a complete HTML document. Each screen's CSS is scoped to its own container so shared class names
 (.race, .btn, h1, ...) don't collide. Run: python3 build_flow.py
 """
 import re
@@ -56,7 +56,7 @@ def main():
     styles, bodies, scripts = [], [], []
     head = None
     for name, file in SCREENS:
-        src = (HERE / file).read_text()
+        src = (HERE / file).read_text(encoding="utf-8")
         if head is None:
             head = "".join(re.findall(r"<link[^>]*>\n?", src))
         style, body, script = split(src)
@@ -103,6 +103,11 @@ def main():
 </script>"""
 
     out = (
+        "<!doctype html>\n"
+        '<html lang="en">\n'
+        "<head>\n"
+        '<meta charset="utf-8">\n'
+        '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
         "<title>Read &amp; Rank Prototype</title>\n"
         + head
         + "<style>\n"
@@ -110,15 +115,17 @@ def main():
         + "\n.screen { flex: 1 0 auto; display: flex; flex-direction: column; }"
         + "\n.screen[hidden] { display: none; }"
         + "\n.screen [tabindex=\"-1\"]:focus, .screen [tabindex=\"-1\"]:focus-visible { outline: none !important; }"
-        + "\n</style>\n\n"
+        + "\n</style>\n"
+        + "</head>\n<body>\n\n"
         + "\n\n".join(bodies)
         + "\n\n"
         + "\n".join(scripts)
         + "\n"
         + router
         + "\n"
+        + "</body>\n</html>\n"
     )
-    (HERE / "index.html").write_text(out)
+    (HERE / "index.html").write_text(out, encoding="utf-8")
     print("wrote index.html")
 
 
