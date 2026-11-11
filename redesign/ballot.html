@@ -167,20 +167,7 @@
 
   /* Alignment at a glance: full-width table. When the topics don't fit, rows stack and wrap (see fitGlance). */
   .glance { margin-top: 32px; }
-  .glance .label { margin: 0; }
-  .glance-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; margin-bottom: 12px; }
-  /* Prototype-only switch: fills the results with 8 sample issues and 4 sample candidates */
-  .preview-toggle {
-    display: inline-flex; align-items: center; gap: 8px; padding: 4px 10px 4px 4px; border-radius: 999px; cursor: pointer;
-    background: var(--surface); border: 1px solid var(--line); color: var(--ink-2); font: 600 13px/1.2 var(--font); text-align: left;
-  }
-  .preview-toggle:hover { border-color: var(--teal); color: var(--ink); }
-  .preview-toggle:focus-visible { outline: 3px solid color-mix(in srgb, var(--teal) 40%, transparent); outline-offset: 2px; }
-  .preview-toggle .switch { position: relative; flex: none; width: 30px; height: 18px; border-radius: 999px; background: var(--line); transition: background .15s ease; }
-  .preview-toggle .switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 1px 2px rgba(0,0,0,.25); transition: translate .15s ease; }
-  .preview-toggle[aria-checked="true"] { border-color: var(--teal); color: var(--ink); }
-  .preview-toggle[aria-checked="true"] .switch { background: var(--teal); }
-  .preview-toggle[aria-checked="true"] .switch::after { translate: 12px 0; }
+  .glance .label { margin: 0 0 12px; }
   .glance-wrap { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
   .glance-table { width: 100%; border-collapse: collapse; }
   .glance-table th, .glance-table td { padding: 14px 24px; text-align: left; }
@@ -404,10 +391,6 @@
     border-radius: 10px; color: var(--ink-2); font-size: 13.5px; line-height: 1.45;
   }
   .proto-note b { color: var(--ink); }
-  .proto-views { display: inline-block; margin-left: 4px; }
-  .proto-views a { white-space: nowrap; }
-  .proto-views a { color: var(--teal); font-weight: 700; }
-  .proto-views a[aria-current="page"] { color: var(--ink); text-decoration: none; }
 
   /* "Your compass" card: shown instead of the calibrate prompt once the user has a compass */
   .my-compass { padding: 24px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); }
@@ -497,8 +480,7 @@
       <p class="proto-note" role="note" style="--i:0">
         <span aria-hidden="true">⚠️</span>
         <span><b>Prototype — sample content.</b> The names, quotes and results on this screen are
-        invented for design review. They are not real candidates and not real statements.
-        <span class="proto-views">View: <a href="#ballot" id="view-plain">No compass yet</a> · <a href="#ballot-compass" id="view-compass">Compass calibrated</a></span></span>
+        invented for design review. They are not real candidates and not real statements.</span>
       </p>
       <section class="hero" style="--i:0" aria-labelledby="hero-race ballot-title">
         <p class="hero-race" id="hero-race">U.S. Representative District 7</p>
@@ -508,12 +490,7 @@
       </section>
 
       <section class="glance" style="--i:1" aria-labelledby="glance-title">
-        <div class="glance-head">
-          <h2 class="label" id="glance-title">Your alignment at a glance</h2>
-          <button class="preview-toggle" type="button" role="switch" aria-checked="false" id="preview-toggle">
-            <span class="switch" aria-hidden="true"></span>Preview with 8 issues and 4 candidates
-          </button>
-        </div>
+        <h2 class="label" id="glance-title">Your alignment at a glance</h2>
         <div class="glance-wrap">
           <table class="glance-table">
             <thead>
@@ -678,35 +655,6 @@
 
     // Build the ballot for the race picked earlier (window.RR) from the rankings made on the
     // reading screen. Without window.RR the District 7 markup above stays as is.
-    // Prototype-only sample for the "Preview with 8 issues and 4 candidates" switch. Fictional
-    // candidates and bracketed placeholder quotes, like the rest of this screen's sample content.
-    var PREVIEW = (function () {
-      var ids = ['p1', 'p2', 'p3', 'p4'];
-      var names = ['Housing', 'Immigration', 'Health Care', 'Climate and Energy', 'Education', 'Public Safety', 'Taxes and Budget', 'Reproductive Rights'];
-      var topics = names.map(function (n, i) {
-        var order = ids.slice(i % 4).concat(ids.slice(0, i % 4)), cut = 2 + (i % 2);
-        var quoted = i === 5 ? ids.slice(0, 3) : ids;                      // one candidate has no quote on Public Safety
-        return {
-          key: 'preview-' + i, name: n, q: '[Question for ' + n + ']',
-          quotes: quoted.map(function (c) { return { c: c, text: '[Sample quote on ' + n + ']' }; }),
-          ranked: {
-            agreed: order.slice(0, cut).filter(function (c) { return quoted.indexOf(c) >= 0; }),
-            disagreed: order.slice(cut).filter(function (c) { return quoted.indexOf(c) >= 0; })
-          }
-        };
-      });
-      return {
-        office: 'US Representative', officeLong: 'U.S. Representative', seat: 'Sample District', state: 'Preview',
-        candidates: {
-          p1: { name: 'Rosa Lindqvist', ini: 'RL', office: 'U.S. House of Representatives - Sample District' },
-          p2: { name: 'Dev Ramanathan', ini: 'DR', office: 'Candidate' },
-          p3: { name: 'Marisol Okafor', ini: 'MO', office: 'Candidate' },
-          p4: { name: 'Theo Brandt-Whitfield', ini: 'TB', office: 'Candidate' }
-        },
-        topics: topics
-      };
-    })();
-    var preview = false;
 
     // ── "Your compass" card ─────────────────────────────────────────────
     // The user's stances come from the Compass steps in this session; otherwise a sample on the
@@ -768,7 +716,7 @@
 
     function render() {
       var RR = window.RR; if (!RR) return;
-      var race = preview ? PREVIEW : RR.race(), id = preview ? 'preview' : RR.active;
+      var race = RR.race(), id = RR.active;
       var where = ballot.closest('.page').querySelector('.crumbs .where:not(.sep)');
       if (where) where.textContent = race.office + ', ' + race.seat + ' · ' + race.state;
       var ranked = race.topics.map(function (t) { return { t: t, r: RR.result(id, t) || t.sample }; }).filter(function (x) { return x.r; });
@@ -860,10 +808,6 @@
       render();
       inform.hidden = hasCompass;
       document.getElementById('my-compass').hidden = !hasCompass;
-      [['view-plain', !hasCompass], ['view-compass', hasCompass]].forEach(function (v) {
-        var link = document.getElementById(v[0]);
-        if (v[1]) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current');
-      });
       ballot.querySelectorAll('.said').forEach(function (s) { s.classList.remove('open'); });
       ballot.querySelectorAll('.said-btn').forEach(function (b) { b.setAttribute('aria-expanded', 'false'); });
       if (reduced || from === 'compass' || from === 'ready' || from === 'ballot') { showBallot(); return; }
@@ -893,11 +837,6 @@
       compareWith = b.dataset.cand;
       this.querySelectorAll('.mc-cand').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
       drawCompass(true);
-    });
-    document.getElementById('preview-toggle').addEventListener('click', function () {
-      preview = !preview;
-      this.setAttribute('aria-checked', String(preview));
-      render();
     });
 
     if (screen === document.body) run();
